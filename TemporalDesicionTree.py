@@ -40,13 +40,20 @@ class TemporalDecisionTreeRegressor:
         """Predicts the target values for the input data."""
         print('\n==========================================================================================')
         print("Predicting...")
-        # self._validate_input(X, pd.Series([0]*len(X)))  # Validate input for prediction, dummy y
+        X = X.copy()
+        X["time"] = pd.to_datetime(X["time"])
+
+        # self._validate_input(X, pd.Series([0]*len(X)))  #Validate input for prediction, dummy y
         unique_patient_ids = X['patient_id'].unique()
+        
         print(f'Predicting on {len(unique_patient_ids)} patients.')
 
         predictions = np.zeros(len(unique_patient_ids))
         for i, patient_id in enumerate(unique_patient_ids):
+            # print(patient_id)
             patient_data = X[X['patient_id'] == patient_id]
+            # print(patient_data)
+            
             predictions[i] = self._predict_row(patient_data, self.tree)
         return predictions
     def evaluate(self,y_real, y_predicted, y_probabilities=None):
@@ -84,7 +91,7 @@ class TemporalDecisionTreeRegressor:
         if y_probabilities is not None:
             auc_roc = roc_auc_score(y_real, y_probabilities)
             fpr, tpr, _ = roc_curve(y_real, y_probabilities)
-            
+            print(len(fpr))
             # Store AUC in results
             results['auc_roc'] = auc_roc
 
@@ -239,121 +246,222 @@ class TemporalDecisionTreeRegressor:
         return best_split
 
 
-    def _aggregate_feature_over_time(self, X: pd.DataFrame, feature: str, tau: Tuple , aggregation: str) -> np.ndarray:
+    # def _aggregate_feature_over_time(self, X: pd.DataFrame, feature: str, tau: Tuple , aggregation: str) -> np.ndarray:
+    #     """
+    #     Aggregates feature values within a specified time window using a given aggregation function.
+    #         -x :EHR raw data
+    #         feature: a feature name on which we are aggregating
+    #         tau: Tuple(Anchor_feature_name,offset_from_anchor) - the delta in months to define the time window
+    #         aggregation: the aggregation function name wanted: min,max,avg,median,count ....
+    #       """
+    #     # print(f'Entered aggregate_features function.')
+
+    #     Anchor_feature_name, offset_from_anchor = tau # [(0,3),(-60,-3),(None,None)]
+    #     # ---- supoort different types of taus ----
+    #     if isinstance(Anchor_feature_name, str):
+    #         # print('str')
+
+    #         if len(X[X['feature_name']==Anchor_feature_name])!=len(X['patient_id'].unique()) : #| (reference_feature_name not in X['feature_name'].unique())
+    #           raise ValueError(f"Input data must contain {Anchor_feature_name} as an Anchor in 'feature_name' columns, once for each patient.")
+            
+    #         date_reference_column = X[X["feature_name"] == Anchor_feature_name][['patient_id','value']] #df
+    #         date_reference_column.rename(columns={'value':'reference_dates_list'},inplace=True)
+    #         X = X.merge(date_reference_column,on='patient_id',how='left')            
+    #         X["time"] = pd.to_datetime(X['time'])
+           
+    #         if X['reference_dates_list'].apply(lambda x: isinstance(x, pd.Timestamp)).all():
+
+    #             # X['reference_dates_list'] = pd.to_datetime(X['reference_dates_list'])
+    #             X["date_relative_offset"] = X['reference_dates_list']  + pd.DateOffset(months=offset_from_anchor)
+    #             # print(f'    Aggregating {feature} over {tau_end} months from {Anchor_feature_name}.')
+    #             mask = (
+    #                 (X["feature_name"] == feature) & (
+    #                 ((offset_from_anchor >= 0) & (X["time"] <= X["date_relative_offset"]) & (X["reference_dates_list"] <= X["time"])) |
+    #                 ((offset_from_anchor < 0) & (X["time"] >= X["date_relative_offset"]) & (X["reference_dates_list"] >= X["time"])))
+    #             )
+
+    #         elif X['reference_dates_list'].apply(lambda x: isinstance(x, list)).all(): # if all values in the column are lists. 
+
+    #             # tau_end relatively to Anchor_feature_name
+    #             # Adjust tau range dynamically based on each patient's date_reference
+    #             # Convert reference_dates_list to datetime (ensuring each list entry is datetime)
+    #             X['reference_dates_list'] = X['reference_dates_list'].apply(lambda lst: [pd.to_datetime(dt) for dt in lst])
+
+    #             # Compute relative offsets for each timestamp in the list
+    #             X["date_relative_offset"] = X['reference_dates_list'].apply(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
+
+    #             # Function to check if any timestamp in the list meets the condition
+    #             def check_time_conditions(row):
+    #                 times = row["reference_dates_list"]
+    #                 offsets = row["date_relative_offset"]
+    #                 time_val = row["time"]
+                    
+    #                 if offset_from_anchor >= 0:
+    #                     return any((time_val <= offset) and (ref_date <= time_val) for ref_date, offset in zip(times, offsets))
+    #                 else:
+    #                     return any((time_val >= offset) and (ref_date >= time_val) for ref_date, offset in zip(times, offsets))
+
+    #             # Apply the filtering condition
+    #             mask = (X["feature_name"] == feature) & X.apply(check_time_conditions, axis=1)
+    #         else:
+    #             raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps.")
+
+    #     elif isinstance(Anchor_feature_name, pd.Timestamp):
+    #         print("Anchor is a pandas Timestamp")
+    #         # if tau_start.year != 0000:
+    #         #     has_year = True # the date contains a specific year
+    #         anchor_date = Anchor_feature_name
+    #         mask = (
+    #             (X["feature_name"] == feature) & (
+    #             ((anchor_date >= 0) & (X["time"] <= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date <= X["time"])) |
+    #             ((anchor_date < 0) & (X["time"] >= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date >= X["time"])))
+    #         )
+            
+
+    #     # Compute row-wise age_start and age_end dynamically
+    #     elif Anchor_feature_name is None and offset_from_anchor is None:
+    #         mask = X["feature_name"] == feature  # No filtering, return all feature data
+
+    #     elif isinstance(Anchor_feature_name,int) and isinstance(offset_from_anchor,int) :
+    #         # Adjust tau range dynamically based on each patient's max_age
+    #         X = self.add_age_at_event(X) #!!!
+    #         X["age_start"] = np.where(
+    #             Anchor_feature_name < 0, X["max_age"] + Anchor_feature_name / 12, Anchor_feature_name/12
+    #         )
+    #         X["age_end"] = np.where(
+    #             offset_from_anchor < 0, X["max_age"] + offset_from_anchor / 12, offset_from_anchor/12
+    #         )
+
+    #         if Anchor_feature_name < 0 and offset_from_anchor > 0:
+    #             raise ValueError("Invalid tau range: tau_start < 0 and offset_from_anchor > 0 is not supported.")
+
+    #         mask = (
+    #             (X["feature_name"] == feature) &
+    #             (X["age_at_event(years)"] >= X["age_start"]) &
+    #             (X["age_at_event(years)"] <= X["age_end"])
+    #         )
+    #     else:
+    #       raise TypeError(f"time_windows input type is unspported ({type(tau[0]),type(tau[1])}).\ntime_windows input should be of type: Tuple(timestamps,int) or Tuple(int,int) or Tuple(str,int) or Tuple(None,None)")
+
+    #     filtered_X = X[mask]
+    #     filtered_X['value'] = pd.to_numeric(filtered_X['value'], errors='coerce')
+    #     # print(f'filtered_X:\n{filtered_X}')
+    #     if aggregation == "count":
+    #         agg_result = filtered_X.groupby("patient_id")["value"].count().reset_index()
+    #     else:
+    #         agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation).reset_index()
+
+    #     # print(f'agg_result:{agg_result}')
+
+    #     # Ensure all patient IDs are present (even if they had no valid feature values)
+    #     all_patients = pd.DataFrame({'patient_id': X['patient_id'].unique()})  # Get all unique patient IDs
+    #     final_df = all_patients.merge(agg_result, on='patient_id', how='left')  # Left join to keep all patients
+    #     # print('aggregated:')
+    #     # print(final_df)
+    #     result = final_df['value'].values
+
+    #     return result
+
+
+    def _aggregate_feature_over_time(self, X_original: pd.DataFrame, feature: str, tau: Tuple, aggregation: str) -> np.ndarray:
         """
         Aggregates feature values within a specified time window using a given aggregation function.
-            -x :EHR raw data
-            feature: a feature name on which we are aggregating
-            tau: Tuple(Anchor_feature_name,offset_from_anchor) - the delta in months to define the time window
-            aggregation: the aggregation function name wanted: min,max,avg,median,count ....
-          """
-        # print(f'Entered aggregate_features function.')
+        """
+        Anchor_feature_name, offset_from_anchor = tau
+        X = X_original.copy()
+        # Ensure "time" is datetime
+        X["time"] = pd.to_datetime(X["time"])
 
-        Anchor_feature_name, offset_from_anchor = tau # [(0,3),(-60,-3),(None,None)]
-        # ---- supoort different types of taus ----
+        # Pre-filter the relevant feature
+        X_feature = X[X["feature_name"] == feature].copy()
+        # If X_feature is empty, return NaN for the patient
+        if X_feature.empty:
+            # Ensure all patient IDs are present
+            print('X_feature is empty, return Nan')
+            final_df = pd.DataFrame({"patient_id": X["patient_id"].unique(),"value":np.array([np.nan] * len(X["patient_id"].unique()))})
+            return final_df["value"].values
+
+
         if isinstance(Anchor_feature_name, str):
-            # print('str')
+            # Check if Anchor_feature_name appears exactly once per patient
+            reference_feature = X[X["feature_name"] == Anchor_feature_name][["patient_id", "value"]].copy()
 
-            if len(X[X['feature_name']==Anchor_feature_name])!=len(X['patient_id'].unique()) : #| (reference_feature_name not in X['feature_name'].unique())
-              raise ValueError(f"Input data must contain {Anchor_feature_name} as an Anchor in 'feature_name' columns, once for each patient.")
-            
-            date_reference_column = X[X["feature_name"] == Anchor_feature_name][['patient_id','value']] #df
-            date_reference_column.rename(columns={'value':'reference_dates_list'},inplace=True)
-            X = X.merge(date_reference_column,on='patient_id',how='left')            
-            X["time"] = pd.to_datetime(X['time'])
-           
-            if X['reference_dates_list'].apply(lambda x: isinstance(x, pd.Timestamp)).all():
+            if len(reference_feature) != len(X["patient_id"].unique()):
+                raise ValueError(f"Each patient must have one {Anchor_feature_name} entry in 'feature_name'.")
 
-                # X['reference_dates_list'] = pd.to_datetime(X['reference_dates_list'])
-                X["date_relative_offset"] = X['reference_dates_list']  + pd.DateOffset(months=offset_from_anchor)
-                # print(f'    Aggregating {feature} over {tau_end} months from {Anchor_feature_name}.')
-                mask = (
-                    (X["feature_name"] == feature) & (
-                    ((offset_from_anchor >= 0) & (X["time"] <= X["date_relative_offset"]) & (X["reference_dates_list"] <= X["time"])) |
-                    ((offset_from_anchor < 0) & (X["time"] >= X["date_relative_offset"]) & (X["reference_dates_list"] >= X["time"])))
-                )
+            reference_feature.rename(columns={"value": "reference_dates_list"}, inplace=True)
+            X_feature = X_feature.merge(reference_feature, on="patient_id", how="left")  
+            if X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
+                # Single timestamp case             
+                X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset_from_anchor)
 
-            elif X['reference_dates_list'].apply(lambda x: isinstance(x, list)).all(): # if all values in the column are lists. 
+                if offset_from_anchor >= 0:
+                    # print(X_feature["time"].dtype)  
+                    # print(X_feature["date_relative_offset"].dtype)  
+                    # print(X_feature["reference_dates_list"].dtype)  
+                    mask = (X_feature["time"] <= X_feature["date_relative_offset"]) & (X_feature["reference_dates_list"] <= X_feature["time"])
+                else:
+                    mask = (X_feature["time"] >= X_feature["date_relative_offset"]) & (X_feature["reference_dates_list"] >= X_feature["time"])
 
-                # tau_end relatively to Anchor_feature_name
-                # Adjust tau range dynamically based on each patient's date_reference
-                # Convert reference_dates_list to datetime (ensuring each list entry is datetime)
-                X['reference_dates_list'] = X['reference_dates_list'].apply(lambda lst: [pd.to_datetime(dt) for dt in lst])
+            elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, list)).all():
+                # Convert lists of timestamps to datetime
+                X_feature["reference_dates_list"] = X_feature["reference_dates_list"].map(lambda lst: pd.to_datetime(lst))
+                X_feature["date_relative_offset"] = X_feature["reference_dates_list"].map(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
 
-                # Compute relative offsets for each timestamp in the list
-                X["date_relative_offset"] = X['reference_dates_list'].apply(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
-
-                # Function to check if any timestamp in the list meets the condition
-                def check_time_conditions(row):
-                    times = row["reference_dates_list"]
-                    offsets = row["date_relative_offset"]
-                    time_val = row["time"]
-                    
+                # Efficient vectorized filtering
+                def time_filter(times, offsets, time_val):
                     if offset_from_anchor >= 0:
-                        return any((time_val <= offset) and (ref_date <= time_val) for ref_date, offset in zip(times, offsets))
+                        return any((time_val <= off) and (ref <= time_val) for ref, off in zip(times, offsets))
                     else:
-                        return any((time_val >= offset) and (ref_date >= time_val) for ref_date, offset in zip(times, offsets))
+                        return any((time_val >= off) and (ref >= time_val) for ref, off in zip(times, offsets))
 
-                # Apply the filtering condition
-                mask = (X["feature_name"] == feature) & X.apply(check_time_conditions, axis=1)
+                mask = X_feature.apply(lambda row: time_filter(row["reference_dates_list"], row["date_relative_offset"], row["time"]), axis=1)
             else:
                 raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps.")
 
         elif isinstance(Anchor_feature_name, pd.Timestamp):
-            print("Anchor is a pandas Timestamp")
-            # if tau_start.year != 0000:
-            #     has_year = True # the date contains a specific year
             anchor_date = Anchor_feature_name
-            mask = (
-                (X["feature_name"] == feature) & (
-                ((anchor_date >= 0) & (X["time"] <= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date <= X["time"])) |
-                ((anchor_date < 0) & (X["time"] >= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date >= X["time"])))
-            )
-            
+            X_feature["date_relative_offset"] = anchor_date + pd.DateOffset(months=offset_from_anchor)
 
-        # Compute row-wise age_start and age_end dynamically
-        elif anchor_date is None and offset_from_anchor is None:
-            mask = X["feature_name"] == feature  # No filtering, return all feature data
+            if offset_from_anchor >= 0:
+                mask = (X_feature["time"] <= X_feature["date_relative_offset"]) & (anchor_date <= X_feature["time"])
+            else:
+                mask = (X_feature["time"] >= X_feature["date_relative_offset"]) & (anchor_date >= X_feature["time"])
 
-        elif isinstance(Anchor_feature_name,int) and isinstance(offset_from_anchor,int) :
-            # Adjust tau range dynamically based on each patient's max_age
-            X = self.add_age_at_event(X) #!!!
-            X["age_start"] = np.where(
-                Anchor_feature_name < 0, X["max_age"] + Anchor_feature_name / 12, Anchor_feature_name/12
+        elif Anchor_feature_name is None and offset_from_anchor is None:
+            mask = np.ones(len(X_feature), dtype=bool)  # Select all rows
+
+        elif isinstance(Anchor_feature_name, int) and isinstance(offset_from_anchor, int):
+            X_feature = self.add_age_at_event(X_feature)  # Precompute age_at_event(years)
+            X_feature["age_start"] = np.where(
+                Anchor_feature_name < 0, X_feature["max_age"] + Anchor_feature_name / 12, Anchor_feature_name / 12
             )
-            X["age_end"] = np.where(
-                offset_from_anchor < 0, X["max_age"] + offset_from_anchor / 12, offset_from_anchor/12
+            X_feature["age_end"] = np.where(
+                offset_from_anchor < 0, X_feature["max_age"] + offset_from_anchor / 12, offset_from_anchor / 12
             )
 
             if Anchor_feature_name < 0 and offset_from_anchor > 0:
                 raise ValueError("Invalid tau range: tau_start < 0 and offset_from_anchor > 0 is not supported.")
 
-            mask = (
-                (X["feature_name"] == feature) &
-                (X["age_at_event(years)"] >= X["age_start"]) &
-                (X["age_at_event(years)"] <= X["age_end"])
-            )
+            mask = (X_feature["age_at_event(years)"].between(X_feature["age_start"], X_feature["age_end"]))
+
         else:
-          raise TypeError(f"time_windows input type is unspported ({type(tau[0]),type(tau[1])}).\ntime_windows input should be of type: Tuple(timestamps,int) or Tuple(int,int) or Tuple(str,int) or Tuple(None,None)")
+            raise TypeError(f"Unsupported tau type: {type(tau[0]), type(tau[1])}")
 
-        filtered_X = X[mask]
-        filtered_X['value'] = pd.to_numeric(filtered_X['value'], errors='coerce')
-        # print(f'filtered_X:\n{filtered_X}')
-        if aggregation == "count":
-            agg_result = filtered_X.groupby("patient_id")["value"].count().reset_index()
-        else:
-            agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation).reset_index()
+        # Apply mask
+        filtered_X = X_feature[mask].copy()
+        
+        # Ensure 'value' is numeric
+        filtered_X["value"] = pd.to_numeric(filtered_X["value"], errors="coerce")
 
-        # print(f'agg_result:{agg_result}')
+        # Aggregate values
+        agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation).reset_index() if aggregation != "count" \
+            else filtered_X.groupby("patient_id")["value"].count().reset_index()
 
-        # Ensure all patient IDs are present (even if they had no valid feature values)
-        all_patients = pd.DataFrame({'patient_id': X['patient_id'].unique()})  # Get all unique patient IDs
-        final_df = all_patients.merge(agg_result, on='patient_id', how='left')  # Left join to keep all patients
-        # print('aggregated:')
-        # print(final_df)
-        result = final_df['value'].values
+        # Ensure all patient IDs are present
+        final_df = pd.DataFrame({"patient_id": X["patient_id"].unique()}).merge(agg_result, on="patient_id", how="left")
 
-        return result
+        return final_df["value"].values
 
     # staticmethod
     def add_age_at_event(self,X):
@@ -441,7 +549,9 @@ class TemporalDecisionTreeRegressor:
 
     def _predict_row(self, row: pd.DataFrame, tree: Dict) -> float:
         """Predicts the target value for a single row of data.""" # find something more effecient ........ !!!!!!!!!!
-        # print("Predicting row...")
+        
+        print("Predicting row...")
+        print(row)
         if 'value' in tree:
             # print(f'return: {tree["value"]}')
             return tree['value']
@@ -451,7 +561,6 @@ class TemporalDecisionTreeRegressor:
             return self._predict_row(row, tree['left'])
         else:
             return self._predict_row(row, tree['right'])
-
 
 def split_data_(data,labels_df):
     n_all=len(data['patient_id'].unique())
@@ -559,19 +668,16 @@ import pandas as pd
 # # Load data
 data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
 data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
-
 labels_df = pd.read_csv('labels_AtopicDermatitis_synthea_9.csv')
-
 train_data, test_data, y_train, y_test = split_data_(data,labels_df)
 #%% Run the model
-
-taus =[('Birth Date',12*5)] # ,(None,None),(0,12), in each split, search whether to look into the first 3 months, the last 3 months, or None (all data points)
+taus =[('Birth Date',12*5),(None,None),('Birth Date',12*2)] # ,(None,None),(0,12), in each split, search whether to look into the first 3 months, the last 3 months, or None (all data points)
 # Train model
 model = TemporalDecisionTreeRegressor(max_depth=3,
                                     min_samples_split=0,
                                     time_windows=taus,
-                                    is_classification=True,
-                                    criterion='gini')
+                                    is_classification=False,
+                                    criterion='mse')
 model.fit(train_data, y_train)
 
 predictions = model.predict(test_data)
@@ -583,7 +689,6 @@ print(results)
 
 # if __name__ == "__main__":
 #     main()
-
 
 #===================================================================================
 # %% undersmapling for balanced data:
@@ -617,8 +722,8 @@ taus =[('Birth Date',12*5),(None,None)] # ,(None,None),(0,12), in each split, se
 model_balanced = TemporalDecisionTreeRegressor(max_depth=3,
                                     min_samples_split=0,
                                     time_windows=taus,
-                                    is_classification=True,
-                                    criterion='gini')
+                                    is_classification=False,
+                                    criterion='mse')
 model_balanced.fit(train_data_balanced, y_train_balanced)
 
 predictions_balanced = model_balanced.predict(test_data)
@@ -628,4 +733,78 @@ y_predicted_balanced = (predictions_balanced >= 0.4).astype(int)
 results = model_balanced.evaluate(y_test,y_predicted_balanced,y_probabilities=predictions_balanced)
 
 print(results)
+# =================================================================================
+# %% run of hypethitical disease PIDS labels. 
+# =================================================================================
+import pandas as pd
+# # Load data
+data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
+data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
+leak_features = ['Acute allergic reaction']
+data_hypo = data.loc[~data['feature_name'].isin(leak_features)]
+labels_df_hypothetical = pd.read_csv('hypothetical_PIDS_labels_synthea.csv')
+labels_df_hypothetical.rename(columns={'PIDS_label':'label'},inplace=True)
+train_data, test_data, y_train, y_test = split_data_(data_hypo,labels_df_hypothetical)
+
+#%% Run the model
+taus = [
+    ('Birth Date', 12 * 3),   # First 3 years (critical for early-onset allergies)
+    ('Birth Date', 12 * 5),   # First 5 years (immune development, infections)
+    ('Birth Date', 12 * 7),   # First 7 years (metabolic issues, BMI, heart rate)
+    ('Birth Date', 12 * 12),  # First 12 years (chronic conditions, hospital visits)
+    (None, None),             # All data points (baseline case)
+    # (0, 6),                   # First 6 months (early immune response assessment)
+    # (-12, 0),                 # Last year (most recent health status before prediction)
+]
+# Train model
+model_hypothetical = TemporalDecisionTreeRegressor(max_depth=3,
+                                    min_samples_split=0,
+                                    time_windows=taus,
+                                    is_classification=False,
+                                    criterion='mse')
+model_hypothetical.fit(train_data, y_train)
+
+predictions_hypothetical = model_hypothetical.predict(test_data)
+
+print(model_hypothetical.tree)
+y_predicted_hypothetical = (predictions_hypothetical >= 0.5).astype(int)
+results_hypothetical = model_hypothetical.evaluate(y_test,y_predicted_hypothetical,y_probabilities=predictions_hypothetical)
+print(results_hypothetical)
+
+# %% new labels: 
+
+import pandas as pd
+# # Load data
+data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
+data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
+leak_features = ['Acute allergic reaction']
+data_hypo = data.loc[~data['feature_name'].isin(leak_features)]
+labels_df_hypothetical_2 = pd.read_csv('hypothetical_PIDS_labels_synthea_2_new.csv')
+labels_df_hypothetical_2.rename(columns={'PIDS_label':'label'},inplace=True)
+train_data, test_data, y_train, y_test = split_data_(data_hypo,labels_df_hypothetical_2)
+
+#%% Run the model
+taus = [
+    ('Birth Date', 12 * 3),   # First 3 years (critical for early-onset allergies)
+    ('Birth Date', 12 * 5),   # First 5 years (immune development, infections)
+    ('Birth Date', 12 * 7),   # First 7 years (metabolic issues, BMI, heart rate)
+    ('Birth Date', 12 * 12),  # First 12 years (chronic conditions, hospital visits)
+    (None, None),             # All data points (baseline case)
+    # (0, 6),                   # First 6 months (early immune response assessment)
+    # (-12, 0),                 # Last year (most recent health status before prediction)
+]
+# Train model
+model_hypothetical_2 = TemporalDecisionTreeRegressor(max_depth=3,
+                                    min_samples_split=0,
+                                    time_windows=taus,
+                                    is_classification=False,
+                                    criterion='mse')
+model_hypothetical_2.fit(train_data, y_train)
+
+predictions_hypothetical_2 = model_hypothetical_2.predict(test_data)
+
+# print(model_hypothetical.tree)
+y_predicted_hypothetical_2 = (predictions_hypothetical_2 >= 0.5).astype(int)
+results_hypothetical_2 = model_hypothetical_2.evaluate(y_test,y_predicted_hypothetical_2,y_probabilities=predictions_hypothetical_2)
+print(results_hypothetical_2)
 # %%
