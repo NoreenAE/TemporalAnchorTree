@@ -138,17 +138,28 @@ class TemporalDecisionTreeRegressor:
         # print(f'input data:\n{X}')
         # print(f'len of data:{len(X)}')
 
-        if len(X['patient_id'].unique()) <= self.min_samples_split or depth >= self.max_depth:
-            print("Stop: (len(X['patient_id'].unique()) < self.min_samples_split) or (depth >= max_depth) -> leaf node")
-            # print(f'return: {y.mean()}')
-            if self.is_classification:
-              most_common_label = np.bincount(y).argmax()  # Get the most frequent class
-              print(f'classification task ==> return: {most_common_label}')
-              return {'value': most_common_label}
-            else:
-              print(f'return: {y.mean()}')
-              return {'value': y.mean()}
+        # if len(X['patient_id'].unique()) <= self.min_samples_split or depth >= self.max_depth:
+        #     print("Stop: (len(X['patient_id'].unique()) < self.min_samples_split) or (depth >= max_depth) -> leaf node")
+        #     # print(f'return: {y.mean()}')
+        #     if self.is_classification:
+        #       most_common_label = np.bincount(y).argmax()  # Get the most frequent class
+        #       print(f'classification task ==> return: {most_common_label}')
+        #       return {'value': most_common_label}
+        #     else:
+        #       print(f'return: {y.mean()}')
+        #       return {'value': y.mean()}
+        unique_patient_ids = X['patient_id'].unique()
+        num_patients = len(unique_patient_ids)
 
+        # Stopping conditions
+        if num_patients <= self.min_samples_split or depth >= self.max_depth:
+            print(f"Stop: (num_patients <= {self.min_samples_split}) or (depth >= {self.max_depth}) -> leaf node")
+            if self.is_classification:
+                most_common_label = np.bincount(y).argmax()
+                return {'value': most_common_label, 'num_patients': num_patients}
+            else:
+                return {'value': y.mean(), 'num_patients': num_patients}
+        
         # Check homogeneity
         if self.is_classification:
             if len(np.unique(y)) == 1:  # All labels are the same
@@ -166,10 +177,10 @@ class TemporalDecisionTreeRegressor:
             if self.is_classification:
               most_common_label = np.bincount(y).argmax()  # Get the most frequent class
             #   print(f'return: {most_common_label}')
-              return {'value': most_common_label}
+              return {'value': most_common_label, 'num_patients': num_patients}
             else:
             #   print(f'return: {y.mean()}')
-              return {'value': y.mean()}
+              return {'value': y.mean(), 'num_patients': num_patients}
 
         print(f'==> Best split is for:{best_split}')
         unique_patient_ids = X['patient_id'].unique()
@@ -187,13 +198,19 @@ class TemporalDecisionTreeRegressor:
         # print(f'right_patient_ids:{right_patient_ids}')
         X_next_left = X[X['patient_id'].isin(left_patient_ids)]
         X_next_right = X[X['patient_id'].isin(right_patient_ids)]
+        print(f"Splitting: {num_patients} patients -> Left: {len(left_patient_ids)}, Right: {len(right_patient_ids)}")
+
         print('entering recursive call')
         left_tree = self._build_tree(X_next_left, y[left_mask], depth + 1)
         print('finished the left side of the tree, strat the right side...')
         right_tree = self._build_tree(X_next_right, y[right_mask], depth + 1)
 
         # print(f'return: {{"feature": {best_split["feature"]}, "threshold": {best_split["threshold"]}, "left": {left_tree}, "right": {right_tree}}}')
-        return {'feature': best_split['feature'], 'threshold': best_split['threshold'], 'aggregation': best_split['aggregation'], 'time_window': best_split['time_window'],
+        return {'feature': best_split['feature'],
+                'threshold': best_split['threshold'],
+                'aggregation': best_split['aggregation'],
+                'time_window': best_split['time_window'],
+                'num_patients': num_patients, # indicates how many unique patients reached this node.
                 'left': left_tree, 'right': right_tree}
 
     def _find_best_split(self, X: pd.DataFrame, y: pd.Series) -> Dict:
@@ -209,9 +226,9 @@ class TemporalDecisionTreeRegressor:
         feature_names = X['feature_name'].unique()
         # print(f'Features names: {feature_names}')
 
-        for feature, tau , agg_name in product(feature_names, self.time_windows, self.aggregation_funcs.keys()):
-            if feature in ['Birth Date', 'age_at_event(years)','Pregnancy Start Date', 'max_age', 'age_start', 'age_end']:
-              continue
+        for feature, tau , agg_name in product(feature_names, self.time_windows, self.aggregation_funcs.keys()): # would change when changin (anchor,int) to 2 lists...
+            if feature in ['Birth Date', 'age_at_event(years)','Pregnancy Start Date', 'max_age', 'age_start', 'age_end']: # or if feature in Anchor_list
+              continue # here , skip "Anchor features" , ------------
             
             print(f'\ntesting {(feature, tau , agg_name)}')
             aggregated_values = self._aggregate_feature_over_time(X, feature, tau , agg_name)
@@ -551,7 +568,7 @@ class TemporalDecisionTreeRegressor:
         """Predicts the target value for a single row of data.""" # find something more effecient ........ !!!!!!!!!!
         
         print("Predicting row...")
-        print(row)
+        # print(row)
         if 'value' in tree:
             # print(f'return: {tree["value"]}')
             return tree['value']
@@ -668,10 +685,12 @@ import pandas as pd
 # # Load data
 data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
 data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
+leak_features = ['Contact dermatitis', 'Application of moisturizer to skin','Skin condition care','Eczema']
+data = data.loc[~data['feature_name'].isin(leak_features)]
 labels_df = pd.read_csv('labels_AtopicDermatitis_synthea_9.csv')
 train_data, test_data, y_train, y_test = split_data_(data,labels_df)
 #%% Run the model
-taus =[('Birth Date',12*5),(None,None),('Birth Date',12*2)] # ,(None,None),(0,12), in each split, search whether to look into the first 3 months, the last 3 months, or None (all data points)
+taus =[('Birth Date',12*5),(None,None),('Birth Date',12*7),('Birth Date',12*2)] # ,(None,None),(0,12), in each split, search whether to look into the first 3 months, the last 3 months, or None (all data points)
 # Train model
 model = TemporalDecisionTreeRegressor(max_depth=3,
                                     min_samples_split=0,
@@ -807,4 +826,42 @@ predictions_hypothetical_2 = model_hypothetical_2.predict(test_data)
 y_predicted_hypothetical_2 = (predictions_hypothetical_2 >= 0.5).astype(int)
 results_hypothetical_2 = model_hypothetical_2.evaluate(y_test,y_predicted_hypothetical_2,y_probabilities=predictions_hypothetical_2)
 print(results_hypothetical_2)
+# %% ===================== Hypothetical diabetes for synthea 9 
+
+import pandas as pd
+# # Load data
+data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
+
+data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
+# leak_features = ['Acute allergic reaction']
+# data_hypo = data.loc[~data['feature_name'].isin(leak_features)]
+labels_df_hypothetical_9 = pd.read_csv('hypothetical_diabetes_labels_synthea_9.csv')
+labels_df_hypothetical_9.rename(columns={'diabetes_label':'label'},inplace=True)
+
+train_data, test_data, y_train, y_test = split_data_(data, labels_df_hypothetical_9)
+
+#%%Run the model
+taus = [
+    ('Birth Date', 12 * 3),   # First 3 years (critical for early-onset allergies)
+    ('Birth Date', 12 * 5),   # First 5 years (immune development, infections)
+    ('Birth Date', 12 * 7),   # First 7 years (metabolic issues, BMI, heart rate)
+    ('Birth Date', 12 * 12),  # First 12 years (chronic conditions, hospital visits)
+    (None, None),             # All data points (baseline case)
+    # (0, 6),                   # First 6 months (early immune response assessment)
+    # (-12, 0),                 # Last year (most recent health status before prediction)
+]
+# Train model
+model_hypothetical_diabetes = TemporalDecisionTreeRegressor(max_depth=3,
+                                    min_samples_split=0,
+                                    time_windows=taus,
+                                    is_classification=False,
+                                    criterion='mse')
+model_hypothetical_diabetes.fit(train_data, y_train)
+
+predictions_hypothetical_9 = model_hypothetical_diabetes.predict(test_data)
+
+# print(model_hypothetical.tree)
+y_predicted_hypothetical_9 = (predictions_hypothetical_9 >= 0.5).astype(int)
+results_hypothetical_9 = model_hypothetical_diabetes.evaluate(y_test,y_predicted_hypothetical_9,y_probabilities=predictions_hypothetical_9)
+print(results_hypothetical_9)
 # %%
