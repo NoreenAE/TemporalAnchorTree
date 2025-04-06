@@ -13,15 +13,17 @@ from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, 
     roc_auc_score, roc_curve, matthews_corrcoef
 )
-
+from pandas import Timestamp
 
 class TemporalDecisionTreeRegressor:
-    def __init__(self, max_depth: int = 3, min_samples_split: int = 1, time_windows: List[Tuple] = [(0,3),(-6,-3),(None,None)] , aggregation_funcs: Dict[str, Callable] = None, is_classification = True , criterion = "entropy"):
+    def __init__(self, max_depth: int = 3, min_samples_split: int = 1, anchors_list=['Birth Date Anchor'], anchor_offset_list = [None], time_windows: List[Tuple] = [(0,3),(-6,-3),(None,None)] , aggregation_funcs: Dict[str, Callable] = None, is_classification = True , criterion = "entropy"):
         self.max_depth = max_depth
         self.is_classification = is_classification
         self.criterion = criterion
         self.min_samples_split = min_samples_split
         self.time_windows = time_windows # (None, None) means look at all data, no specified window time
+        self.anchors_list = anchors_list
+        self.anchor_offset_list = anchor_offset_list
         self.aggregation_funcs = aggregation_funcs if aggregation_funcs else {
             'mean': np.mean,
             'sum': np.sum,
@@ -105,7 +107,6 @@ class TemporalDecisionTreeRegressor:
             plt.legend()
             plt.grid()
             plt.show()
-
         return results
 
     def _validate_input(self, X: pd.DataFrame, y: pd.Series) -> None:
@@ -117,37 +118,116 @@ class TemporalDecisionTreeRegressor:
             raise ValueError("The length of y must be the same as the number of patients.")
         if X.isnull().values.any() or y.isnull().values.any():
             raise ValueError("Input data contains missing values. Please handle them before fitting or predicting.")
+        
+        # Check if self.anchors_list is a list
+        if not isinstance(self.anchors_list, list):
+                raise ValueError("self.anchors_list must be a list.")
 
-    def _build_tree(self, X: pd.DataFrame, y: pd.Series, depth: int) -> Dict:
-        """
-        Recursively builds the regression tree: recursively splits the data into smaller groups by finding the best split at each step
+        # Check that all elements are either strings or pandas Timestamps
+        if not all(isinstance(item, (str, Timestamp)) for item in self.anchors_list):
+            raise ValueError("self.anchors_list must contain only strings or pandas Timestamps.")
 
-        Parameters:
-            X: DataFrame - EHR Raw data with columns ['patient_id', 'time', 'feature_name', 'feature_value']. can contain multiple rows for one patient
-            y: Series - Target variable (1,num_of_patients) - nd array
-            time_col: str - Time column name
-            depth: int - Current depth of the tree (default = 0)
-            aggregation_cache: dict - Cache for storing computed feature aggregations (default = None)
+        # If the element is a string, ensure it ends with 'Anchor'
+        if not all(isinstance(item, Timestamp) or (isinstance(item, str) and item.endswith("Anchor")) for item in self.anchors_list):
+            raise ValueError("All string elements in self.anchors_list must end with 'Anchor'.")
 
-        Returns:
-            dict: A decision tree represented as a dictionary.
-        """
-        print('-'*40)
-        print('-'*40)
+        # Check if self.anchor_offset_list is a list of integers
+        if not isinstance(self.anchor_offset_list, list) or not all(isinstance(item, (int, type(None))) for item in self.anchor_offset_list):
+            raise ValueError("self.anchor_offset_list must be a list containing only integers or None.")
+    
+    
+    # def _build_tree(self, X: pd.DataFrame, y: pd.Series, depth: int) -> Dict:
+    #     """
+    #     Recursively builds the regression tree: recursively splits the data into smaller groups by finding the best split at each step
+
+    #     Parameters:
+    #         X: DataFrame - EHR Raw data with columns ['patient_id', 'time', 'feature_name', 'feature_value']. can contain multiple rows for one patient
+    #         y: Series - Target variable (1,num_of_patients) - nd array
+    #         time_col: str - Time column name
+    #         depth: int - Current depth of the tree (default = 0)
+    #         aggregation_cache: dict - Cache for storing computed feature aggregations (default = None)
+
+    #     Returns:
+    #         dict: A decision tree represented as a dictionary.
+    #     """
+    #     print('-'*40)
+    #     print('-'*40)
+    #     print(f"Building tree at depth {depth}...")
+
+    #     unique_patient_ids = X['patient_id'].unique()
+    #     num_patients = len(unique_patient_ids)
+
+    #     # Stopping conditions
+    #     if num_patients <= self.min_samples_split or depth >= self.max_depth:
+    #         print(f"Stop: (num_patients <= {self.min_samples_split}) or (depth >= {self.max_depth}) -> leaf node")
+    #         if self.is_classification:
+    #             most_common_label = np.bincount(y).argmax()
+    #             return {'value': most_common_label, 'num_patients': num_patients}
+    #         else:
+    #             return {'value': y.mean(), 'num_patients': num_patients}
+        
+    #     # Check homogeneity
+    #     if self.is_classification:
+    #         if len(np.unique(y)) == 1:  # All labels are the same
+    #             print(f"Homogeneous classification node ==> return: {y.iloc[0]}")
+    #             return {'value': y.iloc[0]}
+
+    #     else:
+    #         if np.all(y == y.iloc[0]):  # All values are identical
+    #             print(f"Homogeneous regression node ==> return: {y.iloc[0]}")
+    #             return {'value': y.iloc[0]}
+
+    #     best_split = self._find_best_split(X, y)
+    #     if not best_split:
+    #         print('Stop, no valid split is found -> the node is a leaf node.')
+    #         if self.is_classification:
+    #           most_common_label = np.bincount(y).argmax()  # Get the most frequent class
+    #         #   print(f'return: {most_common_label}')
+    #           return {'value': most_common_label, 'num_patients': num_patients}
+    #         else:
+    #         #   print(f'return: {y.mean()}')
+    #           return {'value': y.mean(), 'num_patients': num_patients}
+
+    #     print(f'==> Best split is for:{best_split}')
+    #     unique_patient_ids = X['patient_id'].unique()
+    #     aggregated_values = self._aggregate_feature_over_time(X, best_split['feature'], best_split['time_window'], best_split['aggregation'])
+    #     # print(f'aggregated_values: {aggregated_values}')
+
+    #     left_mask = aggregated_values <= best_split['threshold']
+    #     right_mask = ~left_mask
+    #     # print(f'left_mask:{left_mask}')
+    #     # print(f'right_mask:{right_mask}')
+
+    #     left_patient_ids = unique_patient_ids[left_mask]
+    #     right_patient_ids = unique_patient_ids[right_mask]
+    #     # print(f'left_patient_ids:{left_patient_ids}')
+    #     # print(f'right_patient_ids:{right_patient_ids}')
+    #     X_next_left = X[X['patient_id'].isin(left_patient_ids)]
+    #     X_next_right = X[X['patient_id'].isin(right_patient_ids)]
+    #     print(f"Splitting: {num_patients} patients -> Left: {len(left_patient_ids)}, Right: {len(right_patient_ids)}")
+
+    #     print('entering recursive call')
+    #     left_tree = self._build_tree(X_next_left, y[left_mask], depth + 1)
+    #     print('finished the left side of the tree, strat the right side...')
+    #     right_tree = self._build_tree(X_next_right, y[right_mask], depth + 1)
+
+    #     # print(f'return: {{"feature": {best_split["feature"]}, "threshold": {best_split["threshold"]}, "left": {left_tree}, "right": {right_tree}}}')
+    #     return {'feature': best_split['feature'],
+    #             'threshold': best_split['threshold'],
+    #             'aggregation': best_split['aggregation'],
+    #             'time_window': best_split['time_window'],
+    #             # best_split['anchors_list'],
+    #             # best_split['anchor_offset_list'],
+    #             'num_patients': num_patients, # indicates how many unique patients reached this node.
+    #             'left': left_tree, 'right': right_tree}
+    def _build_tree(self, X: pd.DataFrame, y: pd.Series, depth: int, anchors_list=None) -> Dict:
+        print('-' * 40)
         print(f"Building tree at depth {depth}...")
-        # print(f'input data:\n{X}')
-        # print(f'len of data:{len(X)}')
 
-        # if len(X['patient_id'].unique()) <= self.min_samples_split or depth >= self.max_depth:
-        #     print("Stop: (len(X['patient_id'].unique()) < self.min_samples_split) or (depth >= max_depth) -> leaf node")
-        #     # print(f'return: {y.mean()}')
-        #     if self.is_classification:
-        #       most_common_label = np.bincount(y).argmax()  # Get the most frequent class
-        #       print(f'classification task ==> return: {most_common_label}')
-        #       return {'value': most_common_label}
-        #     else:
-        #       print(f'return: {y.mean()}')
-        #       return {'value': y.mean()}
+        if anchors_list is None: # the root node will only choose from the given anchors
+            anchors_list = self.anchors_list.copy()
+        
+        print(f'Anchors list: {anchors_list}')
         unique_patient_ids = X['patient_id'].unique()
         num_patients = len(unique_patient_ids)
 
@@ -159,61 +239,283 @@ class TemporalDecisionTreeRegressor:
                 return {'value': most_common_label, 'num_patients': num_patients}
             else:
                 return {'value': y.mean(), 'num_patients': num_patients}
-        
+
         # Check homogeneity
         if self.is_classification:
-            if len(np.unique(y)) == 1:  # All labels are the same
+            if len(np.unique(y)) == 1:
                 print(f"Homogeneous classification node ==> return: {y.iloc[0]}")
                 return {'value': y.iloc[0]}
-
         else:
-            if np.all(y == y.iloc[0]):  # All values are identical
+            if np.all(y == y.iloc[0]):
                 print(f"Homogeneous regression node ==> return: {y.iloc[0]}")
                 return {'value': y.iloc[0]}
 
-        best_split = self._find_best_split(X, y)
+        best_split = self._find_best_split(X, y, anchors_list=anchors_list)
         if not best_split:
             print('Stop, no valid split is found -> the node is a leaf node.')
             if self.is_classification:
-              most_common_label = np.bincount(y).argmax()  # Get the most frequent class
-            #   print(f'return: {most_common_label}')
-              return {'value': most_common_label, 'num_patients': num_patients}
+                most_common_label = np.bincount(y).argmax()
+                return {'value': most_common_label, 'num_patients': num_patients}
             else:
-            #   print(f'return: {y.mean()}')
-              return {'value': y.mean(), 'num_patients': num_patients}
+                return {'value': y.mean(), 'num_patients': num_patients}
 
-        print(f'==> Best split is for:{best_split}')
-        unique_patient_ids = X['patient_id'].unique()
-        aggregated_values = self._aggregate_feature_over_time(X, best_split['feature'], best_split['time_window'], best_split['aggregation'])
-        # print(f'aggregated_values: {aggregated_values}')
+        print(f'==> Best split is for: {best_split}')
 
+        # Aggregate feature values
+        aggregated_values, anchor = self._aggregate_feature_over_time(
+            X, best_split['feature'], best_split['time_window'], best_split['aggregation']
+        )
+        print(f'aggregated_values:\n{aggregated_values}')
         left_mask = aggregated_values <= best_split['threshold']
         right_mask = ~left_mask
-        # print(f'left_mask:{left_mask}')
-        # print(f'right_mask:{right_mask}')
 
         left_patient_ids = unique_patient_ids[left_mask]
         right_patient_ids = unique_patient_ids[right_mask]
-        # print(f'left_patient_ids:{left_patient_ids}')
-        # print(f'right_patient_ids:{right_patient_ids}')
-        X_next_left = X[X['patient_id'].isin(left_patient_ids)]
-        X_next_right = X[X['patient_id'].isin(right_patient_ids)]
+
         print(f"Splitting: {num_patients} patients -> Left: {len(left_patient_ids)}, Right: {len(right_patient_ids)}")
 
-        print('entering recursive call')
-        left_tree = self._build_tree(X_next_left, y[left_mask], depth + 1)
-        print('finished the left side of the tree, strat the right side...')
-        right_tree = self._build_tree(X_next_right, y[right_mask], depth + 1)
+        # # Add new anchors for patients exceeding the threshold
+        # new_anchor = f"{best_split['feature']} Anchor"
 
-        # print(f'return: {{"feature": {best_split["feature"]}, "threshold": {best_split["threshold"]}, "left": {left_tree}, "right": {right_tree}}}')
-        return {'feature': best_split['feature'],
-                'threshold': best_split['threshold'],
-                'aggregation': best_split['aggregation'],
-                'time_window': best_split['time_window'],
-                'num_patients': num_patients, # indicates how many unique patients reached this node.
-                'left': left_tree, 'right': right_tree}
+        # def create_anchor_dates(patient_id, feature, side_mask):
+        #     print(f'create_anchor_dates. side_mask: {side_mask}')
+        #     patient_data = X[(X['patient_id'] == patient_id) & (X['feature_name'] == feature)]
+        #     valid_dates = patient_data.loc[side_mask, 'time'].tolist()
+        #     return valid_dates
 
-    def _find_best_split(self, X: pd.DataFrame, y: pd.Series) -> Dict:
+        # new_anchor_data = []
+
+        # for patient_id in unique_patient_ids:
+        #     print(patient_id)
+        #     print(best_split['feature'])
+        #     print(X.loc[(X['patient_id'] == patient_id) & (X['feature_name'] == best_split['feature']), 'value'])
+        #     print((X.loc[(X['patient_id'] == patient_id) & (X['feature_name'] == best_split['feature']), 'value']).astype(int))
+        #     mask_patient = (X.loc[(X['patient_id'] == patient_id) & (X['feature_name'] == best_split['feature']), 'value']).astype(int) >= best_split['threshold'].astype(int)
+        #     anchor_dates_greater = create_anchor_dates(patient_id, best_split['feature'], ~mask_patient)
+        #     anchor_dates_less = create_anchor_dates(patient_id, best_split['feature'], mask_patient)
+
+        #     new_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': new_anchor, 'feature_value': anchor_dates_greater})
+        #     new_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': new_anchor + " (Less) Anchor", 'feature_value': anchor_dates_less})
+
+        # new_anchors_df = pd.DataFrame(new_anchor_data)
+
+        # # Update X with new anchors and anchors_list
+        # X = pd.concat([X, new_anchors_df], ignore_index=True)
+
+        # updated_anchors_list = anchors_list + [new_anchor, new_anchor + " (Less) Anchor"]
+        #------------- more effecient ----------------
+        
+        # # Add new anchors for patients exceeding the threshold
+        # new_anchor = f"{best_split['feature']} Anchor"
+
+        # def create_anchor_dates(patient_data, side_mask):
+        #     # Extract valid dates based on the mask
+        #     return patient_data.loc[side_mask, 'time'].tolist()
+
+        # # Filter data only once to improve performance
+        # filtered_X = X[X['feature_name'] == best_split['feature']]
+
+        # # Precompute masks for each patient and collect anchor data
+        # new_anchor_data = []
+
+        # for patient_id, patient_data in filtered_X.groupby('patient_id'):
+        #     # Compare patient values with the threshold
+        #     mask_patient = patient_data['value'].astype(float) >= float(best_split['threshold'])
+            
+        #     # Create anchor dates
+        #     anchor_dates_greater = create_anchor_dates(patient_data, ~mask_patient)
+        #     anchor_dates_less = create_anchor_dates(patient_data, mask_patient)
+
+        #     # Append new anchor data
+        #     new_anchor_data.extend([
+        #         {'patient_id': patient_id, 'time': np.nan, 'feature_name': new_anchor, 'feature_value': anchor_dates_greater},
+        #         {'patient_id': patient_id, 'time': np.nan, 'feature_name': new_anchor + " (Less) Anchor", 'feature_value': anchor_dates_less}
+        #     ])
+
+        # # Create and merge the new anchors DataFrame
+        # new_anchors_df = pd.DataFrame(new_anchor_data)
+        # X = pd.concat([X, new_anchors_df], ignore_index=True)
+        # # Update the anchors list
+        # updated_anchors_list = anchors_list + [new_anchor, new_anchor + " (Less) Anchor"]
+        
+        # X_next_left = X[X['patient_id'].isin(left_patient_ids)]
+        # X_next_right = X[X['patient_id'].isin(right_patient_ids)]
+        
+        # print('Entering recursive call')
+        # left_tree = self._build_tree(X_next_left, y[left_mask], depth + 1, updated_anchors_list)
+
+        # print('Finished the left side of the tree, start the right side...')
+        # right_tree = self._build_tree(X_next_right, y[right_mask], depth + 1, updated_anchors_list)
+
+        # return {
+        #     'feature': best_split['feature'],
+        #     'threshold': best_split['threshold'],
+        #     'aggregation': best_split['aggregation'],
+        #     'time_window': best_split['time_window'],
+        #     'num_patients': num_patients,
+        #     'anchors_list': updated_anchors_list,
+        #     'left': left_tree,
+        #     'right': right_tree
+        # }
+        
+        # -------------- updated the propagation ----------------
+
+        # Generate new anchors names based on the split direction
+        left_anchor = f"{best_split['feature']} <= {np.round(best_split['threshold'])} Anchor"
+        right_anchor = f"{best_split['feature']} > {np.round(best_split['threshold'])} Anchor"
+
+        # Function to extract valid dates based on a mask
+        def create_anchor_dates(patient_data, side_mask):
+            return patient_data.loc[side_mask, 'time'].tolist()
+
+        # # Filter data for the best split feature
+        # filtered_X = X[X['feature_name'] == best_split['feature']]
+
+        # # Collect new anchor data for left and right
+        # left_anchor_data = []
+        # right_anchor_data = []
+        
+        # for patient_id, patient_data in filtered_X.groupby('patient_id'):
+        #     mask_patient = patient_data['value'].astype(float) <= float(best_split['threshold'])
+
+        #     # Left: Values <= threshold
+        #     left_anchor_dates = create_anchor_dates(patient_data, mask_patient)
+        #     left_anchor_data.append({
+        #         'patient_id': patient_id,
+        #         'time': np.nan,
+        #         'feature_name': left_anchor,
+        #         'value': left_anchor_dates
+        #     })
+
+        #     # Right: Values > threshold
+        #     right_anchor_dates = create_anchor_dates(patient_data, ~mask_patient)
+        #     right_anchor_data.append({
+        #         'patient_id': patient_id,
+        #         'time': np.nan,
+        #         'feature_name': right_anchor,
+        #         'value': right_anchor_dates
+        #     })
+
+        # # Create new DataFrames for left and right anchors
+        # left_anchors_df = pd.DataFrame(left_anchor_data)
+        # right_anchors_df = pd.DataFrame(right_anchor_data)
+        # print(f'left_anchor_df:{len(left_anchors_df)}')
+        # print(f'right_anchor_df:{right_anchors_df}')
+        # # the split is done based on the aggregation, and only the left ids should get the anchor added
+        # left_anchors_df = left_anchors_df[left_anchors_df['patient_id'].isin(left_patient_ids)]
+        # right_anchors_df = right_anchors_df[right_anchors_df['patient_id'].isin(right_patient_ids)]
+        
+        filtered_X = X[X['feature_name'] == best_split['feature']]
+        left_anchor_data = []
+        right_anchor_data = []
+        # -------------------------------------------
+        # Create separate X for left and right subtrees with unique anchors
+        X_left = X[X['patient_id'].isin(left_patient_ids)]
+        X_right = X[X['patient_id'].isin(right_patient_ids)]
+        
+        filtered_X_left = X_left[X_left['feature_name'] == best_split['feature']]
+        filtered_X_right = X_right[X_right['feature_name'] == best_split['feature']]
+        # add anchors for left patients
+        for patient_id in left_patient_ids:
+            patient_data = filtered_X_left[filtered_X_left['patient_id'] == patient_id]
+             
+            if patient_data.empty:
+                # No data for this feature, assign empty anchor for this patients
+                left_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': left_anchor, 'value': []})
+                continue
+            mask_patient = patient_data['value'].astype(float) <= float(best_split['threshold']) # Here to change to mask from the time window of the previous , make sure that the 'time' column falls within the time window of the best split from the anchor chosen 
+
+            # Create anchors based on the mask
+            left_anchor_dates = create_anchor_dates(patient_data, mask_patient)
+
+            left_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': left_anchor, 'value': left_anchor_dates})
+        
+        # add anchors for right patients
+        for patient_id in right_patient_ids:
+            patient_data = filtered_X_right[filtered_X_right['patient_id'] == patient_id]
+             
+            if patient_data.empty:
+                # No data for this feature, assign empty anchor for this patients
+                right_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': right_anchor, 'value': []})
+                continue
+            mask_patient = patient_data['value'].astype(float) <= float(best_split['threshold'])
+
+            # Create anchors based on the mask
+            right_anchor_dates = create_anchor_dates(patient_data, mask_patient)
+
+            right_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': right_anchor, 'value': right_anchor_dates})
+
+        # -----------------------------------------------
+        # for patient_id in unique_patient_ids:
+        #     patient_data = filtered_X[filtered_X['patient_id'] == patient_id]
+
+        #     if patient_data.empty:
+        #         # No data for this feature, assign empty anchor
+        #         left_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': left_anchor, 'value': []})
+        #         right_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': right_anchor, 'value': []})
+        #         continue
+
+        #     mask_patient = patient_data['value'].astype(float) <= float(best_split['threshold'])
+
+        #     # Create anchors based on the mask
+        #     left_anchor_dates = create_anchor_dates(patient_data, mask_patient)
+        #     right_anchor_dates = create_anchor_dates(patient_data, ~mask_patient)
+
+        #     if patient_id in left_patient_ids:
+        #         left_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': left_anchor, 'value': left_anchor_dates})
+
+        #     if patient_id in right_patient_ids:
+        #         right_anchor_data.append({'patient_id': patient_id, 'time': np.nan, 'feature_name': right_anchor, 'value': right_anchor_dates})
+        
+        # Create new DataFrames for left and right anchors
+        left_anchors_df = pd.DataFrame(left_anchor_data)
+        right_anchors_df = pd.DataFrame(right_anchor_data)        
+        
+        from IPython.display import display
+        print(f'left_anchor_data:{len(left_anchors_df)}')
+        # display(left_anchors_df)
+        print(f'right_anchor_data:{len(right_anchors_df)}')
+        # display(right_anchors_df)
+        print(f'left_patient_ids:{len(left_patient_ids)}')
+        display(left_patient_ids)
+        print(f'right_patient_ids: {len(right_patient_ids)}')
+        display(right_patient_ids)
+        
+        
+        X_next_left = pd.concat([X_left, left_anchors_df], ignore_index=True)
+        X_next_right = pd.concat([X_right, right_anchors_df], ignore_index=True)
+
+        # print(f'\nX_next_left:')
+        # display(X_next_left)
+        # print(f'X_next_right:')
+        # display(X_next_right)
+        # print('\nCheck if all the patients in left has the new anchor:')
+        # ids__ = X_next_left.loc[X_next_left['feature_name']==left_anchor,'patient_id'].unique()
+        # print(f'len(ids): {len(ids__)}')
+        # print(f'len left patients: {len(left_patient_ids)}')
+        
+        # Create separate anchor lists for left and right
+        left_anchors_list = anchors_list + [left_anchor]
+        right_anchors_list = anchors_list + [right_anchor]
+        
+        print('Entering recursive call')
+        # Recursive calls with independent anchor lists
+        left_tree = self._build_tree(X_next_left, y[left_mask], depth + 1, left_anchors_list)
+        right_tree = self._build_tree(X_next_right, y[right_mask], depth + 1, right_anchors_list)
+
+        # Return the split node
+        return {
+            'feature': best_split['feature'],
+            'threshold': best_split['threshold'],
+            'aggregation': best_split['aggregation'],
+            'time_window': best_split['time_window'],
+            'num_patients': num_patients,
+            'anchors_list': anchors_list,  # Keep the current node's anchor list
+            'left': left_tree,
+            'right': right_tree
+        }
+
+    def _find_best_split(self, X: pd.DataFrame, y: pd.Series, anchors_list = None) -> Dict:
         """Finds the best split (feature, threshold, time and aggregation function) using temporal aggregations efficiently.
         X- raw EHR data
         y- target nd array
@@ -225,13 +527,17 @@ class TemporalDecisionTreeRegressor:
         num_samples = len(y)
         feature_names = X['feature_name'].unique()
         # print(f'Features names: {feature_names}')
-
-        for feature, tau , agg_name in product(feature_names, self.time_windows, self.aggregation_funcs.keys()): # would change when changin (anchor,int) to 2 lists...
-            if feature in ['Birth Date', 'age_at_event(years)','Pregnancy Start Date', 'max_age', 'age_start', 'age_end']: # or if feature in Anchor_list
-              continue # here , skip "Anchor features" , ------------
+        
+        if anchors_list is None: # the root node will only choose from the given anchors
+            anchors_list = self.anchors_list.copy()
+        
+        for feature, (anchor, offset), agg_name in product(feature_names, product(anchors_list, self.anchor_offset_list), self.aggregation_funcs.keys()):
+            if (feature == 'Birth Date') or (feature.endswith('Anchor')):  # feature in self.anchors_list
+                continue  # Skip anchor features and 'Birth Date'
             
-            print(f'\ntesting {(feature, tau , agg_name)}')
-            aggregated_values = self._aggregate_feature_over_time(X, feature, tau , agg_name)
+            tau = (anchor, offset)  # Create tau tuple
+            print(f'\ntesting {(feature, tau, agg_name)}')
+            aggregated_values, anchor = self._aggregate_feature_over_time(X, feature, tau , agg_name)
             # print(f'aggregated_values:{aggregated_values}')
 
             thresh_values = np.unique(pd.Series(aggregated_values).dropna())
@@ -252,132 +558,16 @@ class TemporalDecisionTreeRegressor:
                 score = self._calculate_split_score(y[left_mask], y[right_mask], self.criterion, self.is_classification)
                 # print(f'  Calculating {self.criterion} score for this combination with threshold {threshold}.')
                 # print(f'{self.criterion} score:{score}. best score:{score}')
+                
                 if score < best_score:
                     best_score = score
                     best_split = {
                         'feature': feature,
                         'threshold': threshold,
                         'aggregation': agg_name,
-                        'time_window': tau #Tuple (tau_start,tau_end)
+                        'time_window': (anchor, offset) # (chosen anchor, chosen offset)
                     }
         return best_split
-
-
-    # def _aggregate_feature_over_time(self, X: pd.DataFrame, feature: str, tau: Tuple , aggregation: str) -> np.ndarray:
-    #     """
-    #     Aggregates feature values within a specified time window using a given aggregation function.
-    #         -x :EHR raw data
-    #         feature: a feature name on which we are aggregating
-    #         tau: Tuple(Anchor_feature_name,offset_from_anchor) - the delta in months to define the time window
-    #         aggregation: the aggregation function name wanted: min,max,avg,median,count ....
-    #       """
-    #     # print(f'Entered aggregate_features function.')
-
-    #     Anchor_feature_name, offset_from_anchor = tau # [(0,3),(-60,-3),(None,None)]
-    #     # ---- supoort different types of taus ----
-    #     if isinstance(Anchor_feature_name, str):
-    #         # print('str')
-
-    #         if len(X[X['feature_name']==Anchor_feature_name])!=len(X['patient_id'].unique()) : #| (reference_feature_name not in X['feature_name'].unique())
-    #           raise ValueError(f"Input data must contain {Anchor_feature_name} as an Anchor in 'feature_name' columns, once for each patient.")
-            
-    #         date_reference_column = X[X["feature_name"] == Anchor_feature_name][['patient_id','value']] #df
-    #         date_reference_column.rename(columns={'value':'reference_dates_list'},inplace=True)
-    #         X = X.merge(date_reference_column,on='patient_id',how='left')            
-    #         X["time"] = pd.to_datetime(X['time'])
-           
-    #         if X['reference_dates_list'].apply(lambda x: isinstance(x, pd.Timestamp)).all():
-
-    #             # X['reference_dates_list'] = pd.to_datetime(X['reference_dates_list'])
-    #             X["date_relative_offset"] = X['reference_dates_list']  + pd.DateOffset(months=offset_from_anchor)
-    #             # print(f'    Aggregating {feature} over {tau_end} months from {Anchor_feature_name}.')
-    #             mask = (
-    #                 (X["feature_name"] == feature) & (
-    #                 ((offset_from_anchor >= 0) & (X["time"] <= X["date_relative_offset"]) & (X["reference_dates_list"] <= X["time"])) |
-    #                 ((offset_from_anchor < 0) & (X["time"] >= X["date_relative_offset"]) & (X["reference_dates_list"] >= X["time"])))
-    #             )
-
-    #         elif X['reference_dates_list'].apply(lambda x: isinstance(x, list)).all(): # if all values in the column are lists. 
-
-    #             # tau_end relatively to Anchor_feature_name
-    #             # Adjust tau range dynamically based on each patient's date_reference
-    #             # Convert reference_dates_list to datetime (ensuring each list entry is datetime)
-    #             X['reference_dates_list'] = X['reference_dates_list'].apply(lambda lst: [pd.to_datetime(dt) for dt in lst])
-
-    #             # Compute relative offsets for each timestamp in the list
-    #             X["date_relative_offset"] = X['reference_dates_list'].apply(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
-
-    #             # Function to check if any timestamp in the list meets the condition
-    #             def check_time_conditions(row):
-    #                 times = row["reference_dates_list"]
-    #                 offsets = row["date_relative_offset"]
-    #                 time_val = row["time"]
-                    
-    #                 if offset_from_anchor >= 0:
-    #                     return any((time_val <= offset) and (ref_date <= time_val) for ref_date, offset in zip(times, offsets))
-    #                 else:
-    #                     return any((time_val >= offset) and (ref_date >= time_val) for ref_date, offset in zip(times, offsets))
-
-    #             # Apply the filtering condition
-    #             mask = (X["feature_name"] == feature) & X.apply(check_time_conditions, axis=1)
-    #         else:
-    #             raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps.")
-
-    #     elif isinstance(Anchor_feature_name, pd.Timestamp):
-    #         print("Anchor is a pandas Timestamp")
-    #         # if tau_start.year != 0000:
-    #         #     has_year = True # the date contains a specific year
-    #         anchor_date = Anchor_feature_name
-    #         mask = (
-    #             (X["feature_name"] == feature) & (
-    #             ((anchor_date >= 0) & (X["time"] <= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date <= X["time"])) |
-    #             ((anchor_date < 0) & (X["time"] >= anchor_date + pd.DateOffset(months=offset_from_anchor)) & (anchor_date >= X["time"])))
-    #         )
-            
-
-    #     # Compute row-wise age_start and age_end dynamically
-    #     elif Anchor_feature_name is None and offset_from_anchor is None:
-    #         mask = X["feature_name"] == feature  # No filtering, return all feature data
-
-    #     elif isinstance(Anchor_feature_name,int) and isinstance(offset_from_anchor,int) :
-    #         # Adjust tau range dynamically based on each patient's max_age
-    #         X = self.add_age_at_event(X) #!!!
-    #         X["age_start"] = np.where(
-    #             Anchor_feature_name < 0, X["max_age"] + Anchor_feature_name / 12, Anchor_feature_name/12
-    #         )
-    #         X["age_end"] = np.where(
-    #             offset_from_anchor < 0, X["max_age"] + offset_from_anchor / 12, offset_from_anchor/12
-    #         )
-
-    #         if Anchor_feature_name < 0 and offset_from_anchor > 0:
-    #             raise ValueError("Invalid tau range: tau_start < 0 and offset_from_anchor > 0 is not supported.")
-
-    #         mask = (
-    #             (X["feature_name"] == feature) &
-    #             (X["age_at_event(years)"] >= X["age_start"]) &
-    #             (X["age_at_event(years)"] <= X["age_end"])
-    #         )
-    #     else:
-    #       raise TypeError(f"time_windows input type is unspported ({type(tau[0]),type(tau[1])}).\ntime_windows input should be of type: Tuple(timestamps,int) or Tuple(int,int) or Tuple(str,int) or Tuple(None,None)")
-
-    #     filtered_X = X[mask]
-    #     filtered_X['value'] = pd.to_numeric(filtered_X['value'], errors='coerce')
-    #     # print(f'filtered_X:\n{filtered_X}')
-    #     if aggregation == "count":
-    #         agg_result = filtered_X.groupby("patient_id")["value"].count().reset_index()
-    #     else:
-    #         agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation).reset_index()
-
-    #     # print(f'agg_result:{agg_result}')
-
-    #     # Ensure all patient IDs are present (even if they had no valid feature values)
-    #     all_patients = pd.DataFrame({'patient_id': X['patient_id'].unique()})  # Get all unique patient IDs
-    #     final_df = all_patients.merge(agg_result, on='patient_id', how='left')  # Left join to keep all patients
-    #     # print('aggregated:')
-    #     # print(final_df)
-    #     result = final_df['value'].values
-
-    #     return result
 
 
     def _aggregate_feature_over_time(self, X_original: pd.DataFrame, feature: str, tau: Tuple, aggregation: str) -> np.ndarray:
@@ -397,21 +587,23 @@ class TemporalDecisionTreeRegressor:
             print('X_feature is empty, return Nan')
             final_df = pd.DataFrame({"patient_id": X["patient_id"].unique(),"value":np.array([np.nan] * len(X["patient_id"].unique()))})
             return final_df["value"].values
-
-
         if isinstance(Anchor_feature_name, str):
             # Check if Anchor_feature_name appears exactly once per patient
             reference_feature = X[X["feature_name"] == Anchor_feature_name][["patient_id", "value"]].copy()
 
             if len(reference_feature) != len(X["patient_id"].unique()):
+                print(f'len of data with this anchor {len(reference_feature["patient_id"].unique())}')
+                print(f'unique patients: {len(X["patient_id"].unique())}')
                 raise ValueError(f"Each patient must have one {Anchor_feature_name} entry in 'feature_name'.")
 
             reference_feature.rename(columns={"value": "reference_dates_list"}, inplace=True)
             X_feature = X_feature.merge(reference_feature, on="patient_id", how="left")  
-            if X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
+            if offset_from_anchor is None:
+                   mask = np.ones(len(X_feature), dtype=bool)  # Select all rows
+                   Anchor_feature_name = None # in the case where we are looking at the data of all times, the anchor name makes no sense.
+            elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
                 # Single timestamp case             
-                X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset_from_anchor)
-
+                X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset_from_anchor) 
                 if offset_from_anchor >= 0:
                     # print(X_feature["time"].dtype)  
                     # print(X_feature["date_relative_offset"].dtype)  
@@ -433,9 +625,11 @@ class TemporalDecisionTreeRegressor:
                         return any((time_val >= off) and (ref >= time_val) for ref, off in zip(times, offsets))
 
                 mask = X_feature.apply(lambda row: time_filter(row["reference_dates_list"], row["date_relative_offset"], row["time"]), axis=1)
-            else:
-                raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps.")
 
+            else:
+                raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps or None")
+        
+        
         elif isinstance(Anchor_feature_name, pd.Timestamp):
             anchor_date = Anchor_feature_name
             X_feature["date_relative_offset"] = anchor_date + pd.DateOffset(months=offset_from_anchor)
@@ -445,25 +639,11 @@ class TemporalDecisionTreeRegressor:
             else:
                 mask = (X_feature["time"] >= X_feature["date_relative_offset"]) & (anchor_date >= X_feature["time"])
 
-        elif Anchor_feature_name is None and offset_from_anchor is None:
-            mask = np.ones(len(X_feature), dtype=bool)  # Select all rows
-
-        elif isinstance(Anchor_feature_name, int) and isinstance(offset_from_anchor, int):
-            X_feature = self.add_age_at_event(X_feature)  # Precompute age_at_event(years)
-            X_feature["age_start"] = np.where(
-                Anchor_feature_name < 0, X_feature["max_age"] + Anchor_feature_name / 12, Anchor_feature_name / 12
-            )
-            X_feature["age_end"] = np.where(
-                offset_from_anchor < 0, X_feature["max_age"] + offset_from_anchor / 12, offset_from_anchor / 12
-            )
-
-            if Anchor_feature_name < 0 and offset_from_anchor > 0:
-                raise ValueError("Invalid tau range: tau_start < 0 and offset_from_anchor > 0 is not supported.")
-
-            mask = (X_feature["age_at_event(years)"].between(X_feature["age_start"], X_feature["age_end"]))
-
+        elif Anchor_feature_name is None: # if i want to look on all data, i give None in the list of anchors_list
+                   mask = np.ones(len(X_feature), dtype=bool)
+                   
         else:
-            raise TypeError(f"Unsupported tau type: {type(tau[0]), type(tau[1])}")
+            raise TypeError(f"Unsupported anchor or offset type: {type(tau[0]), type(tau[1])}")
 
         # Apply mask
         filtered_X = X_feature[mask].copy()
@@ -478,7 +658,7 @@ class TemporalDecisionTreeRegressor:
         # Ensure all patient IDs are present
         final_df = pd.DataFrame({"patient_id": X["patient_id"].unique()}).merge(agg_result, on="patient_id", how="left")
 
-        return final_df["value"].values
+        return final_df["value"].values, Anchor_feature_name
 
     # staticmethod
     def add_age_at_event(self,X):
@@ -572,6 +752,32 @@ class TemporalDecisionTreeRegressor:
         if 'value' in tree:
             # print(f'return: {tree["value"]}')
             return tree['value']
+        anchor_name, offset = tree['time_window']
+        if anchor_name is not None and isinstance(anchor_name, str) and ('<=' in anchor_name or '>' in anchor_name):
+            # Dynamically reconstruct anchor from patient data
+            feature = tree['feature']
+            threshold = tree['threshold']
+
+            patient_data = row[row['feature_name'] == feature]
+            patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
+
+            if '<=' in anchor_name:
+                mask = patient_data['value'] <= threshold
+            else:
+                mask = patient_data['value'] > threshold
+
+            anchor_dates = patient_data.loc[mask, 'time'].tolist()
+
+            # Add new anchor row to patient data (just like in training) making sure anchors used in time_window are created if they’re missing from the test row.
+            anchor_row = pd.DataFrame([{
+                'patient_id': row['patient_id'].iloc[0],
+                'time': np.nan,
+                'feature_name': anchor_name,
+                'value': anchor_dates
+            }])
+
+            row = pd.concat([row, anchor_row], ignore_index=True)
+
         aggregated_value = self._aggregate_feature_over_time(row, tree['feature'], tree['time_window'], tree['aggregation'])[0]
         # print(f'aggregated_value:{aggregated_value}')
         if aggregated_value <= tree['threshold']:
@@ -686,19 +892,58 @@ import pandas as pd
 data = pd.read_csv('synthea_dataset_AtopicDermatitis_9.csv')
 data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
 leak_features = ['Contact dermatitis', 'Application of moisturizer to skin','Skin condition care','Eczema']
+data.loc[data['feature_name'] == 'Birth Date', 'feature_name'] = 'Birth Date Anchor'
+
 data = data.loc[~data['feature_name'].isin(leak_features)]
+# insure that the values are in the correct type (int)
+for index, row in data.iterrows():
+    if isinstance(row['value'], pd.Timestamp):
+        continue  # Skip if it's already a timestamp
+    try:
+        data.at[index, 'value'] = pd.to_numeric(row['value'], errors='coerce')
+    except:
+        continue  # Skip if conversion fails
+
 labels_df = pd.read_csv('labels_AtopicDermatitis_synthea_9.csv')
-train_data, test_data, y_train, y_test = split_data_(data,labels_df)
+
+labels_20 = labels_df.head(100)
+data_20 = data.loc[data['patient_id'].isin(labels_20['patient_id'])]
+
+train_data, test_data, y_train, y_test = split_data_(data, labels_df)
+
 #%% Run the model
+
+anchors_list = ['Birth Date Anchor']
+anchor_offset_list = [None, 6 , 12, 12*5] #12*5, 12*7, 
 taus =[('Birth Date',12*5),(None,None),('Birth Date',12*7),('Birth Date',12*2)] # ,(None,None),(0,12), in each split, search whether to look into the first 3 months, the last 3 months, or None (all data points)
 # Train model
 model = TemporalDecisionTreeRegressor(max_depth=3,
                                     min_samples_split=0,
+                                    anchors_list=anchors_list,
+                                    anchor_offset_list=anchor_offset_list,
                                     time_windows=taus,
                                     is_classification=False,
                                     criterion='mse')
 model.fit(train_data, y_train)
 
+#%% Save the model
+# import joblib
+# joblib.dump(model, 'saved_models\model_with_attention.pkl')
+import dill
+from datetime import datetime
+
+# Generate timestamped filename
+timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+filename = f'/home/noreena/TemporalDecisionTree/saved_models/model_with_attention_{timestamp}.dill'
+# Save the model
+with open(filename, 'wb') as f:
+    dill.dump(model, f)
+    
+#%%
+# Load the model
+with open('/home/noreena/TemporalDecisionTree/saved_models/model_with_attention.dill', 'rb') as f:
+    model = dill.load(f)   
+#%%
 predictions = model.predict(test_data)
 
 print(model.tree)
