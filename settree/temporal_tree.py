@@ -210,19 +210,37 @@ class TemporalTree(BaseEstimator):
             self.min_samples_split = math.ceil(self.min_samples_split * self.n_features)
     
     def _check_stopping_conditions(self, y, num_patients, depth) -> Optional[TemporalLeaf]:
+        y_target = y["label"] if isinstance(y, pd.DataFrame) else y
+
         if num_patients <= self.min_samples_split or depth >= self.max_depth_:
-            print("Stopping: too few samples or max depth reached.")
-            prediction = y.mode()[0] if self.is_classification else y.mean()
+            print(f"Stopping: too few samples or max depth reached. samples:{num_patients}, depth:{depth}")
+            prediction = y_target.mode()[0] if self.is_classification else y_target.mean()
             return self._create_leaf(prediction, num_patients, depth)
 
-        if self.is_classification and y.nunique() == 1:
+        if self.is_classification and y_target.nunique() == 1:
             print("Stopping: homogeneous classification label.")
-            return self._create_leaf(y.iloc[0], num_patients, depth)
+            return self._create_leaf(y_target.iloc[0], num_patients, depth)
 
-        elif not self.is_classification and y.nunique() == 1:
+        elif not self.is_classification and y_target.nunique() == 1:
             print("Stopping: homogeneous regression value.")
-            return self._create_leaf(y.iloc[0], num_patients, depth)
+            return self._create_leaf(y_target.iloc[0], num_patients, depth)
+
         return None
+        
+    # def _check_stopping_conditions(self, y, num_patients, depth) -> Optional[TemporalLeaf]:
+    #     if num_patients <= self.min_samples_split or depth >= self.max_depth_:
+    #         print(f"Stopping: too few samples or max depth reached. samples:{num_patients}, depth:{depth}")
+    #         prediction = y.mode()[0] if self.is_classification else y.mean()
+    #         return self._create_leaf(prediction, num_patients, depth)
+
+    #     if self.is_classification and y.nunique() == 1:
+    #         print("Stopping: homogeneous classification label.")
+    #         return self._create_leaf(y.iloc[0], num_patients, depth)
+
+    #     elif not self.is_classification and y.nunique() == 1:
+    #         print("Stopping: homogeneous regression value.")
+    #         return self._create_leaf(y.iloc[0], num_patients, depth)
+    #     return None
     
     def _create_leaf(self, value, num_patients, depth): # __add_leaf
             """Create and register a leaf node with a unique ID (sn)."""
@@ -230,6 +248,7 @@ class TemporalTree(BaseEstimator):
             leaf.sn = self.n_leafs
             self.n_leafs += 1
             self.leafs.append(leaf)
+            print(f'[_create_leaf] return at depth {depth} : \n{leaf} done with create leaf\n')
             return leaf
     
         # def __add_leaf(val, n_samples, curr_depth):
@@ -247,9 +266,11 @@ class TemporalTree(BaseEstimator):
         num_patients = len(y)
 
         stopping_node = self._check_stopping_conditions(y, num_patients, depth)
-        if stopping_node:
+        if stopping_node: #stop expanding the tree at this point and return a leaf node if a stopping condition has been met.
             return stopping_node
-        
+        # print(f'[get_node] stopping_node: {stopping_node} . Continues to find the best split and grow the tree further.')
+        print(f"[get_node] depth={depth}, num_patients={len(y)}, anchors={anchors_list}")
+
         best_split = self._find_best_split(X, y, anchors_list=anchors_list)
 
         if not best_split:
@@ -284,6 +305,8 @@ class TemporalTree(BaseEstimator):
         Builds the tree using BFS traversal and creates dynamic anchor rows
         after each split for temporal propagation.
         """
+        anch_lst = self.anchors_list.copy()
+        print(f'Inside _build - call _get_node with (x={len(X)}, y={len(y)}, {0}, anchors_list={anch_lst})')
         root = self._get_node(X, y, depth=0, anchors_list=self.anchors_list.copy())
         self.depth = 0
         print('_build function:')
@@ -295,12 +318,15 @@ class TemporalTree(BaseEstimator):
         queue.append((root, X, y, 0, self.anchors_list.copy()))
         # print(f'queue: {queue}')
         while queue:
+            print(f'[build] depth={self.depth}')
             node, X_node, y_node, depth, anchors = queue.popleft()
 
             # --- 1. Aggregate for this split ---
+            print('Inside _build - aggregate on best split')
             agg_values, _ = self._aggregate_feature_over_time(
                 X_node, node.feature, node.time_window, node.aggregation
             )
+            unique_patient_ids = X_node['patient_id'].unique()
 
             left_mask = agg_values <= node.threshold
             right_mask = ~left_mask
@@ -308,12 +334,23 @@ class TemporalTree(BaseEstimator):
             y_left = y_node.loc[left_mask]
             y_right = y_node.loc[right_mask]
 
-            left_ids = y_left.index
-            right_ids = y_right.index
-            
+            # left_ids = y_left.index ############ bug
+            # right_ids = y_right.index
+            left_ids = unique_patient_ids[left_mask]
+            right_ids = unique_patient_ids[right_mask]
+        
+            print(f'[_build] X_node len : {len(X_node)}')
+            # print(f'[_build] X_node  : {X_node}')
+            print(f'[_build] left_ids len : {len(left_ids)}')
+            # print(f'[_build] y_left : {y_left}')
+            # print(f'[_build] left_ids : {left_ids}')
+
             # split temporal data
             X_left = X_node[X_node['patient_id'].isin(left_ids)]
             X_right = X_node[X_node['patient_id'].isin(right_ids)]
+            
+            # print(f'[_build] X_left len : {len(X_left)}') 
+            # print(f'[_build] X_right len : {len(X_right)}')
 
             # --- 2. Create new anchor names ---
             left_anchor = f"{node.feature} <= {np.round(node.threshold)} Anchor"
@@ -735,11 +772,13 @@ class TemporalTree(BaseEstimator):
         for feature, (anchor, offset), agg_name in product(feature_names,
                                                            product(anchors_list, self.anchor_offset_list), 
                                                            self.aggregation_funcs.keys()):
+            # print('best split entered loop')
             if (feature == 'Birth Date') or (feature.endswith('Anchor')):  # feature in self.anchors_list
+                # print(f'skip {feature}')
                 continue  # Skip anchor features and 'Birth Date'
             
             tau = (anchor, offset)  # Create tau tuple
-            print(f"\nTesting: feature={feature}, time window={(feature, tau, agg_name)}, agg={agg_name}")
+            print(f"\nTesting: feature={feature}, time window={tau}, agg={agg_name}")
             aggregated_values, anchor = self._aggregate_feature_over_time(X, feature, tau , agg_name)
             # print(f'aggregated_values:{aggregated_values}')
 
@@ -771,6 +810,8 @@ class TemporalTree(BaseEstimator):
                         'time_window': (anchor, offset), # (chosen anchor, chosen offset)
                         'score': score  
                     }
+        print("Best split:", best_split)
+
         return best_split
 
 
@@ -862,6 +903,9 @@ class TemporalTree(BaseEstimator):
 
         # Ensure all patient IDs are present
         final_df = pd.DataFrame({"patient_id": X["patient_id"].unique()}).merge(agg_result, on="patient_id", how="left")
+        
+        print(f"[AGG] feature={feature}, anchor={Anchor_feature_name}, offset={offset_from_anchor}")
+        # print("Non-null aggregated values:",agg_result)
 
         return final_df["value"].values, Anchor_feature_name
 
@@ -1026,7 +1070,7 @@ from sklearn.model_selection import train_test_split
 # # Load data
 data = pd.read_csv('/home/noreena/TemporalDecisionTree/synthea_dataset_AtopicDermatitis_2.csv')
 data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
-leak_features = ['Contact dermatitis', 'Application of moisturizer to skin','Skin condition care','Eczema']
+leak_features = ['Contact dermatitis','Allergy education', 'Application of moisturizer to skin','Skin condition care','Eczema']
 data.loc[data['feature_name'] == 'Birth Date', 'feature_name'] = 'Birth Date Anchor'
 
 data = data.loc[~data['feature_name'].isin(leak_features)]
@@ -1041,6 +1085,7 @@ for index, row in data.iterrows():
 
 labels_df = pd.read_csv('/home/noreena/TemporalDecisionTree/labels_AtopicDermatitis_synthea_2.csv')
 labels_df = labels_df[labels_df['patient_id'].isin(list(data['patient_id'].unique()))]
+
 #%%
 labels_20 = labels_df.head(50)
 data_20 = data.loc[data['patient_id'].isin(labels_20['patient_id'])]
@@ -1049,11 +1094,11 @@ train_data, test_data, y_train, y_test = split_data_(data, labels_df)
 
 #%% Run the model (train)
 anchors_list = ['Birth Date Anchor']
-anchor_offset_list = [None, 6 , 12, -12] #, -6, 12*5, 12*5, 12*7]
-
+anchor_offset_list = [None, 6 , 12, 12*5]#-12, -6, 12*5, 12*7] #months 
+import time
 # Train model
 model = TemporalTree(max_depth=3,
-                                    min_samples_split=0,
+                                    min_samples_split=1,
                                     anchors_list=anchors_list,
                                     anchor_offset_list=anchor_offset_list,
                                     is_classification=False,
