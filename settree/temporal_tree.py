@@ -1,9 +1,6 @@
 #%%
 import numpy as np
 from collections import defaultdict
-from datetime import datetime, date, time
-from IPython.display import display
-import dill
 import math
 import queue
 from pandas import Timestamp
@@ -16,7 +13,7 @@ from sklearn.base import BaseEstimator
 # from settree.splitters import SPLITTERS
 from collections import deque
 from typing import List, Tuple, Dict, Callable, Any
-from anchor_utils import create_branch_anchors, get_time_window_mask # my addition
+from .anchor_utils import create_branch_anchors, get_time_window_mask # my addition
 
 
 #%%
@@ -567,7 +564,7 @@ class TemporalTree(BaseEstimator):
             feature = node.feature
             threshold = node.threshold
 
-            patient_data = row[row['feature_name'] == feature]
+            patient_data = row[row['feature_name'] == feature].copy()
             patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
             mask = patient_data['value'] <= threshold if '<=' in anchor_name else patient_data['value'] > threshold
             anchor_dates = patient_data.loc[mask, 'time'].tolist()
@@ -617,7 +614,7 @@ class TemporalTree(BaseEstimator):
 
         # Reconstruct anchor dynamically (if needed)
         if anchor_name and isinstance(anchor_name, str) and ('<=' in anchor_name or '>' in anchor_name):
-            patient_data = row[row['feature_name'] == node.feature]
+            patient_data = row[row['feature_name'] == node.feature].copy()
             patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
 
             if '<=' in anchor_name:
@@ -671,7 +668,7 @@ class TemporalTree(BaseEstimator):
             feature = node.feature
             threshold = node.threshold
 
-            patient_data = row[row['feature_name'] == feature]
+            patient_data = row[row['feature_name'] == feature].copy()
             patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
             mask = patient_data['value'] <= threshold if '<=' in anchor_name else patient_data['value'] > threshold
             anchor_dates = patient_data.loc[mask, 'time'].tolist()
@@ -764,6 +761,12 @@ class TemporalTree(BaseEstimator):
         best_score= float('inf')
         num_samples = len(y)
         feature_names = X['feature_name'].unique()
+        anchor_reference_cache = {}
+        feature_subset_cache = {}
+        feature_anchor_merge_cache = {}
+        time_window_mask_cache = {}
+        filtered_numeric_cache = {}
+        aggregation_result_cache = {}
         # print(f'Features names: {feature_names}')
         
         if anchors_list is None: # the root node will only choose from the given anchors
@@ -779,7 +782,18 @@ class TemporalTree(BaseEstimator):
             
             tau = (anchor, offset)  # Create tau tuple
             print(f"\nTesting: feature={feature}, time window={tau}, agg={agg_name}")
-            aggregated_values, anchor = self._aggregate_feature_over_time(X, feature, tau , agg_name)
+            aggregated_values, anchor = self._aggregate_feature_over_time(
+                X,
+                feature,
+                tau,
+                agg_name,
+                anchor_reference_cache=anchor_reference_cache,
+                feature_subset_cache=feature_subset_cache,
+                feature_anchor_merge_cache=feature_anchor_merge_cache,
+                time_window_mask_cache=time_window_mask_cache,
+                filtered_numeric_cache=filtered_numeric_cache,
+                aggregation_result_cache=aggregation_result_cache,
+            )
             # print(f'aggregated_values:{aggregated_values}')
 
             thresh_values = np.unique(pd.Series(aggregated_values).dropna())
@@ -815,22 +829,39 @@ class TemporalTree(BaseEstimator):
         return best_split
 
 
-    def _aggregate_feature_over_time(self, X_original: pd.DataFrame, feature: str, tau: Tuple, aggregation: str) -> np.ndarray:
+    def _aggregate_feature_over_time(
+        self,
+        X_original: pd.DataFrame,
+        feature: str,
+        tau: Tuple,
+        aggregation: str,
+        anchor_reference_cache=None,
+        feature_subset_cache=None,
+        feature_anchor_merge_cache=None,
+        time_window_mask_cache=None,
+        filtered_numeric_cache=None,
+        aggregation_result_cache=None,
+    ) -> np.ndarray:
         """
         Aggregates feature values within a specified time window using a given aggregation function.
         """
         Anchor_feature_name, offset_from_anchor = tau
-        X = X_original.copy()
-        # Ensure "time" is datetime
-        X["time"] = pd.to_datetime(X["time"])
 
         # Pre-filter the relevant feature
-        X_feature = X[X["feature_name"] == feature].copy()
+        if feature_subset_cache is not None and feature in feature_subset_cache:
+            X_feature = feature_subset_cache[feature].copy()
+        else:
+            X_feature = X_original[X_original["feature_name"] == feature].copy()
+            # Ensure "time" is datetime
+            X_feature["time"] = pd.to_datetime(X_feature["time"])
+
+            if feature_subset_cache is not None:
+                feature_subset_cache[feature] = X_feature.copy()
         # If X_feature is empty, return NaN for the patient
         if X_feature.empty:
             # Ensure all patient IDs are present
             # print('X_feature is empty, return Nan')
-            final_df = pd.DataFrame({"patient_id": X["patient_id"].unique(),"value":np.array([np.nan] * len(X["patient_id"].unique()))})
+            final_df = pd.DataFrame({"patient_id": X_original["patient_id"].unique(),"value":np.array([np.nan] * len(X_original["patient_id"].unique()))})
             return final_df["value"].values
         if offset_from_anchor is None:
             mask = np.ones(len(X_feature), dtype=bool)  # Select all rows
@@ -838,16 +869,33 @@ class TemporalTree(BaseEstimator):
         
         if isinstance(Anchor_feature_name, str):
             # Check if Anchor_feature_name appears exactly once per patient
-            reference_feature = X[X["feature_name"] == Anchor_feature_name][["patient_id", "value"]].copy()
+            mask_cache_key = (feature, Anchor_feature_name, offset_from_anchor)
+            if anchor_reference_cache is not None and Anchor_feature_name in anchor_reference_cache:
+                reference_feature = anchor_reference_cache[Anchor_feature_name].copy()
+            else:
+                reference_feature = X_original[X_original["feature_name"] == Anchor_feature_name][["patient_id", "value"]].copy()
+                reference_feature.rename(columns={"value": "reference_dates_list"}, inplace=True)
 
-            if len(reference_feature) != len(X["patient_id"].unique()):
+                if anchor_reference_cache is not None:
+                    anchor_reference_cache[Anchor_feature_name] = reference_feature.copy()
+
+            if len(reference_feature) != len(X_original["patient_id"].unique()):
                 print(f'len of data with this anchor {len(reference_feature["patient_id"].unique())}')
-                print(f'unique patients: {len(X["patient_id"].unique())}')
+                print(f'unique patients: {len(X_original["patient_id"].unique())}')
                 raise ValueError(f"Each patient must have one {Anchor_feature_name} entry in 'feature_name'.")
 
-            reference_feature.rename(columns={"value": "reference_dates_list"}, inplace=True)
-            X_feature = X_feature.merge(reference_feature, on="patient_id", how="left")  
-            if X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
+            merge_cache_key = (feature, Anchor_feature_name)
+            if feature_anchor_merge_cache is not None and merge_cache_key in feature_anchor_merge_cache:
+                X_feature = feature_anchor_merge_cache[merge_cache_key].copy()
+            else:
+                X_feature = X_feature.merge(reference_feature, on="patient_id", how="left")
+
+                if feature_anchor_merge_cache is not None:
+                    feature_anchor_merge_cache[merge_cache_key] = X_feature.copy()
+
+            if time_window_mask_cache is not None and mask_cache_key in time_window_mask_cache:
+                mask = time_window_mask_cache[mask_cache_key].copy()
+            elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
                 # Single timestamp case             
                 X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset_from_anchor) 
                 if offset_from_anchor >= 0:
@@ -857,6 +905,8 @@ class TemporalTree(BaseEstimator):
                     mask = (X_feature["time"] <= X_feature["date_relative_offset"]) & (X_feature["reference_dates_list"] <= X_feature["time"])
                 else:
                     mask = (X_feature["time"] >= X_feature["date_relative_offset"]) & (X_feature["reference_dates_list"] >= X_feature["time"])
+                if time_window_mask_cache is not None:
+                    time_window_mask_cache[mask_cache_key] = mask.copy()
 
             elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, list)).all():
                 # Convert lists of timestamps to datetime
@@ -871,6 +921,8 @@ class TemporalTree(BaseEstimator):
                         return any((time_val >= off) and (ref >= time_val) for ref, off in zip(times, offsets))
 
                 mask = X_feature.apply(lambda row: time_filter(row["reference_dates_list"], row["date_relative_offset"], row["time"]), axis=1)
+                if time_window_mask_cache is not None:
+                    time_window_mask_cache[mask_cache_key] = mask.copy()
 
             else:
                 raise ValueError(f"The value of {Anchor_feature_name} Anchor should be pd.Timestamps or a List of pd.Timestamps or None")
@@ -892,22 +944,42 @@ class TemporalTree(BaseEstimator):
             raise TypeError(f"Unsupported anchor or offset type: {type(tau[0]), type(tau[1])}")
 
         # Apply mask
-        filtered_X = X_feature[mask].copy()
-        
-        # Ensure 'value' is numeric
-        filtered_X["value"] = pd.to_numeric(filtered_X["value"], errors="coerce")
+        filtered_cache_key = (feature, Anchor_feature_name, offset_from_anchor)
+        if filtered_numeric_cache is not None and filtered_cache_key in filtered_numeric_cache:
+            filtered_X = filtered_numeric_cache[filtered_cache_key]
+        else:
+            filtered_X = X_feature[mask].copy()
+            
+            # Ensure 'value' is numeric
+            filtered_X["value"] = pd.to_numeric(filtered_X["value"], errors="coerce")
+
+            if filtered_numeric_cache is not None:
+                filtered_numeric_cache[filtered_cache_key] = filtered_X
 
         # Aggregate values
-        agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation).reset_index() if aggregation != "count" \
-            else filtered_X.groupby("patient_id")["value"].count().reset_index()
+        cached_aggregation_names = {"mean", "sum", "max", "count"}
+        if aggregation in cached_aggregation_names:
+            if aggregation_result_cache is not None and filtered_cache_key in aggregation_result_cache:
+                agg_results = aggregation_result_cache[filtered_cache_key]
+            else:
+                agg_results = filtered_X.groupby("patient_id")["value"].agg(
+                    mean="mean",
+                    sum="sum",
+                    max="max",
+                    count="count",
+                )
 
-        # Ensure all patient IDs are present
-        final_df = pd.DataFrame({"patient_id": X["patient_id"].unique()}).merge(agg_result, on="patient_id", how="left")
+                if aggregation_result_cache is not None:
+                    aggregation_result_cache[filtered_cache_key] = agg_results
+
+            agg_result = agg_results[aggregation]
+        else:
+            agg_result = filtered_X.groupby("patient_id")["value"].agg(aggregation)
         
         print(f"[AGG] feature={feature}, anchor={Anchor_feature_name}, offset={offset_from_anchor}")
         # print("Non-null aggregated values:",agg_result)
 
-        return final_df["value"].values, Anchor_feature_name
+        return agg_result.reindex(X_original["patient_id"].unique()).values, Anchor_feature_name
 
     # staticmethod
     def add_age_at_event(self,X):
@@ -1029,120 +1101,3 @@ def print_debug_error(mask_inds_l, mask_inds_r, y, args):
 
     if 'is_leaf' in args:
         print('args["is_leaf"] = {}'.format(args['is_leaf']))
-
-
-# %%
-
-def split_data_(data,labels_df):
-    n_all=len(data['patient_id'].unique())
-    print(f'number of patients in the data: {n_all}')
-
-    from sklearn.model_selection import train_test_split
-
-    #split train - test datasets 
-
-    # Stratified split to maintain label distribution
-    train_patients, test_patients = train_test_split(
-        labels_df["patient_id"], 
-        test_size=0.3, 
-        stratify=labels_df["label"],  # Ensures class balance
-        random_state=42
-    )
-
-    # Create train and test sets
-    train_data = data[data["patient_id"].isin(train_patients)]
-    test_data = data[data["patient_id"].isin(test_patients)]
-
-    train_labels = labels_df[labels_df["patient_id"].isin(train_patients)]
-    test_labels = labels_df[labels_df["patient_id"].isin(test_patients)]
-
-    y_train = train_labels['label']
-    y_test = test_labels['label']
-
-    n_train=len(train_data['patient_id'].unique())
-    print(f'number of patients in the train: {n_train}')
-    print(f'Precentage of label 1 in train: {y_train.sum()*100/n_train}')
-    n_test=len(test_data['patient_id'].unique())
-    print(f'number of patients in the test: {n_test}')
-    return train_data, test_data, y_train, y_test
-import pandas as pd
-from sklearn.model_selection import train_test_split
-# # Load data
-data = pd.read_csv('/home/noreena/TemporalDecisionTree/synthea_dataset_AtopicDermatitis_2.csv')
-data.loc[data['feature_name'] == 'Birth Date', 'value'] = pd.to_datetime(data.loc[data['feature_name'] == 'Birth Date', 'value'])
-leak_features = ['Contact dermatitis','Allergy education', 'Application of moisturizer to skin','Skin condition care','Eczema']
-data.loc[data['feature_name'] == 'Birth Date', 'feature_name'] = 'Birth Date Anchor'
-
-data = data.loc[~data['feature_name'].isin(leak_features)]
-# insure that the values are in the correct type (int)
-for index, row in data.iterrows():
-    if isinstance(row['value'], pd.Timestamp):
-        continue  # Skip if it's already a timestamp
-    try:
-        data.at[index, 'value'] = pd.to_numeric(row['value'], errors='coerce')
-    except:
-        continue  # Skip if conversion fails
-
-labels_df = pd.read_csv('/home/noreena/TemporalDecisionTree/labels_AtopicDermatitis_synthea_2.csv')
-labels_df = labels_df[labels_df['patient_id'].isin(list(data['patient_id'].unique()))]
-
-#%%
-labels_20 = labels_df.head(50)
-data_20 = data.loc[data['patient_id'].isin(labels_20['patient_id'])]
-
-train_data, test_data, y_train, y_test = split_data_(data, labels_df)
-
-#%% Run the model (train)
-anchors_list = ['Birth Date Anchor']
-anchor_offset_list = [None, 6 , 12, 12*5]#-12, -6, 12*5, 12*7] #months 
-import time
-# Train model
-model = TemporalTree(max_depth=3,
-                                    min_samples_split=1,
-                                    anchors_list=anchors_list,
-                                    anchor_offset_list=anchor_offset_list,
-                                    is_classification=False,
-                                    criterion='mse')
-start_time = time.time()
-model.fit(train_data, y_train)
-end_time = time.time()
-
-print(f"\nTraining time: {end_time - start_time:.2f} seconds")
-
-#%%
-predictions = model.predict(test_data)
-
-# print(model.tree)
-y_predicted = (predictions >= 0.5).astype(int)
-# %%
-from eval_utils import evaluate_TemporalTree, plot_tree_structure
-
-
-# from sklearn.metrics import accuracy_score
-# print("Accuracy:", accuracy_score(y_true=y_test, y_pred=y_predicted))
-
-results = evaluate_TemporalTree(y_test,y_predicted,y_probabilities=predictions)
-plot_tree_structure(model.tree)
-
-print(results)
-
-#%%  ===== Save the model ==========
-# import joblib
-# joblib.dump(model, 'saved_models\model_with_attention.pkl')
-
-# Generate timestamped filename
-timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-filename = f'/home/noreena/TemporalDecisionTree/saved_models/temporal_tree_{timestamp}.dill'
-# Save the model
-with open(filename, 'wb') as f:
-    dill.dump(model, f)
-    
-#%% Or load
-# Load the model
-    """ 
-    previous path of the best model: /home/noreena/TemporalDecisionTree/saved_models/model_with_attention_2025-04-07_23-54-07.dill
-    new path : /home/noreena/TemporalDecisionTree/saved_models/model_best_AD2_2025-04-07.dill 
-    """
-
-with open('/home/noreena/TemporalDecisionTree/saved_models/model_best_AD2_2025-04-07.dill', 'rb') as f:
-    model = dill.load(f)   

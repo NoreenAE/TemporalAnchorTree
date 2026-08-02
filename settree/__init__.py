@@ -1,8 +1,3 @@
-from settree.set_data import *
-from settree.set_tree import *
-from settree.gbest import *
-from settree.set_rf import *
+from .temporal_tree import TemporalTree
 
-from settree.operations import *
-from settree.explainability import *
-
+__all__ = ["TemporalTree"]

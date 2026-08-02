@@ -1,0 +1,30 @@
+# Data files
+*.csv
+*.xlsx
+
+# Archived/generated datasets
+legacy/features_dfs/
+legacy/features_dfs_9/
+legacy/*synthea*.csv
+legacy/labels*.csv
+legacy/hypothetical_*.csv
+legacy/patients.xlsx
+
+# Notebooks with generated outputs/data exploration
+legacy/*.ipynb
+
+# Saved models
+*.dill
+*.pkl
+*.pickle
+legacy/saved_models/
+outputs/
+
+# Python cache/build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# IDE files
+.idea/
+.vscode/
