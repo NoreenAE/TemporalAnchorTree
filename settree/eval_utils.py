@@ -1,7 +1,7 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, 
+    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix,  average_precision_score, precision_recall_curve,
     roc_auc_score, roc_curve, matthews_corrcoef
 )
 
@@ -40,10 +40,20 @@ def evaluate_TemporalTree(y_real, y_predicted, y_probabilities=None):
         if y_probabilities is not None:
             auc_roc = roc_auc_score(y_real, y_probabilities)
             fpr, tpr, _ = roc_curve(y_real, y_probabilities)
-            print(len(fpr))
+            print(f'len(fpr): {len(fpr)}')
             # Store AUC in results
             results['auc_roc'] = auc_roc
+            # Average Precision / PR-AUC
+            average_precision = average_precision_score(
+                y_real,
+                y_probabilities
+            )
+            results['average_precision'] = average_precision
 
+            pr_precision, pr_recall, _ = precision_recall_curve(
+                y_real,
+                y_probabilities
+            )
             # Plot ROC Curve
             plt.figure(figsize=(6, 6))
             plt.plot(fpr, tpr, color='blue', label=f'AUC-ROC = {auc_roc:.3f}')

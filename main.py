@@ -12,7 +12,11 @@ from settree.temporal_tree import TemporalTree
 
 
 def load_data(data_path, labels_path):
-    data = pd.read_csv(data_path)
+    if str(data_path).lower().endswith('.pkl'):
+        data = pd.read_pickle(data_path)
+    else:
+        data = pd.read_csv(data_path)
+
     data["time"] = pd.to_datetime(data["time"], errors="coerce")
     invalid_time_count = data["time"].isna().sum()
 
@@ -34,16 +38,17 @@ def load_data(data_path, labels_path):
     data.loc[data['feature_name'] == 'Birth Date', 'feature_name'] = 'Birth Date Anchor'
 
     data = data.loc[~data['feature_name'].isin(leak_features)]
-    # insure that the values are in the correct type (int)
-    for index, row in data.iterrows():
-        if isinstance(row['value'], pd.Timestamp):
-            continue  # Skip if it's already a timestamp
-        try:
-            data.at[index, 'value'] = pd.to_numeric(row['value'], errors='coerce')
-        except:
-            continue  # Skip if conversion fails
+    # Preserve birth-anchor values as timestamps while converting other features to numeric.
+    anchor_mask = data['feature_name'].eq('Birth Date Anchor')
+    data.loc[anchor_mask, 'value'] = pd.to_datetime(data.loc[anchor_mask, 'value'])
+    data.loc[~anchor_mask, 'value'] = pd.to_numeric(data.loc[~anchor_mask, 'value'], errors='coerce')
+    data.loc[~anchor_mask, 'value'] = data.loc[~anchor_mask, 'value'].fillna(0)
 
-    labels_df = pd.read_csv(labels_path)
+    if str(labels_path).lower().endswith('.pkl'):
+        labels_df = pd.read_pickle(labels_path)
+    else:
+        labels_df = pd.read_csv(labels_path)
+
     labels_df = labels_df[labels_df['patient_id'].isin(list(data['patient_id'].unique()))]
     return data, labels_df
 
@@ -109,17 +114,22 @@ def train_model(train_data, y_train):
     anchor_offset_list = [None, 6, 12, 12 * 5]#-12, -6, 12*5, 12*7] #months
     model = TemporalTree(max_depth=3,
                          min_samples_split=1,
+                         min_samples_leaf = 1,
                          anchors_list=anchors_list,
                          anchor_offset_list=anchor_offset_list,
                          is_classification=False,
-                         criterion='mse')
+                         criterion='mse',
+                        learn_missing_direction=False)
     model.fit(train_data, y_train)
     return model
 
 
 def evaluate_model(model, test_data, y_test):
+    print('-------------evaluate_model() func-------------')
     predictions = model.predict(test_data)
+    print('Predictions:', predictions)
     y_predicted = (predictions >= 0.5).astype(int)
+    print('Predicted labels:', y_predicted)
     results = evaluate_TemporalTree(y_test, y_predicted, y_probabilities=predictions)
     plot_tree_structure(model.tree)
     return results
@@ -140,24 +150,56 @@ def load_model(model_path):
 
 
 def main():
-    data_path = Path('legacy/synthea_dataset_AtopicDermatitis_2.csv')
-    labels_path = Path('legacy/labels_AtopicDermatitis_synthea_2.csv')
+    total_start_time = time.time()
+
+    # # Existing CSV-based run remains unchanged.
+    # legacy_data_path = Path('legacy/synthea_dataset_AtopicDermatitis_2.csv')
+    # legacy_labels_path = Path('legacy/labels_AtopicDermatitis_synthea_2.csv')
+    # output_dir = Path('outputs/models')
+
+    # data, labels_df = load_data(legacy_data_path, legacy_labels_path)
+    # train_data, test_data, y_train, y_test = split_data(data, labels_df)
+
+    # start_time = time.time()
+    # model = train_model(train_data, y_train)
+    # end_time = time.time()
+
+    # print(f"\nTraining time: {end_time - start_time:.2f} seconds")
+
+    # results = evaluate_model(model, test_data, y_test)
+    # print(results)
+
+    # save_model(model, output_dir)
+
+    # Additional synthetic-data run using the new PKL files.
     output_dir = Path('outputs/models')
+    #synthetic_moh_longitudinal_2000
+    #synthetic_moh_labels_2000
+    synthetic_data_path = Path('synthetic_temporal_unit_test_5000.pkl') #
+    synthetic_labels_path = Path('synthetic_temporal_unit_test_labels_5000.pkl') #
 
-    data, labels_df = load_data(data_path, labels_path)
-    train_data, test_data, y_train, y_test = split_data(data, labels_df)
+    synthetic_data, synthetic_labels_df = load_data(synthetic_data_path, synthetic_labels_path)
+    synthetic_train_data, synthetic_test_data, synthetic_y_train, synthetic_y_test = split_data(
+        synthetic_data, synthetic_labels_df
+    )
 
-    start_time = time.time()
-    model = train_model(train_data, y_train)
-    end_time = time.time()
+    synthetic_start_time = time.time()
+    synthetic_model = train_model(synthetic_train_data, synthetic_y_train)
+    synthetic_end_time = time.time()
 
-    print(f"\nTraining time: {end_time - start_time:.2f} seconds")
+    print(f"\nSynthetic training time: {synthetic_end_time - synthetic_start_time:.2f} seconds")
 
-    results = evaluate_model(model, test_data, y_test)
-    print(results)
+    synthetic_results = evaluate_model(synthetic_model, synthetic_test_data, synthetic_y_test)
+    print("Synthetic results:")
+    print(synthetic_results)
 
-    save_model(model, output_dir)
+    save_model(synthetic_model, output_dir)
+
+    total_runtime_seconds = time.time() - total_start_time
+    print(f"\nTotal runtime: {total_runtime_seconds:.2f} seconds")
+    print(f"Total runtime: {total_runtime_seconds / 60:.2f} minutes")
 
 
 if __name__ == "__main__":
+    print("Starting Temporal Tree training and evaluation...")
     main()

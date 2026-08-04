@@ -24,6 +24,7 @@ class TemporalSplitNode:
         threshold: float = None,
         aggregation: str = None,
         time_window: tuple = None,
+        missing_direction: str = "right",
         anchors_list: list = None,
         num_patients: int = 0,
         depth: int = 0,
@@ -42,6 +43,7 @@ class TemporalSplitNode:
         - threshold: Threshold for the split condition.
         - aggregation: Aggregation function used (e.g., 'mean', 'max').
         - time_window: (anchor_name, offset) defining the time window for aggregation.
+        - missing_direction: Direction used for missing aggregated values.
         - anchors_list: List of anchors available at this node.
         - num_patients: Number of patients reaching this node.
         - depth: Depth of this node in the tree.
@@ -53,6 +55,7 @@ class TemporalSplitNode:
         self.threshold = threshold
         self.aggregation = aggregation
         self.time_window = time_window  # (anchor, offset)
+        self.missing_direction = missing_direction
         self.anchors_list = anchors_list if anchors_list else []
         self.num_patients = num_patients
         self.depth = depth
@@ -77,6 +80,7 @@ class TemporalSplitNode:
         return (
             f"SplitNode(feature={self.feature}, threshold={self.threshold}, "
             f"aggregation={self.aggregation}, time_window={self.time_window}, "
+            f"missing_direction={self.missing_direction}, "
             f"depth={self.depth}, num_patients={self.num_patients})"
         )
 
@@ -110,6 +114,7 @@ class TemporalTree(BaseEstimator):
                  aggregation_funcs=None,
                  is_classification=True,
                  criterion="entropy",
+                 learn_missing_direction=False,
                  random_state=None):
 
         """
@@ -164,6 +169,7 @@ class TemporalTree(BaseEstimator):
         self.min_samples_leaf = min_samples_leaf
         self.is_classification = is_classification
         self.criterion = criterion
+        self.learn_missing_direction = learn_missing_direction
         self.random_state = random_state
 
         self.anchors_list = anchors_list or ['Birth Date Anchor']
@@ -209,7 +215,7 @@ class TemporalTree(BaseEstimator):
     def _check_stopping_conditions(self, y, num_patients, depth) -> Optional[TemporalLeaf]:
         y_target = y["label"] if isinstance(y, pd.DataFrame) else y
 
-        if num_patients <= self.min_samples_split or depth >= self.max_depth_:
+        if num_patients < self.min_samples_split or depth >= self.max_depth_:
             print(f"Stopping: too few samples or max depth reached. samples:{num_patients}, depth:{depth}")
             prediction = y_target.mode()[0] if self.is_classification else y_target.mean()
             return self._create_leaf(prediction, num_patients, depth)
@@ -280,6 +286,7 @@ class TemporalTree(BaseEstimator):
             threshold=best_split["threshold"],
             aggregation=best_split["aggregation"],
             time_window=best_split["time_window"],
+            missing_direction=best_split.get("missing_direction", "right"),
             anchors_list=anchors_list,
             num_patients=num_patients,
             depth=depth,
@@ -325,7 +332,13 @@ class TemporalTree(BaseEstimator):
             )
             unique_patient_ids = X_node['patient_id'].unique()
 
-            left_mask = agg_values <= node.threshold
+            missing_mask = pd.isna(agg_values)
+            with np.errstate(invalid='ignore'):
+                non_missing_left_mask = (~missing_mask) & (agg_values <= node.threshold)
+            if getattr(node, "missing_direction", "right") == "left":
+                left_mask = non_missing_left_mask | missing_mask
+            else:
+                left_mask = non_missing_left_mask
             right_mask = ~left_mask
 
             y_left = y_node.loc[left_mask]
@@ -558,29 +571,40 @@ class TemporalTree(BaseEstimator):
         """Returns the unique ID (sn) of the leaf node reached by the patient."""
         if node.is_leaf():
             return getattr(node, 'sn', -1)
-        
-        anchor_name, offset = node.time_window
-        if anchor_name and isinstance(anchor_name, str) and ('<=' in anchor_name or '>' in anchor_name):
-            feature = node.feature
-            threshold = node.threshold
-
-            patient_data = row[row['feature_name'] == feature].copy()
-            patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
-            mask = patient_data['value'] <= threshold if '<=' in anchor_name else patient_data['value'] > threshold
-            anchor_dates = patient_data.loc[mask, 'time'].tolist()
-            anchor_row = pd.DataFrame([{
-                'patient_id': row['patient_id'].iloc[0],
-                'time': np.nan,
-                'feature_name': anchor_name,
-                'value': anchor_dates
-            }])
-            row = pd.concat([row, anchor_row], ignore_index=True)
 
         aggregated_value = self._aggregate_feature_over_time(
             row, node.feature, node.time_window, node.aggregation
         )[0]
 
-        return self._get_leaf_id(row, node.left if aggregated_value <= node.threshold else node.right)
+        direction = self._get_prediction_direction(aggregated_value, node)
+        row = self._append_prediction_branch_anchor(row, node, direction)
+        next_node = node.left if direction == "left" else node.right
+
+        return self._get_leaf_id(row, next_node)
+
+    def _get_prediction_direction(self, aggregated_value, node) -> str:
+        if pd.isna(aggregated_value):
+            return "left" if getattr(node, "missing_direction", "right") == "left" else "right"
+        return "left" if aggregated_value <= node.threshold else "right"
+
+    def _append_prediction_branch_anchor(self, row: pd.DataFrame, node, direction: str) -> pd.DataFrame:
+        patient_id = row["patient_id"].iloc[0]
+        if direction == "left":
+            anchor_name = f"{node.feature} <= {np.round(node.threshold)} Anchor"
+        else:
+            anchor_name = f"{node.feature} > {np.round(node.threshold)} Anchor"
+
+        anchor_df = create_branch_anchors(
+            patient_ids=[patient_id],
+            X_branch=row,
+            anchor_name=anchor_name,
+            direction=direction,
+            feature=node.feature,
+            threshold=node.threshold,
+            time_window=node.time_window
+        )
+        return pd.concat([row, anchor_df], ignore_index=True)
+
     def predict(self, X: pd.DataFrame) -> np.ndarray:
         if self.tree is None:
             raise ValueError("Model not fitted. Call `.fit()` first.")
@@ -610,37 +634,15 @@ class TemporalTree(BaseEstimator):
         if node.is_leaf():
             return node.value if not self.is_classification else np.argmax(node.value)
 
-        anchor_name, offset = node.time_window
-
-        # Reconstruct anchor dynamically (if needed)
-        if anchor_name and isinstance(anchor_name, str) and ('<=' in anchor_name or '>' in anchor_name):
-            patient_data = row[row['feature_name'] == node.feature].copy()
-            patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
-
-            if '<=' in anchor_name:
-                mask = patient_data['value'] <= node.threshold
-            else:
-                mask = patient_data['value'] > node.threshold
-
-            anchor_dates = patient_data.loc[mask, 'time'].tolist()
-            anchor_row = pd.DataFrame([{
-                'patient_id': row['patient_id'].iloc[0],
-                'time': np.nan,
-                'feature_name': anchor_name,
-                'value': anchor_dates
-            }])
-
-            row = pd.concat([row, anchor_row], ignore_index=True)
-
         # Aggregate and make the decision
         aggregated_value = self._aggregate_feature_over_time(
             row, node.feature, node.time_window, node.aggregation
         )[0]
 
-        if aggregated_value <= node.threshold:
-            return self._predict_row(row, node.left)
-        else:
-            return self._predict_row(row, node.right)
+        direction = self._get_prediction_direction(aggregated_value, node)
+        row = self._append_prediction_branch_anchor(row, node, direction)
+        next_node = node.left if direction == "left" else node.right
+        return self._predict_row(row, next_node)
 
     def apply(self, X: pd.DataFrame) -> np.ndarray:
         """Returns the ID of the leaf each patient lands in."""
@@ -662,29 +664,14 @@ class TemporalTree(BaseEstimator):
         if node.is_leaf():
             return node.value  # expected to be a probability vector
 
-        # Same anchor logic as in _predict_row()
-        anchor_name, offset = node.time_window
-        if anchor_name and isinstance(anchor_name, str) and ('<=' in anchor_name or '>' in anchor_name):
-            feature = node.feature
-            threshold = node.threshold
-
-            patient_data = row[row['feature_name'] == feature].copy()
-            patient_data.loc[:, 'value'] = pd.to_numeric(patient_data['value'], errors='coerce')
-            mask = patient_data['value'] <= threshold if '<=' in anchor_name else patient_data['value'] > threshold
-            anchor_dates = patient_data.loc[mask, 'time'].tolist()
-            anchor_row = pd.DataFrame([{
-                'patient_id': row['patient_id'].iloc[0],
-                'time': np.nan,
-                'feature_name': anchor_name,
-                'value': anchor_dates
-            }])
-            row = pd.concat([row, anchor_row], ignore_index=True)
-
         aggregated_value = self._aggregate_feature_over_time(
             row, node.feature, node.time_window, node.aggregation
         )[0]
 
-        return self._predict_proba_row(row, node.left if aggregated_value <= node.threshold else node.right)
+        direction = self._get_prediction_direction(aggregated_value, node)
+        row = self._append_prediction_branch_anchor(row, node, direction)
+        next_node = node.left if direction == "left" else node.right
+        return self._predict_proba_row(row, next_node)
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
         if not self.is_classification:
@@ -799,31 +786,44 @@ class TemporalTree(BaseEstimator):
             thresh_values = np.unique(pd.Series(aggregated_values).dropna())
             for threshold in thresh_values:
                 # print(f'  threshold:{threshold}')
+                missing_mask = pd.isna(aggregated_values)
                 with np.errstate(invalid='ignore'):  # Suppress invalid comparison warnings
-                    left_mask = aggregated_values <= threshold
+                    non_missing_left_mask = (~missing_mask) & (aggregated_values <= threshold)
 
-                right_mask = ~left_mask
-                # print(f'right_mask:\n{right_mask}')
-                # print(f'left_mask ( <= ):\n{left_mask}')
-                if np.sum(left_mask) < self.min_samples_split or np.sum(right_mask) < self.min_samples_split:
-                    print(f'  This split has {np.sum(left_mask)} samples on the left, and {np.sum(right_mask)} on the right.')
-                    print(f'  The split is skipped, it does not meet the minimum number of samples required for valid child nodes ({self.min_samples_split}).')
-                    continue
+                missing_directions = (
+                    ["right", "left"]
+                    if self.learn_missing_direction and np.any(missing_mask)
+                    else ["right"]
+                )
+                for missing_direction in missing_directions:
+                    if missing_direction == "left":
+                        left_mask = non_missing_left_mask | missing_mask
+                    else:
+                        left_mask = non_missing_left_mask
 
-                # score = self._calculate_mse(y[left_mask], y[right_mask])
-                score = self._calculate_split_score(y[left_mask], y[right_mask], self.criterion, self.is_classification)
-                # print(f'  Calculating {self.criterion} score for this combination with threshold {threshold}.')
-                # print(f'{self.criterion} score:{score}. best score:{score}')
-                
-                if score < best_score:
-                    best_score = score
-                    best_split = {
-                        'feature': feature,
-                        'threshold': threshold,
-                        'aggregation': agg_name,
-                        'time_window': (anchor, offset), # (chosen anchor, chosen offset)
-                        'score': score  
-                    }
+                    right_mask = ~left_mask
+                    # print(f'right_mask:\n{right_mask}')
+                    # print(f'left_mask ( <= ):\n{left_mask}')
+                    if np.sum(left_mask) < self.min_samples_leaf or np.sum(right_mask) < self.min_samples_leaf:
+                        print(f'  This split has {np.sum(left_mask)} samples on the left, and {np.sum(right_mask)} on the right.')
+                        print(f'  The split is skipped, it does not meet the minimum number of samples required for valid leaf nodes ({self.min_samples_leaf}).')
+                        continue
+
+                    # score = self._calculate_mse(y[left_mask], y[right_mask])
+                    score = self._calculate_split_score(y[left_mask], y[right_mask], self.criterion, self.is_classification)
+                    # print(f'  Calculating {self.criterion} score for this combination with threshold {threshold}.')
+                    # print(f'{self.criterion} score:{score}. best score:{score}')
+                    
+                    if score < best_score:
+                        best_score = score
+                        best_split = {
+                            'feature': feature,
+                            'threshold': threshold,
+                            'aggregation': agg_name,
+                            'time_window': (anchor, offset), # (chosen anchor, chosen offset)
+                            'missing_direction': missing_direction,
+                            'score': score  
+                        }
         print("Best split:", best_split)
 
         return best_split
