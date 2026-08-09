@@ -68,7 +68,7 @@ def evaluate_TemporalTree(y_real, y_predicted, y_probabilities=None):
 
 import matplotlib.pyplot as plt
 
-def plot_tree_structure(tree, figsize=(12, 6), title="Temporal Decision Tree"):
+def plot_tree_structure(tree, figsize=(12, 6), title="Temporal Decision Tree", save_path=None):
     """
     Plots a simple visual representation of the tree structure using matplotlib.
 
@@ -107,4 +107,7 @@ def plot_tree_structure(tree, figsize=(12, 6), title="Temporal Decision Tree"):
     ax.axis('off')
     plt.title(title)
     plt.tight_layout()
+    if save_path is not None:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
     plt.show()
+    return fig

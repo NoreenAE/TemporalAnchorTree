@@ -28,8 +28,7 @@ class TemporalSplitNode:
         anchors_list: list = None,
         num_patients: int = 0,
         depth: int = 0,
-        impurity: float = None,
-        # value: float = None,  # ← NEW: For leaf prediction
+        impurity: float = None, # value: float = None,  # ← NEW: For leaf prediction
         left=None,
         right=None
     ):
@@ -594,15 +593,54 @@ class TemporalTree(BaseEstimator):
         else:
             anchor_name = f"{node.feature} > {np.round(node.threshold)} Anchor"
 
-        anchor_df = create_branch_anchors(
-            patient_ids=[patient_id],
-            X_branch=row,
-            anchor_name=anchor_name,
-            direction=direction,
-            feature=node.feature,
-            threshold=node.threshold,
-            time_window=node.time_window
-        )
+        prev_anchor_name, offset = node.time_window
+        patient_data = row[row["feature_name"] == node.feature]
+
+        if patient_data.empty:
+            anchor_dates = []
+        else:
+            value_mask = (
+                patient_data["value"].astype(float) <= node.threshold
+                if direction == "left"
+                else patient_data["value"].astype(float) > node.threshold
+            )
+
+            anchor_value = row[row["feature_name"] == prev_anchor_name]["value"]
+            if anchor_value.empty or pd.isnull(anchor_value.values[0]):
+                time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+            else:
+                anchor_raw = anchor_value.values[0]
+                if isinstance(anchor_raw, pd.Timestamp):
+                    anchor_time = pd.to_datetime(anchor_raw)
+                    offset_time = anchor_time + pd.DateOffset(months=offset)
+                    time_mask = (
+                        (patient_data["time"] >= anchor_time) & (patient_data["time"] <= offset_time)
+                        if offset >= 0 else
+                        (patient_data["time"] <= anchor_time) & (patient_data["time"] >= offset_time)
+                    )
+                elif isinstance(anchor_raw, list):
+                    anchor_times = pd.to_datetime(anchor_raw)
+                    offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
+
+                    def time_filter(time_val):
+                        return any(
+                            (time_val <= o and r <= time_val) if offset >= 0 else (time_val >= o and r >= time_val)
+                            for r, o in zip(anchor_times, offset_times)
+                        )
+
+                    time_mask = patient_data["time"].apply(time_filter)
+                else:
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+
+            combined_mask = value_mask & time_mask
+            anchor_dates = patient_data.loc[combined_mask, "time"].tolist()
+
+        anchor_df = pd.DataFrame([{
+            "patient_id": patient_id,
+            "time": np.nan,
+            "feature_name": anchor_name,
+            "value": anchor_dates
+        }])
         return pd.concat([row, anchor_df], ignore_index=True)
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:
@@ -613,11 +651,10 @@ class TemporalTree(BaseEstimator):
 
         X = X.copy()
         X["time"] = pd.to_datetime(X["time"])
-        patient_ids = X['patient_id'].unique()
 
         return np.array([
-            self._predict_row(X[X['patient_id'] == pid], self.tree)
-            for pid in patient_ids
+            self._predict_row(patient_data, self.tree)
+            for _, patient_data in X.groupby("patient_id", sort=False)
         ])
    
     def _predict_row(self, row: pd.DataFrame, node) -> float:
@@ -758,9 +795,20 @@ class TemporalTree(BaseEstimator):
         
         if anchors_list is None: # the root node will only choose from the given anchors
             anchors_list = self.anchors_list.copy()
+
+        time_windows = []
+        seen_full_timeline_window = False
+        for anchor, offset in product(anchors_list, self.anchor_offset_list):
+            if offset is None:
+                if seen_full_timeline_window:
+                    continue
+                time_windows.append((None, None))
+                seen_full_timeline_window = True
+            else:
+                time_windows.append((anchor, offset))
         
         for feature, (anchor, offset), agg_name in product(feature_names,
-                                                           product(anchors_list, self.anchor_offset_list), 
+                                                           time_windows,
                                                            self.aggregation_funcs.keys()):
             # print('best split entered loop')
             if (feature == 'Birth Date') or (feature.endswith('Anchor')):  # feature in self.anchors_list
@@ -964,7 +1012,7 @@ class TemporalTree(BaseEstimator):
             else:
                 agg_results = filtered_X.groupby("patient_id")["value"].agg(
                     mean="mean",
-                    sum="sum",
+                    sum=lambda values: values.sum(min_count=1),
                     max="max",
                     count="count",
                 )
@@ -1067,8 +1115,12 @@ class TemporalTree(BaseEstimator):
             raise ValueError("Input data must contain 'time', 'patient_id', 'feature_name', 'value'  columns.")
         if len(X['patient_id'].unique()) != len(y):
             raise ValueError("The length of y must be the same as the number of patients.")
-        if X.isnull().values.any() or y.isnull().values.any():
-            raise ValueError("Input data contains missing values. Please handle them before fitting or predicting.")
+        required_columns = ["patient_id", "time", "feature_name"]
+        if X[required_columns].isnull().values.any() or y.isnull().values.any():
+            raise ValueError(
+                "Input data contains missing values in required columns or labels. "
+                "Missing values are allowed only in the 'value' column."
+            )
         
         # Check if self.anchors_list is a list
         if not isinstance(self.anchors_list, list):
