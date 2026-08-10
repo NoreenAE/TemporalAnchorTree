@@ -22,6 +22,22 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
     grouped = X_branch.groupby("patient_id")
     prev_anchor_name, offset = time_window
 
+    if not (prev_anchor_name is None and offset is None):
+        reference_feature = X_branch[X_branch['feature_name'] == prev_anchor_name][['patient_id', 'value']]
+        anchor_counts = reference_feature.groupby('patient_id').size()
+        expected_patients = pd.Index(patient_ids)
+        counts_by_patient = anchor_counts.reindex(expected_patients, fill_value=0)
+        missing_patients = counts_by_patient[counts_by_patient == 0]
+        duplicate_patients = counts_by_patient[counts_by_patient > 1]
+        if len(missing_patients) > 0 or len(duplicate_patients) > 0:
+            raise ValueError(
+                f"Each patient must have exactly one {prev_anchor_name} entry in 'feature_name'. "
+                f"Missing anchor for {len(missing_patients)} patients "
+                f"(examples: {missing_patients.index[:5].tolist()}); "
+                f"duplicate anchor rows for {len(duplicate_patients)} patients "
+                f"(examples: {duplicate_patients.index[:5].tolist()})."
+            )
+
     for patient_id in patient_ids:
         try:
             full_patient_data = grouped.get_group(patient_id)
@@ -51,32 +67,39 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
         )
 
         # Retrieve anchor reference value (from previous anchor)
-        anchor_value = full_patient_data[full_patient_data['feature_name'] == prev_anchor_name]['value']
-        if anchor_value.empty or pd.isnull(anchor_value.values[0]):
-            time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+        if prev_anchor_name is None and offset is None:
+            time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
         else:
-            anchor_raw = anchor_value.values[0]
-            if isinstance(anchor_raw, pd.Timestamp):
-                anchor_time = pd.to_datetime(anchor_raw)
-                offset_time = anchor_time + pd.DateOffset(months=offset)
-                time_mask = (
-                    (patient_data['time'] >= anchor_time) & (patient_data['time'] <= offset_time)
-                    if offset >= 0 else
-                    (patient_data['time'] <= anchor_time) & (patient_data['time'] >= offset_time)
-                )
-            elif isinstance(anchor_raw, list):
-                anchor_times = pd.to_datetime(anchor_raw)
-                offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
-
-                def time_filter(time_val):
-                    return any(
-                        (time_val <= o and r <= time_val) if offset >= 0 else (time_val >= o and r >= time_val)
-                        for r, o in zip(anchor_times, offset_times)
-                    )
-
-                time_mask = patient_data['time'].apply(time_filter)
-            else:
+            anchor_value = full_patient_data[full_patient_data['feature_name'] == prev_anchor_name]['value']
+            if anchor_value.empty:
                 time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+            else:
+                anchor_raw = anchor_value.values[0]
+                if isinstance(anchor_raw, (list, np.ndarray)) and len(anchor_raw) == 0:
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+                elif not isinstance(anchor_raw, (list, np.ndarray)) and pd.isnull(anchor_raw):
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+                elif isinstance(anchor_raw, pd.Timestamp):
+                    anchor_time = pd.to_datetime(anchor_raw)
+                    offset_time = anchor_time + pd.DateOffset(months=offset)
+                    time_mask = (
+                        (patient_data['time'] >= anchor_time) & (patient_data['time'] <= offset_time)
+                        if offset >= 0 else
+                        (patient_data['time'] <= anchor_time) & (patient_data['time'] >= offset_time)
+                    )
+                elif isinstance(anchor_raw, (list, np.ndarray)):
+                    anchor_times = pd.to_datetime(anchor_raw)
+                    offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
+
+                    def time_filter(time_val):
+                        return any(
+                            (time_val <= o and r <= time_val) if offset >= 0 else (time_val >= o and r >= time_val)
+                            for r, o in zip(anchor_times, offset_times)
+                        )
+
+                    time_mask = patient_data['time'].apply(time_filter)
+                else:
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
 
         combined_mask = value_mask & time_mask
         anchor_dates = patient_data.loc[combined_mask, 'time'].tolist()

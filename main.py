@@ -140,7 +140,7 @@ def split_data(data, labels_df):
 
 def train_model(train_data, y_train):
     anchors_list = ['Birth Date Anchor']
-    anchor_offset_list = [None, 6, 12, 12 * 5]#-12, -6, 12*5, 12*7] #months
+    anchor_offset_list = [None,1, 2, 3, 4, 6, 9, 12, 12 * 5]#-12, -6, 12*5, 12*7] #months
     model = TemporalTree(max_depth=3,
                          min_samples_split=1,
                          min_samples_leaf = 1,
@@ -242,7 +242,9 @@ def export_tree_structure(tree, output_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
     nodes = []
     lines = []
-
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = f'temporal_tree_structure_{timestamp}.json'
+    
     def traverse(node, depth=0):
         node_id = len(nodes)
         if node.is_leaf():
@@ -291,10 +293,10 @@ def export_tree_structure(tree, output_dir):
 
     traverse(tree)
 
-    text_path = output_dir / "temporal_tree_structure.txt"
-    json_path = output_dir / "temporal_tree_structure.json"
+    # text_path = output_dir / "temporal_tree_structure.txt"
+    json_path = output_dir / filename
 
-    text_path.write_text("\n".join(lines) + "\n")
+    # text_path.write_text("\n".join(lines) + "\n")
     json_path.write_text(json.dumps(nodes, indent=2, default=str))
 
 
@@ -357,9 +359,11 @@ def main():
     output_dir = Path('outputs/models')
     #synthetic_moh_longitudinal_2000
     #synthetic_moh_labels_2000
-    synthetic_data_path = Path('synthetic_temporal_unit_test_5000.pkl') #
-    synthetic_labels_path = Path('synthetic_temporal_unit_test_labels_5000.pkl') #
-
+    # synthetic_data_path = Path('synthetic_temporal_unit_test_5000.pkl') #
+    # synthetic_labels_path = Path('synthetic_temporal_unit_test_labels_5000.pkl') #
+    synthetic_data_path = Path('synthetic_exp3_temporal_5000.pkl') #
+    synthetic_labels_path = Path('synthetic_exp3_temporal_labels_5000.pkl')
+    
     synthetic_data, synthetic_labels_df = load_data(synthetic_data_path, synthetic_labels_path)
     (
         synthetic_train_data,

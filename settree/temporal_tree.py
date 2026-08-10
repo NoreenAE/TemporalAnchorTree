@@ -303,6 +303,73 @@ class TemporalTree(BaseEstimator):
         self.tree = self._build(X, y)
         return self
 
+    def _dynamic_anchor_key(self, node, direction: str):
+        source_anchor, offset = node.time_window
+        return (
+            node.feature,
+            direction,
+            float(node.threshold),
+            source_anchor,
+            offset,
+        )
+
+    def _format_dynamic_anchor_name(self, node, direction: str) -> str:
+        source_anchor, offset = node.time_window
+        operator = "<=" if direction == "left" else ">"
+        threshold = f"{float(node.threshold):.3f}"
+        if source_anchor is None and offset is None:
+            return f"{node.feature} {operator} {threshold} | Full Timeline Anchor"
+        return f"{node.feature} {operator} {threshold} | {source_anchor} +{offset}m Anchor"
+
+    def _validate_one_anchor_row_per_patient(
+        self,
+        reference_feature: pd.DataFrame,
+        expected_patients,
+        anchor_name: str,
+    ) -> None:
+        anchor_counts = reference_feature.groupby("patient_id").size()
+        expected_patients = pd.Index(expected_patients)
+        counts_by_patient = anchor_counts.reindex(expected_patients, fill_value=0)
+        missing_patients = counts_by_patient[counts_by_patient == 0]
+        duplicate_patients = counts_by_patient[counts_by_patient > 1]
+        if len(missing_patients) > 0 or len(duplicate_patients) > 0:
+            raise ValueError(
+                f"Each patient must have exactly one {anchor_name} entry in 'feature_name'. "
+                f"Missing anchor for {len(missing_patients)} patients "
+                f"(examples: {missing_patients.index[:5].tolist()}); "
+                f"duplicate anchor rows for {len(duplicate_patients)} patients "
+                f"(examples: {duplicate_patients.index[:5].tolist()})."
+            )
+
+    def _prepare_branch_anchor(
+        self,
+        node,
+        patient_ids,
+        X_branch,
+        anchors,
+        anchor_registry,
+        direction: str,
+    ):
+        anchor_key = self._dynamic_anchor_key(node, direction)
+        if anchor_key in anchor_registry:
+            anchor_name = anchor_registry[anchor_key]
+            return anchor_name, anchors.copy(), pd.DataFrame(), anchor_registry.copy()
+
+        anchor_name = self._format_dynamic_anchor_name(node, direction)
+        next_anchors = anchors + [anchor_name]
+        next_anchor_registry = anchor_registry.copy()
+        next_anchor_registry[anchor_key] = anchor_name
+        anchor_df = create_branch_anchors(
+            patient_ids=patient_ids,
+            X_branch=X_branch,
+            anchor_name=anchor_name,
+            direction=direction,
+            feature=node.feature,
+            threshold=node.threshold,
+            time_window=node.time_window
+        )
+        return anchor_name, next_anchors, anchor_df, next_anchor_registry
+
     def _build(self, X: pd.DataFrame, y: pd.DataFrame):
         """
         Builds the tree using BFS traversal and creates dynamic anchor rows
@@ -318,11 +385,11 @@ class TemporalTree(BaseEstimator):
             return root
 
         queue = deque()
-        queue.append((root, X, y, 0, self.anchors_list.copy()))
+        queue.append((root, X, y, 0, self.anchors_list.copy(), {}))
         # print(f'queue: {queue}')
         while queue:
             print(f'[build] depth={self.depth}')
-            node, X_node, y_node, depth, anchors = queue.popleft()
+            node, X_node, y_node, depth, anchors, anchor_registry = queue.popleft()
 
             # --- 1. Aggregate for this split ---
             print('Inside _build - aggregate on best split')
@@ -361,35 +428,35 @@ class TemporalTree(BaseEstimator):
             # print(f'[_build] X_left len : {len(X_left)}') 
             # print(f'[_build] X_right len : {len(X_right)}')
 
-            # --- 2. Create new anchor names ---
-            left_anchor = f"{node.feature} <= {np.round(node.threshold)} Anchor"
-            right_anchor = f"{node.feature} > {np.round(node.threshold)} Anchor"
-            left_anchors = anchors + [left_anchor]
-            right_anchors = anchors + [right_anchor]
-
-            # --- 3. Generate new anchor rows for each group ---
-            left_anchor_df = create_branch_anchors(
+            # --- 2. Create or reuse branch-specific dynamic anchors ---
+            left_anchor, left_anchors, left_anchor_df, left_anchor_registry = self._prepare_branch_anchor(
+                node=node,
                 patient_ids=left_ids,
                 X_branch=X_left,
-                anchor_name=left_anchor,
+                anchors=anchors,
+                anchor_registry=anchor_registry,
                 direction="left",
-                feature=node.feature,
-                threshold=node.threshold,
-                time_window=node.time_window
             )
-            right_anchor_df = create_branch_anchors(
+            right_anchor, right_anchors, right_anchor_df, right_anchor_registry = self._prepare_branch_anchor(
+                node=node,
                 patient_ids=right_ids,
                 X_branch=X_right,
-                anchor_name=right_anchor,
+                anchors=anchors,
+                anchor_registry=anchor_registry,
                 direction="right",
-                feature=node.feature,
-                threshold=node.threshold,
-                time_window=node.time_window
             )
 
-            # --- 4. Append anchor rows to event data ---
-            X_left_next = pd.concat([X_left, left_anchor_df], ignore_index=True)
-            X_right_next = pd.concat([X_right, right_anchor_df], ignore_index=True)
+            # --- 3. Append newly created anchor rows to event data ---
+            X_left_next = (
+                X_left
+                if left_anchor_df.empty
+                else pd.concat([X_left, left_anchor_df], ignore_index=True)
+            )
+            X_right_next = (
+                X_right
+                if right_anchor_df.empty
+                else pd.concat([X_right, right_anchor_df], ignore_index=True)
+            )
 
             # print(f'left_anchors: {left_anchor}')
             # --- 5. Create child nodes with updated data and anchors ---
@@ -397,9 +464,9 @@ class TemporalTree(BaseEstimator):
             node.right = self._get_node(X_right_next, y_right, depth + 1, right_anchors)
 
             if not node.left.is_leaf():
-                queue.append((node.left, X_left_next, y_left, depth + 1, left_anchors))
+                queue.append((node.left, X_left_next, y_left, depth + 1, left_anchors, left_anchor_registry))
             if not node.right.is_leaf():
-                queue.append((node.right, X_right_next, y_right, depth + 1, right_anchors))
+                queue.append((node.right, X_right_next, y_right, depth + 1, right_anchors, right_anchor_registry))
 
             self.depth = max(self.depth, depth + 1)
 
@@ -588,10 +655,9 @@ class TemporalTree(BaseEstimator):
 
     def _append_prediction_branch_anchor(self, row: pd.DataFrame, node, direction: str) -> pd.DataFrame:
         patient_id = row["patient_id"].iloc[0]
-        if direction == "left":
-            anchor_name = f"{node.feature} <= {np.round(node.threshold)} Anchor"
-        else:
-            anchor_name = f"{node.feature} > {np.round(node.threshold)} Anchor"
+        anchor_name = self._format_dynamic_anchor_name(node, direction)
+        if anchor_name in row["feature_name"].values:
+            return row
 
         prev_anchor_name, offset = node.time_window
         patient_data = row[row["feature_name"] == node.feature]
@@ -605,12 +671,26 @@ class TemporalTree(BaseEstimator):
                 else patient_data["value"].astype(float) > node.threshold
             )
 
-            anchor_value = row[row["feature_name"] == prev_anchor_name]["value"]
-            if anchor_value.empty or pd.isnull(anchor_value.values[0]):
-                time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+            if prev_anchor_name is None and offset is None:
+                time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
             else:
+                anchor_value = row[row["feature_name"] == prev_anchor_name]["value"]
+                if len(anchor_value) != 1:
+                    missing_count = int(anchor_value.empty)
+                    duplicate_count = int(len(anchor_value) > 1)
+                    raise ValueError(
+                        f"Each patient must have exactly one {prev_anchor_name} entry in 'feature_name'. "
+                        f"Missing anchor for {missing_count} patients "
+                        f"(examples: {[patient_id] if missing_count else []}); "
+                        f"duplicate anchor rows for {duplicate_count} patients "
+                        f"(examples: {[patient_id] if duplicate_count else []})."
+                    )
                 anchor_raw = anchor_value.values[0]
-                if isinstance(anchor_raw, pd.Timestamp):
+                if isinstance(anchor_raw, (list, np.ndarray)) and len(anchor_raw) == 0:
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+                elif not isinstance(anchor_raw, (list, np.ndarray)) and pd.isnull(anchor_raw):
+                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
+                elif isinstance(anchor_raw, pd.Timestamp):
                     anchor_time = pd.to_datetime(anchor_raw)
                     offset_time = anchor_time + pd.DateOffset(months=offset)
                     time_mask = (
@@ -618,7 +698,7 @@ class TemporalTree(BaseEstimator):
                         if offset >= 0 else
                         (patient_data["time"] <= anchor_time) & (patient_data["time"] >= offset_time)
                     )
-                elif isinstance(anchor_raw, list):
+                elif isinstance(anchor_raw, (list, np.ndarray)):
                     anchor_times = pd.to_datetime(anchor_raw)
                     offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
 
@@ -927,10 +1007,11 @@ class TemporalTree(BaseEstimator):
                 if anchor_reference_cache is not None:
                     anchor_reference_cache[Anchor_feature_name] = reference_feature.copy()
 
-            if len(reference_feature) != len(X_original["patient_id"].unique()):
-                print(f'len of data with this anchor {len(reference_feature["patient_id"].unique())}')
-                print(f'unique patients: {len(X_original["patient_id"].unique())}')
-                raise ValueError(f"Each patient must have one {Anchor_feature_name} entry in 'feature_name'.")
+            self._validate_one_anchor_row_per_patient(
+                reference_feature=reference_feature,
+                expected_patients=X_original["patient_id"].unique(),
+                anchor_name=Anchor_feature_name,
+            )
 
             merge_cache_key = (feature, Anchor_feature_name)
             if feature_anchor_merge_cache is not None and merge_cache_key in feature_anchor_merge_cache:
@@ -956,7 +1037,7 @@ class TemporalTree(BaseEstimator):
                 if time_window_mask_cache is not None:
                     time_window_mask_cache[mask_cache_key] = mask.copy()
 
-            elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, list)).all():
+            elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, (list, np.ndarray))).all():
                 # Convert lists of timestamps to datetime
                 X_feature["reference_dates_list"] = X_feature["reference_dates_list"].map(lambda lst: pd.to_datetime(lst))
                 X_feature["date_relative_offset"] = X_feature["reference_dates_list"].map(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
