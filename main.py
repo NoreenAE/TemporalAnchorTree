@@ -143,7 +143,7 @@ def train_model(train_data, y_train):
     anchor_offset_list = [None,1, 2, 3, 4, 6, 9, 12, 12 * 5]#-12, -6, 12*5, 12*7] #months
     model = TemporalTree(max_depth=3,
                          min_samples_split=1,
-                         min_samples_leaf = 1,
+                         min_samples_leaf = 7,
                          anchors_list=anchors_list,
                          anchor_offset_list=anchor_offset_list,
                          is_classification=False,
@@ -361,8 +361,13 @@ def main():
     #synthetic_moh_labels_2000
     # synthetic_data_path = Path('synthetic_temporal_unit_test_5000.pkl') #
     # synthetic_labels_path = Path('synthetic_temporal_unit_test_labels_5000.pkl') #
-    synthetic_data_path = Path('synthetic_exp3_temporal_5000.pkl') #
-    synthetic_labels_path = Path('synthetic_exp3_temporal_labels_5000.pkl')
+    
+    # synthetic_data_path = Path('synthetic_exp3_temporal_5000.pkl') #
+    # synthetic_labels_path = Path('synthetic_exp3_temporal_labels_5000.pkl')
+    
+    # strong benchmark:
+    synthetic_data_path = Path('temporal_fa_benchmark_5000.pkl') #
+    synthetic_labels_path = Path('temporal_fa_benchmark_labels_5000.pkl')
     
     synthetic_data, synthetic_labels_df = load_data(synthetic_data_path, synthetic_labels_path)
     (
