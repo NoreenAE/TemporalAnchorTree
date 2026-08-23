@@ -1,6 +1,7 @@
 """Post-training temporal decision-path explainability utilities."""
 
-from numbers import Integral
+import math
+from numbers import Integral, Real
 from pathlib import Path
 from typing import Dict, Mapping, Optional, Sequence, Tuple
 
@@ -62,19 +63,23 @@ def derive_monthly_bin_edges(
         for offset in offsets:
             if offset is None or offset == 0:
                 continue
-            if isinstance(offset, bool) or not isinstance(offset, Integral):
+            if (
+                isinstance(offset, bool)
+                or not isinstance(offset, Real)
+                or not np.isfinite(offset)
+            ):
                 raise ValueError(
-                    f"Monthly offsets for {anchor!r} must be integers or None."
+                    f"Offsets for {anchor!r} must be finite real numbers or None."
                 )
-            numeric_offsets.append(int(offset))
+            numeric_offsets.append(float(offset))
 
         if not numeric_offsets:
             raise ValueError(
                 f"At least one non-zero monthly offset is required for {anchor!r}."
             )
 
-        first_edge = min(0, min(numeric_offsets))
-        last_edge = max(0, max(numeric_offsets))
+        first_edge = math.floor(min(0, min(numeric_offsets)))
+        last_edge = math.ceil(max(0, max(numeric_offsets)))
         bin_edges_by_anchor[anchor] = list(range(first_edge, last_edge + 1))
 
     return bin_edges_by_anchor
@@ -96,7 +101,7 @@ def _build_preorder_node_id_map(root) -> Dict[int, int]:
     return node_ids
 
 
-def _effective_offsets(anchor, stored_offset) -> Tuple[Optional[int], Optional[int]]:
+def _effective_offsets(anchor, stored_offset) -> Tuple[Optional[Real], Optional[Real]]:
     """Return the ordered start and end offsets represented by a node."""
     if anchor is None and stored_offset is None:
         return None, None

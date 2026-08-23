@@ -14,7 +14,11 @@ from sklearn.base import BaseEstimator
 # from settree.splitters import SPLITTERS
 from collections import deque
 from typing import Tuple
-from .anchor_utils import create_branch_anchors, get_time_window_mask # my addition
+from .anchor_utils import (
+    _offset_to_dateoffset,
+    create_branch_anchors,
+    get_time_window_mask,
+)
 
 
 #%%
@@ -923,7 +927,7 @@ class TemporalTree(BaseEstimator):
                     time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
                 elif isinstance(anchor_raw, pd.Timestamp):
                     anchor_time = pd.to_datetime(anchor_raw)
-                    offset_time = anchor_time + pd.DateOffset(months=offset)
+                    offset_time = anchor_time + _offset_to_dateoffset(offset)
                     time_mask = (
                         (patient_data["time"] >= anchor_time) & (patient_data["time"] <= offset_time)
                         if offset >= 0 else
@@ -931,7 +935,8 @@ class TemporalTree(BaseEstimator):
                     )
                 elif isinstance(anchor_raw, (list, np.ndarray)):
                     anchor_times = pd.to_datetime(anchor_raw)
-                    offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
+                    date_offset = _offset_to_dateoffset(offset)
+                    offset_times = [dt + date_offset for dt in anchor_times]
 
                     def time_filter(time_val):
                         return any(
@@ -1377,7 +1382,10 @@ class TemporalTree(BaseEstimator):
                 mask = time_window_mask_cache[mask_cache_key].copy()
             elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
                 # Single timestamp case             
-                X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset_from_anchor) 
+                X_feature["date_relative_offset"] = (
+                    X_feature["reference_dates_list"]
+                    + _offset_to_dateoffset(offset_from_anchor)
+                )
                 if offset_from_anchor >= 0:
                     # print(X_feature["time"].dtype)  
                     # print(X_feature["date_relative_offset"].dtype)  
@@ -1391,7 +1399,10 @@ class TemporalTree(BaseEstimator):
             elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, (list, np.ndarray))).all():
                 # Convert lists of timestamps to datetime
                 X_feature["reference_dates_list"] = X_feature["reference_dates_list"].map(lambda lst: pd.to_datetime(lst))
-                X_feature["date_relative_offset"] = X_feature["reference_dates_list"].map(lambda lst: [dt + pd.DateOffset(months=offset_from_anchor) for dt in lst])
+                date_offset = _offset_to_dateoffset(offset_from_anchor)
+                X_feature["date_relative_offset"] = X_feature[
+                    "reference_dates_list"
+                ].map(lambda lst: [dt + date_offset for dt in lst])
 
                 # Efficient vectorized filtering
                 def time_filter(times, offsets, time_val):
@@ -1410,7 +1421,9 @@ class TemporalTree(BaseEstimator):
         
         elif isinstance(Anchor_feature_name, pd.Timestamp):
             anchor_date = Anchor_feature_name
-            X_feature["date_relative_offset"] = anchor_date + pd.DateOffset(months=offset_from_anchor)
+            X_feature["date_relative_offset"] = (
+                anchor_date + _offset_to_dateoffset(offset_from_anchor)
+            )
 
             if offset_from_anchor >= 0:
                 mask = (X_feature["time"] <= X_feature["date_relative_offset"]) & (anchor_date <= X_feature["time"])
@@ -1576,9 +1589,20 @@ class TemporalTree(BaseEstimator):
         if not all(isinstance(item, Timestamp) or (isinstance(item, str) and item.endswith("Anchor")) for item in self.anchors_list):
             raise ValueError("All string elements in self.anchors_list must end with 'Anchor'.")
 
-        # Check if self.anchor_offset_list is a list of integers
-        if not isinstance(self.anchor_offset_list, list) or not all(isinstance(item, (int, type(None))) for item in self.anchor_offset_list):
-            raise ValueError("self.anchor_offset_list must be a list containing only integers or None.")
+        def is_valid_anchor_offset(item):
+            return item is None or (
+                not isinstance(item, bool)
+                and isinstance(item, Real)
+                and np.isfinite(item)
+            )
+
+        if not isinstance(self.anchor_offset_list, list) or not all(
+            is_valid_anchor_offset(item) for item in self.anchor_offset_list
+        ):
+            raise ValueError(
+                "self.anchor_offset_list must be a list containing only "
+                "finite real numbers or None."
+            )
 
         if self.anchor_offset_map is not None:
             if not isinstance(self.anchor_offset_map, dict):
@@ -1593,11 +1617,11 @@ class TemporalTree(BaseEstimator):
                         "All string keys in self.anchor_offset_map must end with 'Anchor'."
                     )
                 if not isinstance(offsets, list) or not all(
-                    isinstance(item, (int, type(None))) for item in offsets
+                    is_valid_anchor_offset(item) for item in offsets
                 ):
                     raise ValueError(
                         "self.anchor_offset_map values must be lists containing "
-                        "only integers or None."
+                        "only finite real numbers or None."
                     )
     
   

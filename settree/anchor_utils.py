@@ -1,5 +1,23 @@
-import pandas as pd
+from numbers import Real
+
 import numpy as np
+import pandas as pd
+
+
+def _offset_to_dateoffset(offset: Real) -> pd.DateOffset:
+    """Use calendar months for integers and signed 30-day fractions otherwise."""
+    if (
+        isinstance(offset, bool)
+        or not isinstance(offset, Real)
+        or not np.isfinite(offset)
+    ):
+        raise ValueError("Anchor offsets must be finite real numbers.")
+
+    numeric_offset = float(offset)
+    if numeric_offset.is_integer():
+        return pd.DateOffset(months=int(numeric_offset))
+    return pd.DateOffset(days=round(numeric_offset * 30))
+
 
 def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
                           feature, threshold, time_window):
@@ -81,7 +99,7 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
                     time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
                 elif isinstance(anchor_raw, pd.Timestamp):
                     anchor_time = pd.to_datetime(anchor_raw)
-                    offset_time = anchor_time + pd.DateOffset(months=offset)
+                    offset_time = anchor_time + _offset_to_dateoffset(offset)
                     time_mask = (
                         (patient_data['time'] >= anchor_time) & (patient_data['time'] <= offset_time)
                         if offset >= 0 else
@@ -89,7 +107,8 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
                     )
                 elif isinstance(anchor_raw, (list, np.ndarray)):
                     anchor_times = pd.to_datetime(anchor_raw)
-                    offset_times = [dt + pd.DateOffset(months=offset) for dt in anchor_times]
+                    date_offset = _offset_to_dateoffset(offset)
+                    offset_times = [dt + date_offset for dt in anchor_times]
 
                     def time_filter(time_val):
                         return any(
@@ -124,7 +143,7 @@ def get_time_window_mask(X: pd.DataFrame, feature: str, anchor_name, offset): # 
             X (pd.DataFrame): The full dataset.
             feature (str): The feature to filter on.
             anchor_name (str, pd.Timestamp, or None): Anchor feature name or direct timestamp or None for no restriction.
-            offset (int or None): Offset in months from anchor point.
+            offset (real number or None): Offset in months from anchor point.
 
         Returns:
             pd.Series: Boolean mask for X_feature with aligned index.
@@ -147,7 +166,10 @@ def get_time_window_mask(X: pd.DataFrame, feature: str, anchor_name, offset): # 
                 return pd.Series([True] * len(X_feature), index=X_feature.index)
 
             if X_feature["reference_dates_list"].map(lambda x: isinstance(x, pd.Timestamp)).all():
-                X_feature["date_relative_offset"] = X_feature["reference_dates_list"] + pd.DateOffset(months=offset)
+                X_feature["date_relative_offset"] = (
+                    X_feature["reference_dates_list"]
+                    + _offset_to_dateoffset(offset)
+                )
                 if offset >= 0:
                     mask = (X_feature["time"] <= X_feature["date_relative_offset"]) & (X_feature["time"] >= X_feature["reference_dates_list"])
                 else:
@@ -155,8 +177,9 @@ def get_time_window_mask(X: pd.DataFrame, feature: str, anchor_name, offset): # 
 
             elif X_feature["reference_dates_list"].map(lambda x: isinstance(x, list)).all():
                 X_feature["reference_dates_list"] = X_feature["reference_dates_list"].map(pd.to_datetime)
+                date_offset = _offset_to_dateoffset(offset)
                 X_feature["date_relative_offset"] = X_feature["reference_dates_list"].map(
-                    lambda lst: [dt + pd.DateOffset(months=offset) for dt in lst]
+                    lambda lst: [dt + date_offset for dt in lst]
                 )
                 def time_filter(times, offsets, time_val):
                     if offset >= 0:
@@ -171,7 +194,7 @@ def get_time_window_mask(X: pd.DataFrame, feature: str, anchor_name, offset): # 
             return pd.Series(mask, index=X_feature.index)
 
         elif isinstance(anchor_name, pd.Timestamp):
-            offset_time = anchor_name + pd.DateOffset(months=offset)
+            offset_time = anchor_name + _offset_to_dateoffset(offset)
             if offset >= 0:
                 mask = (X_feature["time"] >= anchor_name) & (X_feature["time"] <= offset_time)
             else:

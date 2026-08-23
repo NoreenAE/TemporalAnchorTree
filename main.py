@@ -29,8 +29,8 @@ RUN_DESCRIPTION = " depth = 3 run benchmark on temporal_fa_benchmark_5000.pkl da
 RANDOM_STATE = 42
 USE_DYNAMIC_ANCHORS = False
 ANCHOR_OFFSET_MAP = { # here we define the anhor names and offsets
-    "Birth Date Anchor": [1, 2, 3, 4, 5, 6],
-    # "NOW Anchor": [-1, -2, -3, -4, -5, -6],
+    "Birth Date Anchor": [None,0.7, 1, 2, 3, 4, 5, 6], #None should always be included to represent the full timeline.
+    # "NOW Anchor": [None, -1, -2, -3, -4, -5, -6],
 }
 RUN_TEMPORAL_EXPLAINABILITY = True
 TEMPORAL_EXPLAINABILITY_BIN_EDGES = derive_monthly_bin_edges(
@@ -153,8 +153,8 @@ def load_data(data_path, labels_path):
     data.loc[data['feature_name'] == 'Birth Date', 'feature_name'] = 'Birth Date Anchor'
 
     data = data.loc[~data['feature_name'].isin(leak_features)]
-    # Preserve birth-anchor values as timestamps while converting other features to numeric.
-    anchor_mask = data['feature_name'].eq('Birth Date Anchor')
+    # Preserve all anchor values as timestamps while converting other features to numeric.
+    anchor_mask = data['feature_name'].str.endswith('Anchor', na=False)
     data.loc[anchor_mask, 'value'] = pd.to_datetime(data.loc[anchor_mask, 'value'])
     data.loc[~anchor_mask, 'value'] = pd.to_numeric(data.loc[~anchor_mask, 'value'], errors='coerce')
 

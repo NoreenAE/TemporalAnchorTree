@@ -1,0 +1,368 @@
+{
+  "active_predictor_distribution": {
+    "0": 501,
+    "1": 378,
+    "2": 113,
+    "3": 8
+  },
+  "benchmark_version": "phase_2_gi_v1",
+  "calibrated_intercept": -2.709772512073331,
+  "cohort_size": 1000,
+  "excluded_model_visible_distractors": [
+    "FoodExposureYN",
+    "ClinicalVisitYN"
+  ],
+  "external_ground_truth_inputs": {
+    "early_feeding_state": false,
+    "fa_label": false,
+    "fa_probability": false,
+    "feeding_group": false,
+    "feeding_trajectory": false
+  },
+  "independence_audit": {
+    "correlation_gi_label_with_fa_label": 0.029780681544547983,
+    "correlation_gi_probability_with_fa_label": 0.022441495118325803,
+    "correlation_gi_probability_with_fa_probability": -0.02074477391102396,
+    "generation_used_fa_or_feeding_inputs": false,
+    "gi_fa_both_positive_count": 14,
+    "mean_gi_probability_by_feeding_group": {
+      "2.0": 0.11864991005909835,
+      "2.1": 0.12257672580140591,
+      "2.2": 0.1307169379845151,
+      "2.3": 0.11412300127474788,
+      "2.4": 0.11549231043684985,
+      "3": 0.11680772443877087,
+      "4": 0.11934476239769863,
+      "5.1": 0.12007877741605977,
+      "5.2": 0.12741153120540152,
+      "5.3": 0.12421228045818004,
+      "6": 0.10432920699051965
+    },
+    "mean_gi_probability_group_range": {
+      "max": 0.1307169379845151,
+      "min": 0.10432920699051965
+    }
+  },
+  "label_schema": [
+    "patient_id",
+    "label"
+  ],
+  "master_seed": 20260823,
+  "mean_theoretical_probability": 0.11999999999999944,
+  "outcome_interpretation": "Acute GI/stomach-upset outcome assessed immediately after the patient-specific NOW observation cutoff.",
+  "positive_count": 119,
+  "predictor_distribution": {
+    "D_i": {
+      "positive_count": 216,
+      "positive_proportion": 0.216
+    },
+    "G_i": {
+      "positive_count": 238,
+      "positive_proportion": 0.238
+    },
+    "V_i": {
+      "positive_count": 174,
+      "positive_proportion": 0.174
+    }
+  },
+  "predictors": {
+    "DiarrheaYN": {
+      "aggregation": "max (any positive event)",
+      "coefficient": 0.9162907318741551,
+      "effect_size_status": "synthetic benchmark effect size",
+      "odds_ratio": 2.5,
+      "private_variable": "D_i"
+    },
+    "GISymptomYN": {
+      "aggregation": "max (any positive event)",
+      "coefficient": 0.6931471805599453,
+      "effect_size_status": "synthetic benchmark effect size",
+      "odds_ratio": 2.0,
+      "private_variable": "G_i"
+    },
+    "VomitingYN": {
+      "aggregation": "max (any positive event)",
+      "coefficient": 1.0986122886681098,
+      "effect_size_status": "synthetic benchmark effect size",
+      "odds_ratio": 3.0,
+      "private_variable": "V_i"
+    }
+  },
+  "private_ground_truth_schema": [
+    "patient_id",
+    "V_i",
+    "D_i",
+    "G_i",
+    "n_active_predictors",
+    "gi_probability",
+    "gi_label"
+  ],
+  "probability_by_active_predictor_count": {
+    "0": {
+      "max": 0.062399159351006615,
+      "mean": 0.06239915935100632,
+      "min": 0.062399159351006615,
+      "n_patients": 501
+    },
+    "1": {
+      "max": 0.1664275941210871,
+      "mean": 0.13862448299887828,
+      "min": 0.11746838992064851,
+      "n_patients": 378
+    },
+    "2": {
+      "max": 0.3329507074900049,
+      "mean": 0.2862071788731024,
+      "min": 0.24967720576072333,
+      "n_patients": 113
+    },
+    "3": {
+      "max": 0.49956942236365703,
+      "mean": 0.49956942236365703,
+      "min": 0.49956942236365703,
+      "n_patients": 8
+    }
+  },
+  "probability_distribution": {
+    "max": 0.49956942236365703,
+    "mean": 0.11999999999999944,
+    "median": 0.062399159351006615,
+    "min": 0.062399159351006615,
+    "q25": 0.062399159351006615,
+    "q75": 0.14264637733249524,
+    "std": 0.07967350109229514
+  },
+  "realized_prevalence": 0.119,
+  "rng": {
+    "bit_generator": "PCG64",
+    "entropy": 20260823,
+    "name": "gi_labels",
+    "separate_from_fa_label_stream": true,
+    "spawn_key": [
+      6
+    ]
+  },
+  "source_artifacts": {
+    "fa_ground_truth": {
+      "path": "data/temporal_benchmark/temporal_benchmark_ground_truth_1000.pkl",
+      "sha256": "b8122a3bb274646357c0a072b17ec04475e9e40b0ef5dfbc05e0060d5bef12db"
+    },
+    "fa_labels": {
+      "path": "data/temporal_benchmark/temporal_benchmark_fa_labels_1000.pkl",
+      "sha256": "7e6350188f9c6ba8cc273eaf42426461147166754427eb23276c878c91c4a655"
+    },
+    "longitudinal_x": {
+      "path": "data/temporal_benchmark/temporal_benchmark_1000.pkl",
+      "sha256": "a41a4becef0611ed0efa9e1b4bb36e2c92dbd34fba7badd4f71090ce5eabe9d8"
+    }
+  },
+  "source_x_status": "read_only_unchanged",
+  "target_prevalence": 0.12,
+  "temporal_specificity_audit": {
+    "nested_now_windows": {
+      "full_timeline": {
+        "DiarrheaYN": {
+          "correlation_with_true_1m": 0.05784702051418032,
+          "positive_proportion": 0.988
+        },
+        "GISymptomYN": {
+          "correlation_with_true_1m": 0.01768187225979955,
+          "positive_proportion": 0.999
+        },
+        "VomitingYN": {
+          "correlation_with_true_1m": 0.06722068007681141,
+          "positive_proportion": 0.979
+        }
+      },
+      "now_minus_1m_to_now": {
+        "DiarrheaYN": {
+          "correlation_with_true_1m": 1.0,
+          "positive_proportion": 0.216
+        },
+        "GISymptomYN": {
+          "correlation_with_true_1m": 0.9999999999999999,
+          "positive_proportion": 0.238
+        },
+        "VomitingYN": {
+          "correlation_with_true_1m": 1.0,
+          "positive_proportion": 0.174
+        }
+      },
+      "now_minus_2m_to_now": {
+        "DiarrheaYN": {
+          "correlation_with_true_1m": 0.6923238208052249,
+          "positive_proportion": 0.365
+        },
+        "GISymptomYN": {
+          "correlation_with_true_1m": 0.6859015448487901,
+          "positive_proportion": 0.399
+        },
+        "VomitingYN": {
+          "correlation_with_true_1m": 0.6752570234292709,
+          "positive_proportion": 0.316
+        }
+      },
+      "now_minus_3m_to_now": {
+        "DiarrheaYN": {
+          "correlation_with_true_1m": 0.540880830105247,
+          "positive_proportion": 0.485
+        },
+        "GISymptomYN": {
+          "correlation_with_true_1m": 0.5004313478351443,
+          "positive_proportion": 0.555
+        },
+        "VomitingYN": {
+          "correlation_with_true_1m": 0.5305920400113879,
+          "positive_proportion": 0.428
+        }
+      },
+      "now_minus_6m_to_now": {
+        "DiarrheaYN": {
+          "correlation_with_true_1m": 0.3062783429719441,
+          "positive_proportion": 0.746
+        },
+        "GISymptomYN": {
+          "correlation_with_true_1m": 0.2689130651018954,
+          "positive_proportion": 0.812
+        },
+        "VomitingYN": {
+          "correlation_with_true_1m": 0.3112394159157014,
+          "positive_proportion": 0.685
+        }
+      }
+    },
+    "regions": {
+      "birth_0_to_6m": {
+        "DiarrheaYN": {
+          "max_event_count": 5,
+          "mean_event_count": 1.219,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.724,
+          "zero_proportion": 0.276
+        },
+        "GISymptomYN": {
+          "max_event_count": 7,
+          "mean_event_count": 1.558,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.816,
+          "zero_proportion": 0.184
+        },
+        "VomitingYN": {
+          "max_event_count": 6,
+          "mean_event_count": 1.014,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.659,
+          "zero_proportion": 0.341
+        }
+      },
+      "middle_background": {
+        "DiarrheaYN": {
+          "max_event_count": 8,
+          "mean_event_count": 2.001,
+          "median_event_count": 2.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.853,
+          "zero_proportion": 0.147
+        },
+        "GISymptomYN": {
+          "max_event_count": 12,
+          "mean_event_count": 2.32,
+          "median_event_count": 2.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.899,
+          "zero_proportion": 0.101
+        },
+        "VomitingYN": {
+          "max_event_count": 7,
+          "mean_event_count": 1.567,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.801,
+          "zero_proportion": 0.199
+        }
+      },
+      "now_minus_1m_to_now": {
+        "DiarrheaYN": {
+          "max_event_count": 2,
+          "mean_event_count": 0.23,
+          "median_event_count": 0.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.216,
+          "zero_proportion": 0.784
+        },
+        "GISymptomYN": {
+          "max_event_count": 2,
+          "mean_event_count": 0.261,
+          "median_event_count": 0.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.238,
+          "zero_proportion": 0.762
+        },
+        "VomitingYN": {
+          "max_event_count": 2,
+          "mean_event_count": 0.185,
+          "median_event_count": 0.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.174,
+          "zero_proportion": 0.826
+        }
+      },
+      "now_minus_6m_to_1m": {
+        "DiarrheaYN": {
+          "max_event_count": 5,
+          "mean_event_count": 1.084,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.677,
+          "zero_proportion": 0.323
+        },
+        "GISymptomYN": {
+          "max_event_count": 5,
+          "mean_event_count": 1.31,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.756,
+          "zero_proportion": 0.244
+        },
+        "VomitingYN": {
+          "max_event_count": 5,
+          "mean_event_count": 0.868,
+          "median_event_count": 1.0,
+          "min_event_count": 0,
+          "positive_proportion": 0.616,
+          "zero_proportion": 0.384
+        }
+      }
+    }
+  },
+  "true_temporal_window": {
+    "anchor": "NOW Anchor",
+    "bounds": "inclusive",
+    "end_offset": "0 months",
+    "start_offset": "-1 calendar month"
+  },
+  "validation": {
+    "checks": {
+      "active_count_matches_predictors": true,
+      "approved_predictors_only": true,
+      "binary_gi_labels": true,
+      "clinical_visit_excluded": true,
+      "cohort_size": true,
+      "dedicated_gi_rng_stream": true,
+      "deterministic_label_sampling": true,
+      "food_exposure_excluded": true,
+      "gi_label_schema": true,
+      "mean_probability_matches_target": true,
+      "no_external_ground_truth_dependency": true,
+      "predictors_match_exact_final_month_extraction": true,
+      "probabilities_match_approved_equation": true,
+      "same_x_fa_gi_patient_ids": true,
+      "same_x_gi_patient_ids": true,
+      "source_artifact_hashes_unchanged": true,
+      "unique_gi_labels": true
+    }
+  }
+}
