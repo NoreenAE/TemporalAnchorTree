@@ -43,43 +43,42 @@ FEATURES = [
 ]
 
 WINDOWS = {
-    "0_21d": (0.05, 0.65),
-    "21d_2m": (0.75, 1.90),
+    "0_2m": (0.20, 1.80),
     "2_4m": (2.25, 3.75),
     "4_6m": (4.25, 5.75),
 }
 
 PATTERNS = {
     "exclusive_bf": {
-        "states": [0.0, 0.0, 0.0, 0.0],
+        "states": [0.0, 0.0, 0.0],
         "probability": 0.12,
     },
     "continuous_formula": {
-        "states": [1.0, 1.0, 1.0, 1.0],
+        "states": [1.0, 1.0, 1.0],
         "probability": 0.20,
     },
     "early_formula_then_bf": {
-        "states": [1.0, 0.0, 0.0, 0.0],
+        "states": [1.0, 0.0, 0.0],
         "probability": 0.04,
     },
     "early_formula_then_stop_late": {
-        "states": [1.0, 1.0, 0.0, 0.0],
+        "states": [1.0, 1.0, 0.0],
         "probability": 0.12,
     },
     "bf_formula_before_2m": {
-        "states": [0.0, 1.0, 1.0, 1.0],
+        "states": [1.0, 1.0, 1.0],
         "probability": 0.17,
     },
     "bf_formula_2_4m": {
-        "states": [0.0, 0.0, 1.0, 1.0],
+        "states": [0.0, 1.0, 1.0],
         "probability": 0.17,
     },
     "bf_formula_4_6m": {
-        "states": [0.0, 0.0, 0.0, 1.0],
+        "states": [0.0, 0.0, 1.0],
         "probability": 0.12,
     },
     "inconsistent": {
-        "states": [1.0, 0.0, 1.0, 0.0],
+        "states": [1.0, 0.0, 1.0],
         "probability": 0.06,
     },
 }
@@ -188,9 +187,9 @@ def formula_start_age_months(states: list[float], rng: np.random.Generator) -> f
 
 
 def nursing_end_age_months(states: list[float], rng: np.random.Generator) -> float:
-    if states == [1.0, 0.0, 0.0, 0.0]:
+    if states == [1.0, 0.0, 0.0]:
         return np.nan if rng.random() < 0.72 else round(float(rng.uniform(6.0, 13.0)), 2)
-    if states == [0.0, 0.0, 0.0, 0.0]:
+    if states == [0.0, 0.0, 0.0]:
         return np.nan if rng.random() < 0.82 else round(float(rng.uniform(6.0, 14.0)), 2)
     if states[0] == 0.0 and any(state == 1.0 for state in states[1:]):
         return np.nan if rng.random() < 0.65 else round(float(rng.uniform(2.0, 10.0)), 2)
@@ -395,10 +394,9 @@ def assign_deterministic_labels(
         rsuffix="_observed",
     )
 
-    f1 = rule_df["formula_0_21d"].eq(1.0)
-    f2 = rule_df["formula_21d_2m"].eq(1.0)
-    f3 = rule_df["formula_2_4m"].eq(1.0)
-    f4 = rule_df["formula_4_6m"].eq(1.0)
+    f1 = rule_df["formula_0_2m"].eq(1.0)
+    f2 = rule_df["formula_2_4m"].eq(1.0)
+    f3 = rule_df["formula_4_6m"].eq(1.0)
     breastfeeding_continues = rule_df["Nursing End Age before 1 month"].eq(0.0)
     high_ses = rule_df["SocioEconomic_score"].ge(4)
     top_ses = rule_df["SocioEconomic_score"].eq(5)
@@ -407,9 +405,9 @@ def assign_deterministic_labels(
         | rule_df["BirthType_instrumental"].eq(1.0)
     )
 
-    rule_1 = f1 & ~f2 & ~f3 & ~f4 & breastfeeding_continues
-    rule_2 = ~f1 & ~f2 & ~f3 & ~f4 & breastfeeding_continues & top_ses & non_spontaneous
-    rule_3 = f1 & ~f2 & (f3 | f4) & high_ses & non_spontaneous
+    rule_1 = f1 & ~f2 & ~f3 & breastfeeding_continues
+    rule_2 = ~f1 & ~f2 & ~f3 & breastfeeding_continues & top_ses & non_spontaneous
+    rule_3 = f1 & ~f2 & f3 & high_ses & non_spontaneous
 
     rule_df["rule_1_main_temporal_early_stop"] = rule_1
     rule_df["rule_2_exclusive_bf_ses_birth_type"] = rule_2

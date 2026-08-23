@@ -1,4 +1,3 @@
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score, confusion_matrix,  average_precision_score, precision_recall_curve,
@@ -65,8 +64,6 @@ def evaluate_TemporalTree(y_real, y_predicted, y_probabilities=None):
             plt.grid()
             plt.show()
         return results
-
-import matplotlib.pyplot as plt
 
 def plot_tree_structure(tree, figsize=(12, 6), title="Temporal Decision Tree", save_path=None):
     """

@@ -4,16 +4,126 @@ from pathlib import Path
 import time
 
 import dill
-import numpy as np
 import pandas as pd
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 
 from settree.eval_utils import evaluate_TemporalTree, plot_tree_structure
+from settree.temporal_explainability import (
+    derive_monthly_bin_edges,
+    run_temporal_explainability,
+)
 from settree.temporal_tree import TemporalTree
+from settree.temporal_tree_ensemble import TemporalTreeEnsemble
 
 
-TARGET_RECALL = 0.80
 PLOT_TREE = False  # Set to True to plot the tree structure during evaluation
+VERBOSE = 1
+# Training verbosity:
+# 0 = Silent: no training/debug output.
+# 1 = Normal (recommended): node progress, selected splits, branch sizes, leaf reasons, and training summary.
+# 2 = Progress monitoring: level 1 + split-search progress every 1,000 candidates.
+# 3 = Full debug: level 2 + detailed internal messages, including aggregation [AGG] output.
+RUN_NAME = "coin_flip_temporal_fa_benchmark_5000"
+RUN_DESCRIPTION = " depth = 3 run benchmark on temporal_fa_benchmark_5000.pkl dataset with 3 windows , prove that the runtime optimization with coin flip works"
+RANDOM_STATE = 42
+USE_DYNAMIC_ANCHORS = False
+ANCHOR_OFFSET_MAP = { # here we define the anhor names and offsets
+    "Birth Date Anchor": [1, 2, 3, 4, 5, 6],
+    # "NOW Anchor": [-1, -2, -3, -4, -5, -6],
+}
+RUN_TEMPORAL_EXPLAINABILITY = True
+TEMPORAL_EXPLAINABILITY_BIN_EDGES = derive_monthly_bin_edges(
+    ANCHOR_OFFSET_MAP,
+)
+# Single-tree split-group sampling configuration.
+SPLIT_SAMPLING_SEED = 42
+
+# Ensemble configuration. These values are used only when USE_ENSEMBLE is True.
+USE_ENSEMBLE = False
+N_ESTIMATORS = 5
+BASE_ENSEMBLE_SPLIT_SAMPLING_SEED = 42
+ENSEMBLE_SPLIT_SAMPLING_SEEDS = None
+
+TEST_SIZE = 0.3
+OUTPUT_ROOT = Path("outputs/runs")
+DATA_PATH = Path("temporal_fa_benchmark_5000.pkl")
+LABELS_PATH = Path("temporal_fa_benchmark_labels_5000.pkl")
+MODEL_CONFIG = {
+    "max_depth": 3,
+    "min_samples_split": 1,
+    "min_samples_leaf": 1,
+    "anchors_list": list(ANCHOR_OFFSET_MAP.keys()),#["Birth Date Anchor"], #, "NOW Anchor"
+    "anchor_offset_list": [None, 1, 2, 3, 4, 6, 9, 12],
+    "is_classification": False,
+    "criterion": "mse",
+    "learn_missing_direction": False,
+    "candidate_sampling_rate": 0.1, #A
+    "split_sampling_seed": SPLIT_SAMPLING_SEED,
+}
+
+
+def make_run_dir(run_name, output_root=OUTPUT_ROOT):
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    base_name = run_name or f"run_{timestamp}"
+    run_dir = output_root / base_name
+    if run_dir.exists():
+        run_dir = output_root / f"{base_name}_{timestamp}"
+    run_dir.mkdir(parents=True, exist_ok=False)
+    return run_dir
+
+
+def build_config(run_description, dataset_path):
+    return {
+        "description": run_description,
+        "dataset": str(dataset_path),
+        "random_state": RANDOM_STATE,
+        "max_depth": MODEL_CONFIG["max_depth"],
+        "min_samples_split": MODEL_CONFIG["min_samples_split"],
+        "min_samples_leaf": MODEL_CONFIG["min_samples_leaf"],
+        "anchors_list": MODEL_CONFIG["anchors_list"],
+        "anchor_offset_list": MODEL_CONFIG["anchor_offset_list"],
+        "anchor_offset_map": ANCHOR_OFFSET_MAP,
+        "run_temporal_explainability": RUN_TEMPORAL_EXPLAINABILITY,
+        "temporal_explainability_bin_edges": (
+            TEMPORAL_EXPLAINABILITY_BIN_EDGES
+        ),
+        "criterion": MODEL_CONFIG["criterion"],
+        "is_classification": MODEL_CONFIG["is_classification"],
+        "use_dynamic_anchors": USE_DYNAMIC_ANCHORS,
+        "candidate_sampling_rate": MODEL_CONFIG["candidate_sampling_rate"],
+        "split_sampling_seed": MODEL_CONFIG["split_sampling_seed"],
+        "use_ensemble": USE_ENSEMBLE,
+        "ensemble": {
+            "n_estimators": N_ESTIMATORS,
+            "base_split_sampling_seed": BASE_ENSEMBLE_SPLIT_SAMPLING_SEED,
+            "split_sampling_seeds": ENSEMBLE_SPLIT_SAMPLING_SEEDS,
+        } if USE_ENSEMBLE else None,
+        "test_size": TEST_SIZE,
+    }
+
+
+def write_json(data, path):
+    path.write_text(json.dumps(data, indent=2, default=str))
+
+
+def save_metrics(results, runtime_minutes, artifact_paths, output_dir):
+    metrics = {
+        "accuracy": float(results["accuracy"]),
+        "precision": float(results["precision"]),
+        "recall": float(results["recall"]),
+        "auc_roc": float(results["auc_roc"]) if "auc_roc" in results else None,
+        "runtime_minutes": runtime_minutes,
+        "artifacts": {
+            "model": str(artifact_paths["model"]),
+            "tree_json": str(artifact_paths["tree_json"]) if artifact_paths["tree_json"] is not None else None,
+            "tree_png": str(artifact_paths["tree_png"]) if artifact_paths["tree_png"] is not None else None,
+            "config": str(artifact_paths["config"]),
+        },
+    }
+    metrics_path = output_dir / "metrics.json"
+    write_json(metrics, metrics_path)
+    return metrics_path
 
 
 def load_data(data_path, labels_path):
@@ -79,41 +189,28 @@ def split_data(data, labels_df):
             f"Missing labels for {len(missing_data_labels)} patients."
         )
 
-    #split train - validation - test datasets 
+    # Split train - test datasets.
 
     # Stratified split to maintain label distribution
-    train_val_patients, test_patients = train_test_split(
+    train_patients, test_patients = train_test_split(
         labels_df["patient_id"],
-        test_size=0.2,
+        test_size=TEST_SIZE,
         stratify=labels_df["label"],  # Ensures class balance
-        random_state=42
+        random_state=RANDOM_STATE
     )
     labels_by_patient = labels_df.set_index("patient_id")
-    train_val_labels = labels_by_patient.loc[train_val_patients, "label"]
 
-    train_patients, val_patients = train_test_split(
-        train_val_patients,
-        test_size=0.25,
-        stratify=train_val_labels,
-        random_state=42
-    )
-
-    assert set(train_patients).isdisjoint(val_patients)
     assert set(train_patients).isdisjoint(test_patients)
-    assert set(val_patients).isdisjoint(test_patients)
 
-    # Create train, validation and test sets
+    # Create train and test sets.
     train_data = data[data["patient_id"].isin(train_patients)].copy()
-    val_data = data[data["patient_id"].isin(val_patients)].copy()
     test_data = data[data["patient_id"].isin(test_patients)].copy()
 
     train_patient_order = train_data["patient_id"].drop_duplicates().to_numpy()
-    val_patient_order = val_data["patient_id"].drop_duplicates().to_numpy()
     test_patient_order = test_data["patient_id"].drop_duplicates().to_numpy()
 
     for split_name, patient_order in {
         "train": train_patient_order,
-        "validation": val_patient_order,
         "test": test_patient_order,
     }.items():
         missing_labels = set(patient_order) - set(labels_by_patient.index)
@@ -124,99 +221,73 @@ def split_data(data, labels_df):
             )
 
     y_train = labels_by_patient.loc[train_patient_order, "label"].reset_index(drop=True)
-    y_val = labels_by_patient.loc[val_patient_order, "label"].reset_index(drop=True)
     y_test = labels_by_patient.loc[test_patient_order, "label"].reset_index(drop=True)
 
     n_train = len(train_data['patient_id'].unique())
     print(f'number of patients in the train: {n_train}')
     print(f'Precentage of label 1 in train: {y_train.sum()*100/n_train}')
-    n_val = len(val_data['patient_id'].unique())
-    print(f'number of patients in the validation: {n_val}')
-    print(f'Precentage of label 1 in validation: {y_val.sum()*100/n_val}')
     n_test = len(test_data['patient_id'].unique())
     print(f'number of patients in the test: {n_test}')
-    return train_data, val_data, test_data, y_train, y_val, y_test
+    return train_data, test_data, y_train, y_test
 
 
-def train_model(train_data, y_train):
-    anchors_list = ['Birth Date Anchor']
-    anchor_offset_list = [None,1, 2, 3, 4, 6, 9, 12, 12 * 5]#-12, -6, 12*5, 12*7] #months
-    model = TemporalTree(max_depth=3,
-                         min_samples_split=1,
-                         min_samples_leaf = 7,
-                         anchors_list=anchors_list,
-                         anchor_offset_list=anchor_offset_list,
-                         is_classification=False,
-                         criterion='mse',
-                        learn_missing_direction=False)
-    model.fit(train_data, y_train)
-    return model
+def build_model():
+    """Construct either the configured single tree or ensemble estimator."""
+    base_tree = TemporalTree(
+        **MODEL_CONFIG,
+        verbose=VERBOSE,
+        use_dynamic_anchors=USE_DYNAMIC_ANCHORS,
+        anchor_offset_map=ANCHOR_OFFSET_MAP,
+    )
+    if not USE_ENSEMBLE:
+        return base_tree
 
-
-def select_threshold_for_target_recall(y_val, val_scores, target_recall):
-    print('\n-------------select_threshold_for_target_recall() func-------------')
-    y_val = np.asarray(y_val)
-    val_scores = np.asarray(val_scores)
-
-    if not np.all(np.isfinite(val_scores)):
-        raise ValueError(
-            "Validation scores must be finite before threshold selection."
-        )
-
-    if len(val_scores) != len(y_val):
-        raise ValueError(
-            "Validation scores and labels have different lengths."
-        )
-
-    candidate_thresholds = np.unique(val_scores)
-
-    threshold_results = []
-    for threshold in candidate_thresholds:
-        y_pred = (val_scores >= threshold).astype(int)
-        true_positive = np.sum((y_pred == 1) & (y_val == 1))
-        false_positive = np.sum((y_pred == 1) & (y_val == 0))
-        false_negative = np.sum((y_pred == 0) & (y_val == 1))
-
-        recall_denominator = true_positive + false_negative
-        precision_denominator = true_positive + false_positive
-        recall = true_positive / recall_denominator if recall_denominator else 0.0
-        precision = true_positive / precision_denominator if precision_denominator else 0.0
-
-        threshold_results.append((threshold, recall, precision))
-
-    satisfying_thresholds = [
-        result for result in threshold_results
-        if result[1] >= target_recall
-    ]
-
-    if satisfying_thresholds:
-        selected_threshold, validation_recall, validation_precision = max(
-            satisfying_thresholds,
-            key=lambda result: (result[2], result[1], result[0])
-        )
-        target_recall_achieved = True
-    else:
-        selected_threshold, validation_recall, validation_precision = max(
-            threshold_results,
-            key=lambda result: (result[1], result[2], result[0])
-        )
-        target_recall_achieved = False
-        print(
-            "WARNING: Target recall of "
-            f"{target_recall:.2f} was not achievable on the validation set. "
-            f"Best achieved validation recall was {validation_recall:.2f}. "
-            f"Using fallback threshold {selected_threshold}."
-        )
-
-    return (
-        selected_threshold,
-        target_recall_achieved,
-        validation_recall,
-        validation_precision
+    return TemporalTreeEnsemble(
+        estimator=base_tree,
+        n_estimators=N_ESTIMATORS,
+        base_split_sampling_seed=BASE_ENSEMBLE_SPLIT_SAMPLING_SEED,
+        split_sampling_seeds=ENSEMBLE_SPLIT_SAMPLING_SEEDS,
     )
 
 
-def evaluate_model(model, test_data, y_test, threshold, output_dir=None, plot_tree=False):
+def train_model(train_data, y_train):
+    model = build_model()
+    model.fit(train_data, y_train)
+    if VERBOSE >= 1:
+        if y_train.nunique() < 2:
+            print("[TRAIN] ROC-AUC: unavailable (training labels contain one class)")
+        else:
+            train_scores = model.predict(train_data)
+            train_auc = roc_auc_score(y_train, train_scores)
+            print(f"[TRAIN] ROC-AUC: {train_auc:.4f}")
+    return model
+
+
+def run_training_temporal_explainability(model, train_data, output_dir):
+    """Run the configured version-one explainability stage on training data."""
+    if not RUN_TEMPORAL_EXPLAINABILITY:
+        return None
+    if isinstance(model, TemporalTreeEnsemble):
+        raise ValueError(
+            "Temporal explainability version 1 supports single-tree models "
+            "only. Disable RUN_TEMPORAL_EXPLAINABILITY when using an ensemble."
+        )
+
+    result = run_temporal_explainability(
+        model=model,
+        X=train_data,
+        output_dir=output_dir,
+        bin_edges_by_anchor=TEMPORAL_EXPLAINABILITY_BIN_EDGES,
+    )
+    print(
+        "[EXPLAINABILITY] Saved training temporal paths and histogram\n"
+        f"        Path table: {result['path_table_path']}\n"
+        f"        Histogram: {result['histogram_path']}"
+    )
+    return result
+
+
+def evaluate_model(model, test_data, y_test, output_dir=None, plot_tree=False):
     print('-------------evaluate_model() func-------------')
     predictions = model.predict(test_data)
     if len(predictions) != len(y_test):
@@ -225,15 +296,21 @@ def evaluate_model(model, test_data, y_test, threshold, output_dir=None, plot_tr
         )
 
     # print('Predictions:', predictions)
-    print('Threshold:', threshold)
-    y_predicted = (predictions >= threshold).astype(int)
+    print('Threshold:', 0.5)
+    y_predicted = (predictions >= 0.5).astype(int)
     # print('Predicted labels:', y_predicted)
     results = evaluate_TemporalTree(y_test, y_predicted, y_probabilities=predictions)
-    if plot_tree:
+    if plot_tree and isinstance(model, TemporalTreeEnsemble):
+        print(
+            "[ENSEMBLE] Tree plotting is skipped because the current plot "
+            "function supports one TemporalTree only. Individual trees remain "
+            "available through model.estimators_."
+        )
+    elif plot_tree:
         save_path = None
         if output_dir is not None:
             output_dir.mkdir(parents=True, exist_ok=True)
-            save_path = output_dir / "temporal_tree_structure.png"
+            save_path = output_dir / "tree.png"
         plot_tree_structure(model.tree, save_path=save_path)
     return results
 
@@ -242,8 +319,7 @@ def export_tree_structure(tree, output_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
     nodes = []
     lines = []
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = f'temporal_tree_structure_{timestamp}.json'
+    filename = "tree.json"
     
     def traverse(node, depth=0):
         node_id = len(nodes)
@@ -298,28 +374,35 @@ def export_tree_structure(tree, output_dir):
 
     # text_path.write_text("\n".join(lines) + "\n")
     json_path.write_text(json.dumps(nodes, indent=2, default=str))
+    return json_path
 
 
-def save_model(model, selected_threshold, output_dir):
+def export_model_tree_structure(model, output_dir):
+    """Export a single tree, or explicitly skip unsupported ensemble export."""
+    if isinstance(model, TemporalTreeEnsemble):
+        print(
+            "[ENSEMBLE] Single-tree JSON export is skipped. Individual fitted "
+            "trees are stored in the serialized ensemble's estimators_."
+        )
+        return None
+    return export_tree_structure(model.tree, output_dir)
+
+
+def save_model(model, output_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = output_dir / f'temporal_tree_{timestamp}.dill'
-    model_package = {
-        "model": model,
-        "threshold": selected_threshold
-    }
+    filename = output_dir / "model.dill"
 
     with open(filename, "wb") as f:
-        dill.dump(model_package, f)
+        dill.dump(model, f)
     return filename
 
 
 def load_model(model_path):
     with open(model_path, 'rb') as f:
-        model_package = dill.load(f)
-    model = model_package["model"]
-    threshold = model_package["threshold"]
-    return model, threshold
+        model = dill.load(f)
+    if isinstance(model, dict) and "model" in model:
+        return model["model"]
+    return model
 
 
 def main():
@@ -331,7 +414,7 @@ def main():
     # output_dir = Path('outputs/models')
 
     # data, labels_df = load_data(legacy_data_path, legacy_labels_path)
-    # train_data, val_data, test_data, y_train, y_val, y_test = split_data(data, labels_df)
+    # train_data, test_data, y_train, y_test = split_data(data, labels_df)
 
     # start_time = time.time()
     # model = train_model(train_data, y_train)
@@ -339,24 +422,18 @@ def main():
 
     # print(f"\nTraining time: {end_time - start_time:.2f} seconds")
 
-    # val_scores = model.predict(val_data)
-    # selected_threshold, target_recall_achieved, validation_recall, validation_precision = (
-    #     select_threshold_for_target_recall(y_val, val_scores, TARGET_RECALL)
-    # )
-    # print(f"Selected threshold: {selected_threshold}")
-    # print(f"Target recall achieved: {target_recall_achieved}")
-    # print(f"Validation recall: {validation_recall}")
-    # print(f"Validation precision: {validation_precision}")
-    # results = evaluate_model(model, test_data, y_test, selected_threshold)
+    # results = evaluate_model(model, test_data, y_test)
     # print(results)
 
-    # save_model(model, selected_threshold, output_dir)
+    # save_model(model, output_dir)
     # print(f"\nTraining time: {end_time - start_time:.2f} seconds")
     # print(f"Total runtime: {total_runtime_seconds / 60:.2f} minutes")
 
 
     # Additional synthetic-data run using the new PKL files.
-    output_dir = Path('outputs/models')
+    output_dir = make_run_dir(RUN_NAME)
+    config_path = output_dir / "config.json"
+    write_json(build_config(RUN_DESCRIPTION, DATA_PATH), config_path)
     #synthetic_moh_longitudinal_2000
     #synthetic_moh_labels_2000
     # synthetic_data_path = Path('synthetic_temporal_unit_test_5000.pkl') #
@@ -366,16 +443,14 @@ def main():
     # synthetic_labels_path = Path('synthetic_exp3_temporal_labels_5000.pkl')
     
     # strong benchmark:
-    synthetic_data_path = Path('temporal_fa_benchmark_5000.pkl') #
-    synthetic_labels_path = Path('temporal_fa_benchmark_labels_5000.pkl')
+    synthetic_data_path = DATA_PATH
+    synthetic_labels_path = LABELS_PATH
     
     synthetic_data, synthetic_labels_df = load_data(synthetic_data_path, synthetic_labels_path)
     (
         synthetic_train_data,
-        synthetic_val_data,
         synthetic_test_data,
         synthetic_y_train,
-        synthetic_y_val,
         synthetic_y_test
     ) = split_data(
         synthetic_data, synthetic_labels_df
@@ -387,37 +462,42 @@ def main():
 
     print(f"\nSynthetic training time: {synthetic_end_time - synthetic_start_time:.2f} seconds")
 
-    synthetic_val_scores = synthetic_model.predict(synthetic_val_data)
-    (
-        selected_threshold,
-        target_recall_achieved,
-        validation_recall,
-        validation_precision
-    ) = select_threshold_for_target_recall(
-        synthetic_y_val,
-        synthetic_val_scores,
-        TARGET_RECALL
+    run_training_temporal_explainability(
+        synthetic_model,
+        synthetic_train_data,
+        output_dir,
     )
-    print(f"Selected threshold: {selected_threshold}")
-    print(f"Target recall achieved: {target_recall_achieved}")
-    print(f"Validation recall: {validation_recall}")
-    print(f"Validation precision: {validation_precision}")
 
     synthetic_results = evaluate_model(
         synthetic_model,
         synthetic_test_data,
         synthetic_y_test,
-        selected_threshold,
         output_dir,
         PLOT_TREE
     )
     print("Synthetic results:")
     print(synthetic_results)
 
-    export_tree_structure(synthetic_model.tree, output_dir)
-    save_model(synthetic_model,selected_threshold, output_dir)
+    tree_json_path = export_model_tree_structure(synthetic_model, output_dir)
+    model_path = save_model(synthetic_model, output_dir)
 
     total_runtime_seconds = time.time() - total_start_time
+    artifact_paths = {
+        "model": model_path,
+        "tree_json": tree_json_path,
+        "tree_png": (
+            output_dir / "tree.png"
+            if PLOT_TREE and not isinstance(synthetic_model, TemporalTreeEnsemble)
+            else None
+        ),
+        "config": config_path,
+    }
+    save_metrics(
+        synthetic_results,
+        total_runtime_seconds / 60,
+        artifact_paths,
+        output_dir,
+    )
     print(f"\nTotal runtime: {total_runtime_seconds:.2f} seconds")
     print(f"Total runtime: {total_runtime_seconds / 60:.2f} minutes")
 
