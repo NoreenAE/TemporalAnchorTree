@@ -183,7 +183,9 @@ def test_fractional_dynamic_anchor_boundary_matches_training_and_prediction():
         aggregation="max",
         time_window=(ANCHOR, 0.7),
     )
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"signal": "state_measurement"},
+    )
     anchor_name = model._format_dynamic_anchor_name(node, "right")
 
     training_anchor = create_branch_anchors(
@@ -194,6 +196,7 @@ def test_fractional_dynamic_anchor_boundary_matches_training_and_prediction():
         "signal",
         0.5,
         (ANCHOR, 0.7),
+        aggregation="max",
     )
     prediction_data = model._append_prediction_branch_anchor(row, node, "right")
     prediction_anchor = prediction_data.loc[

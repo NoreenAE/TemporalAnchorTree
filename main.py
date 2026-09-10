@@ -38,6 +38,7 @@ TEMPORAL_EXPLAINABILITY_BIN_EDGES = derive_monthly_bin_edges(
 )
 # Single-tree split-group sampling configuration.
 SPLIT_SAMPLING_SEED = 42
+MIN_IMPURITY_DECREASE = 0.0
 
 # Ensemble configuration. These values are used only when USE_ENSEMBLE is True.
 USE_ENSEMBLE = False
@@ -60,6 +61,7 @@ MODEL_CONFIG = {
     "learn_missing_direction": False,
     "candidate_sampling_rate": 0.1, #A
     "split_sampling_seed": SPLIT_SAMPLING_SEED,
+    "min_impurity_decrease": MIN_IMPURITY_DECREASE,
 }
 
 
@@ -93,6 +95,7 @@ def build_config(run_description, dataset_path):
         "use_dynamic_anchors": USE_DYNAMIC_ANCHORS,
         "candidate_sampling_rate": MODEL_CONFIG["candidate_sampling_rate"],
         "split_sampling_seed": MODEL_CONFIG["split_sampling_seed"],
+        "min_impurity_decrease": MODEL_CONFIG["min_impurity_decrease"],
         "use_ensemble": USE_ENSEMBLE,
         "ensemble": {
             "n_estimators": N_ESTIMATORS,

@@ -1,5 +1,6 @@
 import json
 import math
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -18,7 +19,10 @@ from generate_temporal_benchmark import (
     LONGITUDINAL_COLUMNS,
     N_EXPERIMENT_3,
     REGULAR_BOUNDARY_SIGNATURES,
+    PUBLICATION_V2_PROFILE,
+    VALIDATED_V1_PROFILE,
     BenchmarkConfig,
+    _publication_food_probability,
     artifact_paths,
     build_trajectory_spec,
     calibrate_fa_intercept,
@@ -38,6 +42,21 @@ def structural_result():
     return generate_benchmark(
         config,
         assigned_groups=groups,
+        require_empirical_distribution=False,
+    )
+
+
+@pytest.fixture(scope="module")
+def publication_v2_result():
+    config = BenchmarkConfig(
+        n_patients=220,
+        master_seed=303,
+        output_dir=Path("data/temporal_benchmark_v2"),
+        generation_profile=PUBLICATION_V2_PROFILE,
+    )
+    return generate_benchmark(
+        config,
+        assigned_groups=list(GROUP_ORDER) * 20,
         require_empirical_distribution=False,
     )
 
@@ -329,3 +348,70 @@ def test_artifacts_use_dedicated_directory_and_refuse_overwrite(
     )
     with pytest.raises(FileExistsError, match="Refusing to overwrite"):
         save_benchmark(structural_result, config)
+
+
+def test_validated_v1_remains_the_default_profile(structural_result):
+    assert BenchmarkConfig().generation_profile == VALIDATED_V1_PROFILE
+    assert "generation_profile" not in structural_result.metadata
+    assert set(structural_result.metadata["rng_streams"]) == {
+        "cohort",
+        "trajectory",
+        "feeding_observations",
+        "distractors",
+        "missingness",
+        "fa_labels",
+    }
+
+
+def test_publication_v2_now_is_day_level_and_strictly_separated(
+    publication_v2_result,
+):
+    ground_truth = publication_v2_result.ground_truth
+    earliest = ground_truth["birth_date"] + pd.DateOffset(months=18)
+    latest = ground_truth["birth_date"] + pd.DateOffset(months=24)
+
+    assert ground_truth["now"].between(earliest, latest).all()
+    assert ground_truth["now_age_days"].nunique() >= 100
+    assert (
+        ground_truth["birth_date"] + pd.DateOffset(months=6)
+        < ground_truth["now"] - pd.DateOffset(months=6)
+    ).all()
+    assert publication_v2_result.metadata["validation"]["checks"][
+        "day_level_now_distribution"
+    ]
+
+
+def test_publication_v2_food_probability_increases_with_age():
+    probabilities = [
+        _publication_food_probability(age, 180.0, 0.90)
+        for age in (60, 120, 180, 270, 450)
+    ]
+
+    assert probabilities == sorted(probabilities)
+    assert probabilities[0] < 0.01
+    assert probabilities[-1] > 0.89
+
+
+def test_publication_v2_growth_is_routine_and_longitudinally_coherent(
+    publication_v2_result,
+):
+    audit = publication_v2_result.metadata["validation"][
+        "publication_v2_covariate_audit"
+    ]["growth"]
+
+    for feature in ("LengthCm", "WeightKg"):
+        feature_audit = audit[feature]
+        assert 7 <= feature_audit["observations_per_patient"]["min"]
+        assert feature_audit["observations_per_patient"]["max"] <= 9
+        assert feature_audit["measurement_gap_days"]["min"] >= 20
+        assert feature_audit["observed_decrease_rate"] <= 0.01
+
+
+def test_publication_v2_uses_separate_food_growth_and_label_rng_streams(
+    publication_v2_result,
+):
+    streams = publication_v2_result.metadata["rng_streams"]
+
+    assert streams["fa_labels"]["spawn_key"] == [5]
+    assert streams["food_exposure"]["spawn_key"] == [7]
+    assert streams["growth"]["spawn_key"] == [8]

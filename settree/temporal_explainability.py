@@ -1,11 +1,13 @@
 """Post-training temporal decision-path explainability utilities."""
 
+import json
 import math
 from numbers import Integral, Real
 from pathlib import Path
 from typing import Dict, Mapping, Optional, Sequence, Tuple
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 import numpy as np
 import pandas as pd
 
@@ -40,6 +42,9 @@ USAGE_TABLE_COLUMNS = [
     "raw_usage_count",
     "normalized_usage_per_patient",
 ]
+
+TEMPORAL_USAGE_PERCENTAGE_COLUMN = "usage_percentage"
+TEMPORAL_USAGE_ANCHORS = ("Birth Date Anchor", "NOW Anchor")
 
 
 def derive_monthly_bin_edges(
@@ -325,54 +330,340 @@ def plot_temporal_usage(
     bin_edges_by_anchor: Mapping,
     output_path,
 ) -> Path:
-    """Save a multi-panel normalized temporal split-usage histogram."""
+    """Save the individual three-panel temporal-usage percentage figure."""
     edges_by_anchor = _validate_bin_edges(bin_edges_by_anchor)
+    percentage_table, full_timeline_percentage = (
+        calculate_temporal_usage_percentages(usage_table, summary)
+    )
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     anchors = list(edges_by_anchor)
     figure, axes = plt.subplots(
         1,
-        len(anchors),
-        figsize=(7 * len(anchors), 5),
-        squeeze=False,
+        len(anchors) + 1,
+        figsize=(15.5, 5.3),
         sharey=True,
+        gridspec_kw={
+            "width_ratios": [3.2] * len(anchors) + [1.2],
+        },
     )
 
-    for axis, anchor in zip(axes[0], anchors):
-        anchor_usage = usage_table.loc[usage_table["anchor"] == anchor]
+    for axis, anchor in zip(axes[:-1], anchors):
+        anchor_usage = percentage_table.loc[
+            percentage_table["anchor"].eq(anchor)
+        ].sort_values(["bin_start_offset", "bin_end_offset"])
+        expected_bins = len(edges_by_anchor[anchor]) - 1
+        if len(anchor_usage) != expected_bins:
+            raise ValueError(
+                f"Expected {expected_bins} monthly bins for {anchor!r}; "
+                f"found {len(anchor_usage)}."
+            )
         positions = np.arange(len(anchor_usage))
-        heights = anchor_usage["normalized_usage_per_patient"].to_numpy()
+        heights = anchor_usage[TEMPORAL_USAGE_PERCENTAGE_COLUMN].to_numpy()
         labels = [
-            f"{start:g} to {end:g}"
+            f"{start:g}–{end:g}"
             for start, end in zip(
                 anchor_usage["bin_start_offset"],
                 anchor_usage["bin_end_offset"],
             )
         ]
-        axis.bar(positions, heights, width=0.8)
+        bars = axis.bar(positions, heights, width=0.8)
         axis.set_xticks(positions)
         axis.set_xticklabels(labels, rotation=35, ha="right")
-        axis.set_title(f"{anchor} — Temporal Split Usage")
-        axis.set_xlabel("Months Relative to Anchor")
-        axis.set_ylabel(
-            "Mean Patient-Path Temporal Split Usages per Patient"
-        )
+        axis.set_title(anchor)
+        axis.set_xlabel("Months Relative to Anchor", labelpad=8)
+        axis.set_ylim(0, 100)
         axis.grid(axis="y", alpha=0.25)
+        _annotate_nonzero_percentages(axis, bars, heights)
+
+    full_timeline_axis = axes[-1]
+    full_timeline_bar = full_timeline_axis.bar(
+        [0],
+        [full_timeline_percentage],
+        width=0.58,
+    )
+    full_timeline_axis.set_title("Full Timeline")
+    full_timeline_axis.set_xticks([0])
+    full_timeline_axis.set_xticklabels([""])
+    full_timeline_axis.set_xlabel("Full Timeline", labelpad=8)
+    full_timeline_axis.set_ylim(0, 100)
+    full_timeline_axis.grid(axis="y", alpha=0.25)
+    _annotate_nonzero_percentages(
+        full_timeline_axis,
+        full_timeline_bar,
+        [full_timeline_percentage],
+    )
 
     figure.text(
+        0.014,
+        0.55,
+        "Temporal split usage (%)",
+        rotation="vertical",
+        va="center",
+    )
+    figure.text(
         0.5,
-        0.01,
-        "Evaluated patients: "
-        f"{int(summary['evaluated_patient_count'])} | "
-        f"Full-timeline usages: {int(summary['full_timeline_usages'])} | "
-        f"Zero-width usages: {int(summary['zero_width_usages'])}",
+        0.035,
+        f"Evaluated patients: {int(summary['evaluated_patient_count'])}",
         ha="center",
     )
-    figure.tight_layout(rect=(0, 0.06, 1, 1))
-    figure.savefig(output_path, dpi=150, bbox_inches="tight")
+    figure.subplots_adjust(
+        left=0.07,
+        right=0.985,
+        bottom=0.25,
+        top=0.90,
+        wspace=0.16,
+    )
+    figure.savefig(output_path, dpi=150)
     plt.close(figure)
     return output_path
+
+
+def calculate_temporal_usage_percentages(
+    usage_table: pd.DataFrame,
+    summary: Mapping[str, float],
+) -> Tuple[pd.DataFrame, float]:
+    """Convert saved raw usage counts to percentages of all split usages."""
+    missing_columns = {
+        "anchor",
+        "bin_start_offset",
+        "bin_end_offset",
+        "raw_usage_count",
+    }.difference(usage_table.columns)
+    if missing_columns:
+        raise ValueError(
+            "usage_table is missing required columns: "
+            f"{sorted(missing_columns)}."
+        )
+    missing_summary = {
+        "evaluated_patient_count",
+        "temporal_split_usages",
+        "full_timeline_usages",
+    }.difference(summary)
+    if missing_summary:
+        raise ValueError(
+            "summary is missing required fields: "
+            f"{sorted(missing_summary)}."
+        )
+    total_usages = int(summary["temporal_split_usages"])
+    full_timeline_usages = int(summary["full_timeline_usages"])
+    if total_usages <= 0:
+        raise ValueError("temporal_split_usages must be positive.")
+    if not 0 <= full_timeline_usages <= total_usages:
+        raise ValueError(
+            "full_timeline_usages must be between zero and total usages."
+        )
+    raw_counts = pd.to_numeric(
+        usage_table["raw_usage_count"],
+        errors="coerce",
+    )
+    if raw_counts.isna().any() or raw_counts.lt(0).any():
+        raise ValueError("raw_usage_count must contain non-negative numbers.")
+    if raw_counts.gt(total_usages).any():
+        raise ValueError(
+            "A monthly-bin usage count cannot exceed total split usages."
+        )
+
+    percentages = usage_table.copy()
+    percentages[TEMPORAL_USAGE_PERCENTAGE_COLUMN] = (
+        raw_counts / total_usages * 100.0
+    )
+    full_timeline_percentage = (
+        full_timeline_usages / total_usages * 100.0
+    )
+    return percentages, float(full_timeline_percentage)
+
+
+def load_temporal_usage_artifacts(output_dir) -> dict:
+    """Load already-computed temporal usage counts for plotting only."""
+    output_dir = Path(output_dir)
+    usage_path = output_dir / "aggregated_temporal_usage.csv"
+    summary_path = output_dir / "temporal_usage_summary.json"
+    if not usage_path.is_file() or not summary_path.is_file():
+        raise FileNotFoundError(
+            "Saved temporal usage artifacts are required: "
+            f"{usage_path} and {summary_path}."
+        )
+    usage_table = pd.read_csv(usage_path)
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    calculate_temporal_usage_percentages(usage_table, summary)
+    return {
+        "usage_table": usage_table,
+        "summary": summary,
+        "usage_path": usage_path,
+        "summary_path": summary_path,
+    }
+
+
+def plot_temporal_usage_comparison(
+    usage_by_outcome: Mapping[str, Mapping],
+    output_path,
+    subtitle: Optional[str] = None,
+) -> Path:
+    """Save a three-panel FA-versus-GI temporal usage comparison."""
+    normalized = {
+        str(outcome).upper(): artifacts
+        for outcome, artifacts in usage_by_outcome.items()
+    }
+    if set(normalized) != {"FA", "GI"}:
+        raise ValueError("usage_by_outcome must contain exactly FA and GI.")
+
+    prepared = {}
+    evaluated_patient_counts = set()
+    for outcome in ("FA", "GI"):
+        artifacts = normalized[outcome]
+        if not {"usage_table", "summary"}.issubset(artifacts):
+            raise ValueError(
+                f"{outcome} artifacts require usage_table and summary."
+            )
+        percentage_table, full_percentage = (
+            calculate_temporal_usage_percentages(
+                artifacts["usage_table"],
+                artifacts["summary"],
+            )
+        )
+        evaluated_patient_counts.add(
+            int(artifacts["summary"]["evaluated_patient_count"])
+        )
+        prepared[outcome] = {
+            "usage_table": percentage_table,
+            "full_percentage": full_percentage,
+        }
+    if len(evaluated_patient_counts) != 1:
+        raise ValueError("FA and GI evaluated-patient counts must match.")
+    evaluated_patient_count = evaluated_patient_counts.pop()
+
+    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"][:2]
+    outcome_colors = dict(zip(("FA", "GI"), colors))
+    figure, axes = plt.subplots(
+        1,
+        3,
+        figsize=(16, 6),
+        sharey=True,
+        gridspec_kw={"width_ratios": [3.2, 3.2, 1.25]},
+    )
+    bar_width = 0.36
+    for axis, anchor in zip(axes[:2], TEMPORAL_USAGE_ANCHORS):
+        bins = sorted({
+            (float(row.bin_start_offset), float(row.bin_end_offset))
+            for outcome in ("FA", "GI")
+            for row in prepared[outcome]["usage_table"].loc[
+                prepared[outcome]["usage_table"]["anchor"].eq(anchor)
+            ].itertuples(index=False)
+        })
+        if not bins:
+            raise ValueError(f"No saved monthly bins found for {anchor!r}.")
+        positions = np.arange(len(bins))
+        for outcome_index, outcome in enumerate(("FA", "GI")):
+            anchor_usage = prepared[outcome]["usage_table"].loc[
+                prepared[outcome]["usage_table"]["anchor"].eq(anchor)
+            ].set_index(["bin_start_offset", "bin_end_offset"])
+            heights = np.asarray([
+                float(
+                    anchor_usage.loc[
+                        bin_pair,
+                        TEMPORAL_USAGE_PERCENTAGE_COLUMN,
+                    ]
+                )
+                if bin_pair in anchor_usage.index
+                else 0.0
+                for bin_pair in bins
+            ])
+            offset = (outcome_index - 0.5) * bar_width
+            bars = axis.bar(
+                positions + offset,
+                heights,
+                width=bar_width,
+                color=outcome_colors[outcome],
+            )
+            _annotate_nonzero_percentages(axis, bars, heights)
+        axis.set_xticks(positions)
+        axis.set_xticklabels(
+            [f"{start:g}–{end:g}" for start, end in bins],
+            rotation=35,
+            ha="right",
+        )
+        axis.set_title(anchor)
+        axis.set_xlabel("Months Relative to Anchor", labelpad=8)
+        axis.set_ylim(0, 100)
+        axis.grid(axis="y", alpha=0.25)
+
+    full_timeline_axis = axes[2]
+    full_heights = [
+        prepared[outcome]["full_percentage"] for outcome in ("FA", "GI")
+    ]
+    full_bars = full_timeline_axis.bar(
+        np.arange(2),
+        full_heights,
+        width=0.62,
+        color=[outcome_colors[outcome] for outcome in ("FA", "GI")],
+    )
+    full_timeline_axis.set_xticks(np.arange(2))
+    full_timeline_axis.set_xticklabels(["FA", "GI"])
+    full_timeline_axis.set_title("Full Timeline")
+    full_timeline_axis.set_ylim(0, 100)
+    full_timeline_axis.grid(axis="y", alpha=0.25)
+    _annotate_nonzero_percentages(
+        full_timeline_axis,
+        full_bars,
+        full_heights,
+    )
+
+    figure.text(
+        0.014,
+        0.51,
+        "Temporal split usage (%)",
+        rotation="vertical",
+        va="center",
+    )
+    figure.suptitle("FA vs GI Temporal Usage Comparison", y=0.97, fontsize=16)
+    if subtitle:
+        figure.text(0.5, 0.925, subtitle, ha="center", fontsize=10)
+    figure.legend(
+        handles=[
+            Patch(facecolor=outcome_colors[outcome], label=outcome)
+            for outcome in ("FA", "GI")
+        ],
+        loc="upper center",
+        bbox_to_anchor=(0.5, 0.90),
+        ncol=2,
+        frameon=False,
+    )
+    figure.text(
+        0.5,
+        0.035,
+        f"Evaluated patients: {evaluated_patient_count}",
+        ha="center",
+    )
+    figure.subplots_adjust(
+        left=0.07,
+        right=0.985,
+        bottom=0.20,
+        top=0.82,
+        wspace=0.16,
+    )
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    figure.savefig(output_path, dpi=150)
+    plt.close(figure)
+    return output_path
+
+
+def _annotate_nonzero_percentages(axis, bars, percentages) -> None:
+    """Label non-zero percentage bars without cluttering empty bins."""
+    for bar, percentage in zip(bars, percentages):
+        if percentage <= 0:
+            continue
+        axis.annotate(
+            f"{percentage:.1f}%",
+            xy=(bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            xytext=(0, 3),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
 
 
 def run_temporal_explainability(

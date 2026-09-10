@@ -61,6 +61,7 @@ class GIConfig:
     master_seed: int = MASTER_SEED
     target_prevalence: float = TARGET_GI_PREVALENCE
     output_dir: Path = OUTPUT_DIR
+    benchmark_version: str = "phase_2_gi_v1"
     overwrite: bool = False
 
 
@@ -261,7 +262,7 @@ def generate_gi_benchmark(
     predictor_columns = list(GI_PREDICTOR_COLUMNS.values())
     probability_series = ground_truth["gi_probability"]
     metadata = {
-        "benchmark_version": "phase_2_gi_v1",
+        "benchmark_version": config.benchmark_version,
         "source_x_status": "read_only_unchanged",
         "outcome_interpretation": (
             "Acute GI/stomach-upset outcome assessed immediately after the "
@@ -726,6 +727,10 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
     parser.add_argument("--master-seed", type=int, default=MASTER_SEED)
     parser.add_argument(
+        "--benchmark-version",
+        default="phase_2_gi_v1",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Explicitly allow replacement of GI-only artifacts.",
@@ -746,6 +751,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         n_patients=len(fa_labels),
         master_seed=args.master_seed,
         output_dir=args.output_dir,
+        benchmark_version=args.benchmark_version,
         overwrite=args.overwrite,
     )
     result = generate_gi_benchmark(data, config)

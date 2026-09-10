@@ -15,6 +15,7 @@ from sklearn.base import BaseEstimator
 from collections import deque
 from typing import Tuple
 from .anchor_utils import (
+    _aggregation_anchor_dates,
     _offset_to_dateoffset,
     create_branch_anchors,
     get_time_window_mask,
@@ -124,7 +125,9 @@ class TemporalTree(BaseEstimator):
                  split_sampling_seed=42,
                  verbose=1,
                  use_dynamic_anchors=True,
-                 anchor_offset_map=None):
+                 anchor_offset_map=None,
+                 min_impurity_decrease=0.0,
+                 feature_semantics=None):
 
         """
         Parameters
@@ -195,6 +198,22 @@ class TemporalTree(BaseEstimator):
             Optional anchor-specific offset overrides. An anchor present in
             this mapping uses its mapped offsets; every other anchor,
             including dynamic anchors, uses ``anchor_offset_list``.
+
+        min_impurity_decrease : float, default=0.0
+            A node is split only when the best candidate's impurity decrease
+            is at least this value. The default preserves the existing split
+            behavior.
+
+        feature_semantics : dict or None, default=None
+            Explicit semantic metadata controlling whether fitted splits may
+            create dynamic anchors. Values may be one of
+            ``binary_event_indicator``, ``event_occurrence``,
+            ``event_magnitude``, or ``state_measurement``. A state measurement
+            may opt into COUNT anchors with
+            ``{"type": "state_measurement", "count_anchor": True}``.
+            Features without metadata do not create dynamic anchors. Binary
+            MEAN anchors identify positive-event times, not all observations
+            needed to reconstruct the mean.
         """
 
         self.max_depth = max_depth
@@ -209,6 +228,8 @@ class TemporalTree(BaseEstimator):
         self.verbose = verbose
         self.use_dynamic_anchors = use_dynamic_anchors
         self.anchor_offset_map = anchor_offset_map
+        self.min_impurity_decrease = min_impurity_decrease
+        self.feature_semantics = feature_semantics
 
         self.anchors_list = anchors_list or ['Birth Date Anchor']
         self.anchor_offset_list = anchor_offset_list or [None]
@@ -227,6 +248,10 @@ class TemporalTree(BaseEstimator):
             self.use_dynamic_anchors = True
         if "anchor_offset_map" not in self.__dict__:
             self.anchor_offset_map = None
+        if "min_impurity_decrease" not in self.__dict__:
+            self.min_impurity_decrease = 0.0
+        if "feature_semantics" not in self.__dict__:
+            self.feature_semantics = None
 
     def _log(self, level: int, message: str) -> None:
         """Print a training message when the configured verbosity allows it."""
@@ -350,6 +375,19 @@ class TemporalTree(BaseEstimator):
                 "candidate_sampling_rate must be a finite number greater than 0 "
                 "and less than or equal to 1."
             )
+
+        if (
+            isinstance(self.min_impurity_decrease, bool)
+            or not isinstance(self.min_impurity_decrease, Real)
+            or not np.isfinite(self.min_impurity_decrease)
+            or self.min_impurity_decrease < 0
+        ):
+            raise ValueError(
+                "min_impurity_decrease must be a finite number greater than "
+                "or equal to 0."
+            )
+
+        self._validate_feature_semantics()
 
         # This generator controls only feature-window-aggregation group
         # sampling and is reset for every fit so repeated fits with the same
@@ -478,6 +516,37 @@ class TemporalTree(BaseEstimator):
             prediction = y.mode()[0] if self.is_classification else y.mean()
             return self._create_leaf(prediction, num_patients, depth)
 
+        # Preserve the historical path exactly when the new criterion is
+        # disabled. Otherwise, apply it only after the unchanged candidate
+        # search has selected its best split.
+        if self.min_impurity_decrease > 0.0:
+            parent_impurity = self._calculate_node_impurity(
+                y,
+                self.criterion,
+                self.is_classification,
+            )
+            gain = parent_impurity - best_split["score"]
+            meets_minimum_gain = (
+                gain >= self.min_impurity_decrease
+                or np.isclose(
+                    gain,
+                    self.min_impurity_decrease,
+                    rtol=1e-12,
+                    atol=1e-15,
+                )
+            )
+            if not meets_minimum_gain:
+                self._log(
+                    1,
+                    "         → LEAF | reason=min_impurity_decrease | "
+                    f"gain={gain:.6g} | "
+                    f"required={self.min_impurity_decrease:.6g}",
+                )
+                prediction = (
+                    y.mode()[0] if self.is_classification else y.mean()
+                )
+                return self._create_leaf(prediction, num_patients, depth)
+
         anchor, offset = best_split["time_window"]
         self._log(
             1,
@@ -531,19 +600,101 @@ class TemporalTree(BaseEstimator):
         source_anchor, offset = node.time_window
         return (
             node.feature,
+            node.aggregation,
             direction,
             float(node.threshold),
             source_anchor,
             offset,
         )
 
+    def _validate_feature_semantics(self) -> None:
+        """Validate explicit feature metadata used for dynamic anchors."""
+        if self.feature_semantics is None:
+            return
+        if not isinstance(self.feature_semantics, dict):
+            raise ValueError("feature_semantics must be a dictionary or None.")
+
+        supported_types = {
+            "binary_event_indicator",
+            "event_occurrence",
+            "event_magnitude",
+            "state_measurement",
+        }
+        for feature, specification in self.feature_semantics.items():
+            if isinstance(specification, str):
+                feature_type = specification
+                options = {}
+            elif isinstance(specification, dict):
+                unknown_options = set(specification) - {"type", "count_anchor"}
+                if unknown_options:
+                    raise ValueError(
+                        f"Unsupported feature_semantics options for {feature}: "
+                        f"{sorted(unknown_options)}."
+                    )
+                feature_type = specification.get("type")
+                options = specification
+            else:
+                raise ValueError(
+                    f"feature_semantics[{feature!r}] must be a string or dictionary."
+                )
+
+            if feature_type not in supported_types:
+                raise ValueError(
+                    f"Unsupported feature semantic type for {feature}: "
+                    f"{feature_type!r}."
+                )
+            count_anchor = options.get("count_anchor", False)
+            if not isinstance(count_anchor, bool):
+                raise ValueError(
+                    f"feature_semantics[{feature!r}]['count_anchor'] must be boolean."
+                )
+            if count_anchor and feature_type != "state_measurement":
+                raise ValueError(
+                    "count_anchor is only valid for state_measurement features."
+                )
+
+    def _dynamic_anchor_selection(self, node) -> Optional[str]:
+        """Return the semantic timestamp selector, or None when ineligible."""
+        if not self.feature_semantics or node.feature not in self.feature_semantics:
+            return None
+
+        specification = self.feature_semantics[node.feature]
+        if isinstance(specification, str):
+            feature_type = specification
+            count_anchor = False
+        else:
+            feature_type = specification["type"]
+            count_anchor = specification.get("count_anchor", False)
+
+        aggregation = node.aggregation
+        if feature_type == "binary_event_indicator":
+            if aggregation in {"sum", "mean", "max"}:
+                return "positive_events"
+            return None
+        if feature_type == "event_occurrence":
+            return "all_valid" if aggregation == "count" else None
+        if feature_type == "event_magnitude":
+            return "nonzero_contributions" if aggregation == "sum" else None
+        if feature_type == "state_measurement":
+            if aggregation == "max":
+                return "maximum"
+            if aggregation == "count" and count_anchor:
+                return "all_valid"
+        return None
+
     def _format_dynamic_anchor_name(self, node, direction: str) -> str:
         source_anchor, offset = node.time_window
         operator = "<=" if direction == "left" else ">"
         threshold = f"{float(node.threshold):.3f}"
         if source_anchor is None and offset is None:
-            return f"{node.feature} {operator} {threshold} | Full Timeline Anchor"
-        return f"{node.feature} {operator} {threshold} | {source_anchor} +{offset}m Anchor"
+            return (
+                f"{node.aggregation.upper()}({node.feature}) {operator} "
+                f"{threshold} | Full Timeline Anchor"
+            )
+        return (
+            f"{node.aggregation.upper()}({node.feature}) {operator} "
+            f"{threshold} | {source_anchor} +{offset}m Anchor"
+        )
 
     def _validate_one_anchor_row_per_patient(
         self,
@@ -577,6 +728,10 @@ class TemporalTree(BaseEstimator):
         if not getattr(self, "use_dynamic_anchors", True):
             return None, anchors.copy(), pd.DataFrame(), anchor_registry.copy()
 
+        anchor_selection = self._dynamic_anchor_selection(node)
+        if anchor_selection is None:
+            return None, anchors.copy(), pd.DataFrame(), anchor_registry.copy()
+
         anchor_key = self._dynamic_anchor_key(node, direction)
         if anchor_key in anchor_registry:
             anchor_name = anchor_registry[anchor_key]
@@ -593,7 +748,9 @@ class TemporalTree(BaseEstimator):
             direction=direction,
             feature=node.feature,
             threshold=node.threshold,
-            time_window=node.time_window
+            time_window=node.time_window,
+            aggregation=node.aggregation,
+            anchor_selection=anchor_selection,
         )
         return anchor_name, next_anchors, anchor_df, next_anchor_registry
 
@@ -889,6 +1046,10 @@ class TemporalTree(BaseEstimator):
         if not getattr(self, "use_dynamic_anchors", True):
             return row
 
+        anchor_selection = self._dynamic_anchor_selection(node)
+        if anchor_selection is None:
+            return row
+
         patient_id = row["patient_id"].iloc[0]
         anchor_name = self._format_dynamic_anchor_name(node, direction)
         if anchor_name in row["feature_name"].values:
@@ -900,12 +1061,6 @@ class TemporalTree(BaseEstimator):
         if patient_data.empty:
             anchor_dates = []
         else:
-            value_mask = (
-                patient_data["value"].astype(float) <= node.threshold
-                if direction == "left"
-                else patient_data["value"].astype(float) > node.threshold
-            )
-
             if prev_anchor_name is None and offset is None:
                 time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
             else:
@@ -948,8 +1103,11 @@ class TemporalTree(BaseEstimator):
                 else:
                     time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
 
-            combined_mask = value_mask & time_mask
-            anchor_dates = patient_data.loc[combined_mask, "time"].tolist()
+            anchor_dates = _aggregation_anchor_dates(
+                patient_data.loc[time_mask],
+                node.aggregation,
+                anchor_selection,
+            )
 
         anchor_df = pd.DataFrame([{
             "patient_id": patient_id,
@@ -1518,6 +1676,35 @@ class TemporalTree(BaseEstimator):
         right_mse = ((right_y - right_y.mean()) ** 2).mean() if len(right_y) > 0 else 0
         return (left_mse * len(left_y) + right_mse * len(right_y)) / (len(left_y) + len(right_y))
     #
+    def _calculate_node_impurity(
+        self,
+        y: pd.Series,
+        criterion: str,
+        is_classification: bool,
+    ) -> float:
+        """Calculate one node's impurity using the active split criterion."""
+        if not is_classification:
+            if criterion == "mse":
+                return float(((y - y.mean()) ** 2).mean())
+            if criterion == "mae":
+                return float((y - y.median()).abs().mean())
+            raise ValueError(
+                f"Unsupported regression criterion: {criterion}. "
+                "Choose: 'mae' or 'mse'"
+            )
+
+        probabilities = y.value_counts(normalize=True).to_numpy()
+        if criterion == "gini":
+            return float(1 - np.sum(probabilities ** 2))
+        if criterion == "entropy":
+            return float(
+                -np.sum(probabilities * np.log2(probabilities + 1e-9))
+            )
+        raise ValueError(
+            f"Unsupported classification criterion: {criterion}. "
+            "Choose 'gini' or 'entropy'"
+        )
+
     def _calculate_split_score(self, left_y: pd.Series, right_y: pd.Series, criterion: str, is_classification: bool) -> float:
         """Calculates impurity score (MSE, MAE, Gini, Entropy, etc.) for a split."""
 

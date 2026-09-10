@@ -35,6 +35,7 @@ def _configure_fast_tree(monkeypatch):
         "random_state": 17,
         "candidate_sampling_rate": 0.5,
         "split_sampling_seed": 42,
+        "min_impurity_decrease": 0.0,
     }
     monkeypatch.setattr(main, "MODEL_CONFIG", config)
     monkeypatch.setattr(main, "VERBOSE", 0)
@@ -55,6 +56,7 @@ def test_single_tree_main_switch_preserves_single_tree_configuration(monkeypatch
         "verbose": 0,
         "use_dynamic_anchors": False,
         "anchor_offset_map": None,
+        "feature_semantics": None,
     }
     assert main.MODEL_CONFIG == config
 
@@ -75,6 +77,7 @@ def test_ensemble_main_switch_builds_generated_seed_configuration(monkeypatch):
         "verbose": 0,
         "use_dynamic_anchors": True,
         "anchor_offset_map": None,
+        "feature_semantics": None,
     }
     assert model._resolve_split_sampling_seeds() == (42, 43, 44, 45, 46)
 
@@ -188,6 +191,7 @@ def test_build_config_records_active_ensemble_configuration(monkeypatch):
         "base_split_sampling_seed": 42,
         "split_sampling_seeds": [7, 8, 9],
     }
+    assert config["min_impurity_decrease"] == 0.0
 
 
 def test_build_config_and_model_record_anchor_offset_map(monkeypatch):

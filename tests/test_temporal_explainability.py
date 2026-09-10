@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import numpy as np
@@ -7,7 +8,10 @@ import pytest
 from settree.temporal_explainability import (
     PATH_TABLE_COLUMNS,
     aggregate_temporal_usage,
+    calculate_temporal_usage_percentages,
     derive_monthly_bin_edges,
+    load_temporal_usage_artifacts,
+    plot_temporal_usage_comparison,
     run_temporal_explainability,
     trace_temporal_decision_paths,
 )
@@ -179,6 +183,86 @@ def test_usage_bins_count_overlapping_and_repeated_path_rows_additively():
     assert summary["full_timeline_usages"] == 1
     assert summary["zero_width_usages"] == 1
     assert summary["temporal_split_usages"] == 5
+
+
+def test_usage_percentages_use_all_patient_path_split_usages():
+    usage_table = pd.DataFrame({
+        "anchor": ["Birth Date Anchor", "NOW Anchor"],
+        "bin_start_offset": [0.0, -1.0],
+        "bin_end_offset": [1.0, 0.0],
+        "raw_usage_count": [6, 2],
+        "normalized_usage_per_patient": [3.0, 1.0],
+    })
+    summary = {
+        "evaluated_patient_count": 2,
+        "temporal_split_usages": 10,
+        "full_timeline_usages": 3,
+    }
+
+    percentages, full_percentage = calculate_temporal_usage_percentages(
+        usage_table,
+        summary,
+    )
+
+    assert percentages["usage_percentage"].tolist() == [60.0, 20.0]
+    assert full_percentage == 30.0
+
+
+def test_load_and_plot_comparison_use_saved_aggregate_artifacts(tmp_path):
+    usage_tables = {
+        "fa": pd.DataFrame({
+            "anchor": [
+                "Birth Date Anchor",
+                "Birth Date Anchor",
+                "NOW Anchor",
+            ],
+            "bin_start_offset": [0.0, 1.0, -1.0],
+            "bin_end_offset": [1.0, 2.0, 0.0],
+            "raw_usage_count": [6, 4, 0],
+            "normalized_usage_per_patient": [3.0, 2.0, 0.0],
+        }),
+        "gi": pd.DataFrame({
+            "anchor": ["Birth Date Anchor", "NOW Anchor"],
+            "bin_start_offset": [0.0, -1.0],
+            "bin_end_offset": [1.0, 0.0],
+            "raw_usage_count": [1, 7],
+            "normalized_usage_per_patient": [0.5, 3.5],
+        }),
+    }
+    summaries = {
+        "fa": {
+            "evaluated_patient_count": 2,
+            "temporal_split_usages": 10,
+            "full_timeline_usages": 4,
+        },
+        "gi": {
+            "evaluated_patient_count": 2,
+            "temporal_split_usages": 10,
+            "full_timeline_usages": 2,
+        },
+    }
+    loaded = {}
+    for outcome in ("fa", "gi"):
+        directory = tmp_path / outcome
+        directory.mkdir()
+        usage_tables[outcome].to_csv(
+            directory / "aggregated_temporal_usage.csv",
+            index=False,
+        )
+        (directory / "temporal_usage_summary.json").write_text(
+            json.dumps(summaries[outcome]),
+            encoding="utf-8",
+        )
+        loaded[outcome] = load_temporal_usage_artifacts(directory)
+
+    output_path = plot_temporal_usage_comparison(
+        loaded,
+        tmp_path / "temporal_usage_comparison_fa_vs_gi.png",
+        subtitle="test configuration",
+    )
+
+    assert output_path.is_file()
+    assert output_path.stat().st_size > 0
 
 
 def test_run_saves_exactly_the_path_csv_and_histogram(tmp_path):

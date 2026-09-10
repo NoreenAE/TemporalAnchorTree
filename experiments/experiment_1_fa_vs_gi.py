@@ -37,37 +37,40 @@ if str(REPOSITORY_ROOT) not in sys.path:
 from settree.eval_utils import plot_tree_structure  # noqa: E402
 from settree.temporal_explainability import (  # noqa: E402
     derive_monthly_bin_edges,
+    load_temporal_usage_artifacts,
+    plot_temporal_usage_comparison,
     run_temporal_explainability,
 )
 from settree.temporal_tree import TemporalTree  # noqa: E402
 
 
-EXPERIMENT_NAME = "experiment_1_fa_vs_gi"
+EXPERIMENT_NAME = "experiment_1_fa_vs_gi_on_5000V3clean_patients_A1_minS20_minL10_more_offsets2_minGAIN0.0005"
 EXPERIMENT_DESCRIPTION = (
-    "Same validated longitudinal X and identical TemporalTree settings; "
+    "min GAIN, 0.0005 ,wider offset ranges, coinFlip A=1, Same validated longitudinal X (5000) v2 and identical TemporalTree settings; "
     "only the FA versus GI outcome label changes."
 )
 RANDOM_STATE = 42
 TEST_SIZE = 0.30
 DECISION_THRESHOLD = 0.50
-CANDIDATE_SAMPLING_RATE = 1.0
+CANDIDATE_SAMPLING_RATE = 1
 SPLIT_SAMPLING_SEED = 42
+MIN_IMPURITY_DECREASE = 0.0005 # 0 = off
 USE_DYNAMIC_ANCHORS = False
 VERBOSE = 1
 
-DATA_DIR = REPOSITORY_ROOT / "data" / "temporal_benchmark"
+DATA_DIR = REPOSITORY_ROOT / "data" / "temporal_benchmark_v3_clean_fa"
 INPUT_PATHS = {
-    "x": DATA_DIR / "temporal_benchmark_1000.pkl",
-    "fa": DATA_DIR / "temporal_benchmark_fa_labels_1000.pkl",
-    "gi": DATA_DIR / "temporal_benchmark_gi_labels_1000.pkl",
+    "x": DATA_DIR / "temporal_benchmark_5000.pkl",
+    "fa": DATA_DIR / "temporal_benchmark_fa_labels_5000.pkl",
+    "gi": DATA_DIR / "temporal_benchmark_gi_labels_5000.pkl",
 }
 OUTPUT_DIR = (
-    REPOSITORY_ROOT / "experiments" / "results" / "experiment_1"
+    REPOSITORY_ROOT / "experiments" / "results" / "experiment_1_5000V3clean__moreOFFSETS2_patients_A1_minS20_minL10_minGAIN0.0005"
 )
 
 ANCHOR_OFFSET_MAP = {
-    "Birth Date Anchor": [None, 0.7, 1, 2, 3, 4, 5, 6],
-    "NOW Anchor": [None, -1, -2, -3, -4, -5, -6],
+    "Birth Date Anchor": [None, 0.7, 1, 2, 3, 4, 5, 6, 12, 18], #חצי שנה, שנה, שנה וחצי
+    "NOW Anchor": [None, -1, -2, -3, -4, -5, -6, -12, -18],
 }
 ANCHORS_LIST = list(ANCHOR_OFFSET_MAP)
 ANCHOR_OFFSET_LIST = [None]
@@ -75,11 +78,11 @@ TEMPORAL_EXPLAINABILITY_BIN_EDGES = derive_monthly_bin_edges(
     ANCHOR_OFFSET_MAP
 )
 
-AGGREGATION_NAMES = ["mean", "sum", "max", "count"]
+AGGREGATION_NAMES = ["mean", "sum", "max" ] #"count"
 MODEL_HYPERPARAMETERS = {
     "max_depth": 3,
-    "min_samples_split": 1,
-    "min_samples_leaf": 1,
+    "min_samples_split": 20,
+    "min_samples_leaf": 10,
     "anchors_list": ANCHORS_LIST,
     "anchor_offset_list": ANCHOR_OFFSET_LIST,
     "is_classification": False,
@@ -88,6 +91,7 @@ MODEL_HYPERPARAMETERS = {
     "random_state": RANDOM_STATE,
     "candidate_sampling_rate": CANDIDATE_SAMPLING_RATE,
     "split_sampling_seed": SPLIT_SAMPLING_SEED,
+    "min_impurity_decrease": MIN_IMPURITY_DECREASE,
     "verbose": VERBOSE,
     "use_dynamic_anchors": USE_DYNAMIC_ANCHORS,
     "anchor_offset_map": ANCHOR_OFFSET_MAP,
@@ -102,6 +106,9 @@ OUTCOMES = {
         "true_region": "NOW Anchor: -1 calendar month to NOW",
     },
 }
+TEMPORAL_USAGE_COMPARISON_FILENAME = (
+    "temporal_usage_comparison_fa_vs_gi.png"
+)
 
 
 def aggregation_functions() -> Dict[str, object]:
@@ -529,6 +536,7 @@ def experiment_configuration(input_hashes: Mapping[str, str]) -> dict:
         "decision_threshold": DECISION_THRESHOLD,
         "candidate_sampling_rate": CANDIDATE_SAMPLING_RATE,
         "split_sampling_seed": SPLIT_SAMPLING_SEED,
+        "min_impurity_decrease": MIN_IMPURITY_DECREASE,
         "use_dynamic_anchors": USE_DYNAMIC_ANCHORS,
         "anchor_offset_map": ANCHOR_OFFSET_MAP,
         "effective_candidate_windows": windows,
@@ -558,6 +566,28 @@ def comparison_summary(results: Mapping[str, dict]) -> dict:
             "window_distribution": result["window_distribution"],
         }
     return {"experiment_name": EXPERIMENT_NAME, "outcomes": fields}
+
+
+def create_temporal_usage_comparison(output_dir: Path) -> Path:
+    """Plot FA versus GI from their already-saved explainability counts."""
+    usage_by_outcome = {
+        outcome: load_temporal_usage_artifacts(
+            output_dir / outcome / "temporal_explainability"
+        )
+        for outcome in OUTCOMES
+    }
+    subtitle = (
+        f"A = {CANDIDATE_SAMPLING_RATE:g} | "
+        "min_samples_split = "
+        f"{MODEL_HYPERPARAMETERS['min_samples_split']} | "
+        "min_samples_leaf = "
+        f"{MODEL_HYPERPARAMETERS['min_samples_leaf']}"
+    )
+    return plot_temporal_usage_comparison(
+        usage_by_outcome=usage_by_outcome,
+        output_path=output_dir / TEMPORAL_USAGE_COMPARISON_FILENAME,
+        subtitle=subtitle,
+    )
 
 
 def write_json(value, path: Path) -> None:
@@ -656,7 +686,11 @@ def run_experiment() -> dict:
             test_ids=test_ids,
             output_dir=OUTPUT_DIR / outcome,
         )
+    comparison_figure_path = create_temporal_usage_comparison(OUTPUT_DIR)
     comparison = comparison_summary(results)
+    comparison["artifacts"] = {
+        "temporal_usage_comparison": str(comparison_figure_path),
+    }
     write_json(comparison, OUTPUT_DIR / "comparison_summary.json")
     pd.DataFrame({
         outcome: {

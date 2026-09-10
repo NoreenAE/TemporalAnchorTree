@@ -88,12 +88,20 @@ def test_create_branch_anchors_full_timeline_right_and_left():
     right = create_branch_anchors(["P1"], X_branch, "right Anchor", "right", "FormulaYN", 0.4, (None, None))
     left = create_branch_anchors(["P1"], X_branch, "left Anchor", "left", "FormulaYN", 0.4, (None, None))
 
-    assert right.loc[0, "value"] == [pd.Timestamp("2020-01-01"), pd.Timestamp("2020-05-01")]
-    assert left.loc[0, "value"] == [pd.Timestamp("2020-03-01"), pd.Timestamp("2020-08-01")]
+    expected = [
+        pd.Timestamp("2020-01-01"),
+        pd.Timestamp("2020-03-01"),
+        pd.Timestamp("2020-05-01"),
+        pd.Timestamp("2020-08-01"),
+    ]
+    assert right.loc[0, "value"] == expected
+    assert left.loc[0, "value"] == expected
 
 
 def test_prediction_full_timeline_anchor_matches_training_anchor():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     node = TemporalSplitNode(feature="FormulaYN", threshold=0.4, aggregation="mean", time_window=(None, None))
     row = pd.DataFrame([
         {"patient_id": "P1", "time": pd.Timestamp("2020-01-01"), "feature_name": "FormulaYN", "value": 1.0},
@@ -102,7 +110,10 @@ def test_prediction_full_timeline_anchor_matches_training_anchor():
         {"patient_id": "P1", "time": pd.Timestamp("2020-08-01"), "feature_name": "FormulaYN", "value": 0.0},
     ])
     anchor_name = model._format_dynamic_anchor_name(node, "right")
-    training_anchor = create_branch_anchors(["P1"], row, anchor_name, "right", "FormulaYN", 0.4, (None, None))
+    training_anchor = create_branch_anchors(
+        ["P1"], row, anchor_name, "right", "FormulaYN", 0.4,
+        (None, None), aggregation="mean", anchor_selection="positive_events",
+    )
     prediction_row = model._append_prediction_branch_anchor(row, node, "right")
     prediction_anchor = prediction_row[prediction_row["feature_name"] == anchor_name]
 
@@ -112,7 +123,9 @@ def test_prediction_full_timeline_anchor_matches_training_anchor():
 
 
 def test_dynamic_anchor_name_uses_full_timeline_display_only_for_none_window():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     full_timeline_node = TemporalSplitNode(
         feature="FormulaYN",
         threshold=0.0,
@@ -128,16 +141,18 @@ def test_dynamic_anchor_name_uses_full_timeline_display_only_for_none_window():
 
     assert (
         model._format_dynamic_anchor_name(full_timeline_node, "right")
-        == "FormulaYN > 0.000 | Full Timeline Anchor"
+        == "MEAN(FormulaYN) > 0.000 | Full Timeline Anchor"
     )
     assert (
         model._format_dynamic_anchor_name(normal_node, "left")
-        == "FormulaYN <= 0.500 | Birth Date Anchor +3m Anchor"
+        == "MEAN(FormulaYN) <= 0.500 | Birth Date Anchor +3m Anchor"
     )
 
 
 def test_dynamic_anchor_key_keeps_exact_none_window_identity():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     node = TemporalSplitNode(
         feature="FormulaYN",
         threshold=0.0,
@@ -147,6 +162,7 @@ def test_dynamic_anchor_key_keeps_exact_none_window_identity():
 
     assert model._dynamic_anchor_key(node, "right") == (
         "FormulaYN",
+        "mean",
         "right",
         0.0,
         None,
@@ -155,7 +171,9 @@ def test_dynamic_anchor_key_keeps_exact_none_window_identity():
 
 
 def test_repeated_full_timeline_anchor_reuses_same_semantic_key():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     node = TemporalSplitNode(
         feature="FormulaYN",
         threshold=0.0,
@@ -184,7 +202,7 @@ def test_repeated_full_timeline_anchor_reuses_same_semantic_key():
         direction="right",
     )
 
-    assert anchor_name == "FormulaYN > 0.000 | Full Timeline Anchor"
+    assert anchor_name == "MEAN(FormulaYN) > 0.000 | Full Timeline Anchor"
     assert reused_name == anchor_name
     assert reused_anchors == anchors
     assert not anchor_df.empty
@@ -193,7 +211,9 @@ def test_repeated_full_timeline_anchor_reuses_same_semantic_key():
 
 
 def test_dynamic_anchor_key_distinguishes_exact_thresholds_that_display_same():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     first_node = TemporalSplitNode(
         feature="FormulaYN",
         threshold=0.0001,
@@ -215,8 +235,38 @@ def test_dynamic_anchor_key_distinguishes_exact_thresholds_that_display_same():
     )
 
 
+def test_dynamic_anchor_identity_distinguishes_aggregations():
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
+    mean_node = TemporalSplitNode(
+        feature="FormulaYN",
+        threshold=0.5,
+        aggregation="mean",
+        time_window=("Birth Date Anchor", 3),
+    )
+    max_node = TemporalSplitNode(
+        feature="FormulaYN",
+        threshold=0.5,
+        aggregation="max",
+        time_window=("Birth Date Anchor", 3),
+    )
+
+    assert model._format_dynamic_anchor_name(mean_node, "right") == (
+        "MEAN(FormulaYN) > 0.500 | Birth Date Anchor +3m Anchor"
+    )
+    assert model._format_dynamic_anchor_name(max_node, "right") == (
+        "MAX(FormulaYN) > 0.500 | Birth Date Anchor +3m Anchor"
+    )
+    assert model._dynamic_anchor_key(mean_node, "right") != (
+        model._dynamic_anchor_key(max_node, "right")
+    )
+
+
 def test_prediction_numpy_array_source_anchor_matches_training_anchor():
-    model = TemporalTree()
+    model = TemporalTree(
+        feature_semantics={"FormulaYN": "binary_event_indicator"},
+    )
     source_anchor = "source Anchor"
     node = TemporalSplitNode(feature="FormulaYN", threshold=0.4, aggregation="mean", time_window=(source_anchor, 2))
     row = pd.DataFrame([
@@ -226,7 +276,11 @@ def test_prediction_numpy_array_source_anchor_matches_training_anchor():
         {"patient_id": "P1", "time": pd.Timestamp("2016-09-01"), "feature_name": "FormulaYN", "value": 1.0},
     ])
     anchor_name = model._format_dynamic_anchor_name(node, "right")
-    training_anchor = create_branch_anchors(["P1"], row, anchor_name, "right", "FormulaYN", 0.4, (source_anchor, 2))
+    training_anchor = create_branch_anchors(
+        ["P1"], row, anchor_name, "right", "FormulaYN", 0.4,
+        (source_anchor, 2), aggregation="mean",
+        anchor_selection="positive_events",
+    )
     prediction_row = model._append_prediction_branch_anchor(row, node, "right")
     prediction_anchor = prediction_row[prediction_row["feature_name"] == anchor_name]
 
@@ -254,6 +308,181 @@ def test_create_branch_anchors_empty_feature_rows_full_timeline():
     result = create_branch_anchors(["P1"], X_branch, "right Anchor", "right", "FormulaYN", 0.4, (None, None))
 
     assert result.loc[0, "value"] == []
+
+
+@pytest.mark.parametrize(
+    ("aggregation", "direction", "threshold", "values", "expected_indexes"),
+    [
+        ("sum", "right", 4.0, [1, 1, 0, 1, 1, 1], [0, 1, 3, 4, 5]),
+        ("sum", "left", 4.0, [1, 0, 1, 0, 1], [0, 2, 4]),
+        ("mean", "right", 0.5, [1, 0, 1], [0, 2]),
+        ("mean", "left", 0.5, [0, 0, 1], [2]),
+        ("count", "right", 4.0, [0, 1, 0, 1, 1], range(5)),
+        ("count", "left", 4.0, [0, 1, 0], range(3)),
+        ("max", "right", 0.8, [0.2, 0.9, 0.4, 0.9], [1, 3]),
+        ("max", "left", 0.8, [0.2, 0.7, 0.4], [1]),
+    ],
+)
+def test_aggregation_aware_anchors_match_training_and_prediction(
+    aggregation,
+    direction,
+    threshold,
+    values,
+    expected_indexes,
+):
+    times = list(pd.date_range("2020-01-01", periods=len(values), freq="D"))
+    rows = [
+        {
+            "patient_id": "P1",
+            "time": times[index],
+            "feature_name": "VomitingYN",
+            "value": values[index],
+        }
+        for index in reversed(range(len(values)))
+    ]
+    patient_data = pd.DataFrame(rows)
+    node = TemporalSplitNode(
+        feature="VomitingYN",
+        threshold=threshold,
+        aggregation=aggregation,
+        time_window=(None, None),
+    )
+    if aggregation == "count":
+        feature_type = "event_occurrence"
+    elif aggregation == "max":
+        feature_type = "state_measurement"
+    else:
+        feature_type = "binary_event_indicator"
+    model = TemporalTree(
+        feature_semantics={"VomitingYN": feature_type},
+    )
+    aggregate = model._aggregate_feature_over_time(
+        patient_data,
+        node.feature,
+        node.time_window,
+        node.aggregation,
+    )[0][0]
+    assert model._get_prediction_direction(aggregate, node) == direction
+
+    anchor_name = model._format_dynamic_anchor_name(node, direction)
+    training_anchor = create_branch_anchors(
+        ["P1"],
+        patient_data,
+        anchor_name,
+        direction,
+        node.feature,
+        node.threshold,
+        node.time_window,
+        aggregation=node.aggregation,
+        anchor_selection=model._dynamic_anchor_selection(node),
+    )
+    prediction_data = model._append_prediction_branch_anchor(
+        patient_data,
+        node,
+        direction,
+    )
+    prediction_anchor = prediction_data.loc[
+        prediction_data["feature_name"].eq(anchor_name), "value"
+    ].iloc[0]
+    expected = [times[index] for index in expected_indexes]
+
+    assert training_anchor.loc[0, "value"] == expected
+    assert prediction_anchor == expected
+
+
+def test_max_anchor_retains_ties_at_repeated_timestamps():
+    repeated_time = pd.Timestamp("2020-01-02")
+    patient_data = pd.DataFrame([
+        {
+            "patient_id": "P1",
+            "time": repeated_time,
+            "feature_name": "signal",
+            "value": 0.9,
+        },
+        {
+            "patient_id": "P1",
+            "time": pd.Timestamp("2020-01-01"),
+            "feature_name": "signal",
+            "value": 0.2,
+        },
+        {
+            "patient_id": "P1",
+            "time": repeated_time,
+            "feature_name": "signal",
+            "value": 0.9,
+        },
+    ])
+
+    anchor = create_branch_anchors(
+        ["P1"],
+        patient_data,
+        "MAX(signal) > 0.800 | Full Timeline Anchor",
+        "right",
+        "signal",
+        0.8,
+        (None, None),
+        aggregation="max",
+    )
+
+    assert anchor.loc[0, "value"] == [repeated_time, repeated_time]
+
+
+@pytest.mark.parametrize("aggregation", ["sum", "mean", "max", "count"])
+@pytest.mark.parametrize("direction", ["left", "right"])
+def test_aggregation_aware_anchors_are_empty_without_valid_observations(
+    aggregation,
+    direction,
+):
+    patient_data = pd.DataFrame([
+        {
+            "patient_id": "P1",
+            "time": pd.Timestamp("2020-01-01"),
+            "feature_name": "VomitingYN",
+            "value": np.nan,
+        },
+        {
+            "patient_id": "P1",
+            "time": pd.Timestamp("2020-01-02"),
+            "feature_name": "VomitingYN",
+            "value": "not numeric",
+        },
+    ])
+    node = TemporalSplitNode(
+        feature="VomitingYN",
+        threshold=0.5,
+        aggregation=aggregation,
+        time_window=(None, None),
+    )
+    feature_type = (
+        "event_occurrence" if aggregation == "count"
+        else "binary_event_indicator"
+    )
+    model = TemporalTree(
+        feature_semantics={"VomitingYN": feature_type},
+    )
+    anchor_name = model._format_dynamic_anchor_name(node, direction)
+    training_anchor = create_branch_anchors(
+        ["P1"],
+        patient_data,
+        anchor_name,
+        direction,
+        node.feature,
+        node.threshold,
+        node.time_window,
+        aggregation=node.aggregation,
+        anchor_selection=model._dynamic_anchor_selection(node),
+    )
+    prediction_data = model._append_prediction_branch_anchor(
+        patient_data,
+        node,
+        direction,
+    )
+    prediction_anchor = prediction_data.loc[
+        prediction_data["feature_name"].eq(anchor_name), "value"
+    ].iloc[0]
+
+    assert training_anchor.loc[0, "value"] == []
+    assert prediction_anchor == []
 
 
 def _aggregation_frame(anchor_rows):

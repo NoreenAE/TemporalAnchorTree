@@ -19,8 +19,46 @@ def _offset_to_dateoffset(offset: Real) -> pd.DateOffset:
     return pd.DateOffset(days=round(numeric_offset * 30))
 
 
+def _aggregation_anchor_dates(
+    patient_data: pd.DataFrame,
+    aggregation: str,
+    anchor_selection: str = None,
+) -> list:
+    """Return chronologically ordered timestamps supporting an aggregate."""
+    numeric_values = pd.to_numeric(patient_data["value"], errors="coerce")
+    valid_data = patient_data.loc[numeric_values.notna()].copy()
+    if valid_data.empty:
+        return []
+
+    valid_data["_numeric_value"] = numeric_values.loc[valid_data.index]
+    if anchor_selection is None:
+        anchor_selection = (
+            "maximum" if aggregation == "max" else "all_valid"
+        )
+
+    if anchor_selection == "maximum":
+        maximum = valid_data["_numeric_value"].max()
+        valid_data = valid_data[valid_data["_numeric_value"] == maximum]
+    elif anchor_selection == "positive_events":
+        valid_data = valid_data[valid_data["_numeric_value"] == 1]
+    elif anchor_selection == "nonzero_contributions":
+        valid_data = valid_data[valid_data["_numeric_value"] != 0]
+    elif anchor_selection != "all_valid":
+        raise ValueError(
+            f"Unsupported dynamic-anchor selection rule: {anchor_selection}."
+        )
+
+    ordered_data = valid_data.sort_values(
+        "time",
+        kind="mergesort",
+        na_position="last",
+    )
+    return ordered_data["time"].tolist()
+
+
 def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
-                          feature, threshold, time_window):
+                          feature, threshold, time_window, aggregation="mean",
+                          anchor_selection=None):
     """
     Generates anchor rows for patients after a temporal split.
 
@@ -28,10 +66,15 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
         patient_ids (list-like): Patient IDs in this branch.
         X_branch (pd.DataFrame): Long-format EHR data for this branch.
         anchor_name (str): Name to assign to the new anchor (e.g., "IgE <= 200 Anchor").
-        direction (str): "left" or "right" — determines value comparison direction.
+        direction (str): "left" or "right" branch already selected by routing.
         feature (str): Feature used in the split.
-        threshold (float): Threshold used in the split.
+        threshold (float): Patient-level aggregate threshold used in the split.
         time_window (tuple): (anchor_feature_name, offset_in_months).
+        aggregation (str): Patient-level aggregation used by the split.
+        anchor_selection (str or None): Semantic timestamp-selection rule.
+
+        ``direction`` and ``threshold`` identify the branch but are deliberately
+        not reapplied to individual raw values.
 
     Returns:
         pd.DataFrame: New anchor rows, one per patient.
@@ -78,12 +121,6 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
             })
             continue
 
-        value_mask = (
-            patient_data['value'].astype(float) <= threshold
-            if direction == "left"
-            else patient_data['value'].astype(float) > threshold
-        )
-
         # Retrieve anchor reference value (from previous anchor)
         if prev_anchor_name is None and offset is None:
             time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
@@ -120,8 +157,11 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
                 else:
                     time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
 
-        combined_mask = value_mask & time_mask
-        anchor_dates = patient_data.loc[combined_mask, 'time'].tolist()
+        anchor_dates = _aggregation_anchor_dates(
+            patient_data.loc[time_mask],
+            aggregation,
+            anchor_selection,
+        )
 
         anchor_data.append({
             'patient_id': patient_id,
