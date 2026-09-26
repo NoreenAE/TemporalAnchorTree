@@ -1,9 +1,9 @@
-"""Experiment 2: robustness to stochastic candidate-split sampling on V2.
+"""Ensemble Robustness: robustness to stochastic candidate-split sampling on V2.
 
 The experiment fits the same TemporalTree configuration for FA and GI using
 ten candidate-sampling seeds.  The sampling seed is the only experimental
-variable.  Configuration values must be copied manually from the completed V2
-hyperparameter search before either validation or training can run.
+variable. Specify model hyperparameters directly and manually in
+SELECTED_MODEL_CONFIGURATION before validation or training.
 """
 
 from __future__ import annotations
@@ -37,14 +37,15 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
+from settree.eval_utils import save_roc_curves  # noqa: E402
 from settree.temporal_explainability import (  # noqa: E402
     trace_temporal_decision_paths,
 )
 from settree.temporal_tree import TemporalTree  # noqa: E402
 
 
-EXPERIMENT_NAME = "experiment_2_robustness_v2"
-DATA_DIR = REPOSITORY_ROOT / "data" / "temporal_benchmark_v2"
+EXPERIMENT_NAME = "experiment_2_robustness_v3"
+DATA_DIR = REPOSITORY_ROOT / "data" / "temporal_benchmark_v3_clean_fa"
 INPUT_PATHS = {
     "x": DATA_DIR / "temporal_benchmark_5000.pkl",
     "fa": DATA_DIR / "temporal_benchmark_fa_labels_5000.pkl",
@@ -54,7 +55,7 @@ OUTPUT_DIR = (
     REPOSITORY_ROOT
     / "experiments"
     / "results"
-    / "experiment_2_robustness_v2"
+    / "experiment_2_robustness_v3"
 )
 
 TRAIN_TEST_SPLIT = {
@@ -69,14 +70,13 @@ ANCHOR_OFFSET_MAP = {
 }
 AGGREGATION_NAMES = ("mean", "sum", "max", "count")
 
-# Copy the final selected values here after the V2 search is complete.
+# Specify the model hyperparameters directly; no search result is required.
 SELECTED_MODEL_CONFIGURATION = {
-    "candidate_id": "REPLACE_AFTER_SEARCH_COMPLETES",
-    "candidate_sampling_rate": None,
-    "max_depth": None,
-    "min_samples_split": None,
-    "min_samples_leaf": None,
-    "min_impurity_decrease": None,
+    "candidate_sampling_rate": 0.4,
+    "max_depth": 3,
+    "min_samples_split": 20,
+    "min_samples_leaf": 10,
+    "min_impurity_decrease": 0.0005,
 }
 
 FIXED_MODEL_CONFIGURATION = {
@@ -97,7 +97,6 @@ EXPECTED_OFFSET_MAP = {
     "NOW Anchor": [None, -1, -2, -3, -4, -5, -6, -12, -18],
 }
 REQUIRED_SELECTED_FIELDS = {
-    "candidate_id",
     "candidate_sampling_rate",
     "max_depth",
     "min_samples_split",
@@ -114,13 +113,14 @@ def utc_now() -> str:
 
 
 def aggregation_functions() -> Dict[str, object]:
-    """Return fresh aggregation callables for one TemporalTree."""
-    return {
+    """Build the callable mapping from the names recorded in provenance."""
+    available = {
         "mean": np.mean,
         "sum": np.sum,
         "max": np.max,
         "count": lambda values: values.size,
     }
+    return {name: available[name] for name in AGGREGATION_NAMES}
 
 
 def sha256_file(path: Path) -> str:
@@ -204,10 +204,6 @@ def validate_selected_configuration(
             "Fill SELECTED_MODEL_CONFIGURATION before validation or "
             f"training; placeholders remain in {placeholder_fields}."
         )
-    if not isinstance(selected["candidate_id"], str) or not selected[
-        "candidate_id"
-    ].strip():
-        raise ValueError("candidate_id must be a non-empty string.")
     sampling_rate = selected["candidate_sampling_rate"]
     if (
         isinstance(sampling_rate, bool)
@@ -713,6 +709,10 @@ def run_outcome(
     }
     if outcome == "gi":
         row.update(now_minus_one_behavior(model, paths, len(test_order)))
+    save_roc_curves(
+        {"ROC": (y_test, scores, roc_auc)},
+        attempt_dir / f"{prefix}_roc_curve.png",
+    )
     return row, windows
 
 
@@ -945,104 +945,171 @@ def _window_label(row: Mapping) -> str:
     return f"NOW {float(row['offset']):g}"
 
 
+def _plot_seed_distribution(
+    axis, x, values, color: str, *,
+    jitter_bounds: Tuple[float, float] = (-0.28, 0.04),
+    mean_offset: float = 0.20,
+    summary_label: str = "Mean ± sample SD",
+) -> None:
+    """Show seed observations and mean ± sample SD at categorical positions.
+
+    Horizontal offsets only separate overlapping observations; they carry no
+    scientific meaning and do not consume any model random-number state.
+    ``values`` has one row per seed and one column per category, including zeros.
+    """
+    offsets = np.linspace(*jitter_bounds, len(values))
+    axis.scatter(
+        (np.asarray(x)[None, :] + offsets[:, None]).ravel(),
+        values.ravel(),
+        s=18,
+        color=color,
+        alpha=0.45,
+        edgecolors="none",
+        label="Individual seeds",
+        zorder=3,
+    )
+    axis.errorbar(
+        np.asarray(x) + mean_offset,
+        values.mean(axis=0),
+        yerr=values.std(axis=0, ddof=1),
+        fmt="D",
+        linestyle="none",
+        markersize=5,
+        color=color,
+        markeredgecolor="white",
+        markeredgewidth=0.7,
+        elinewidth=1.4,
+        capsize=3,
+        label=summary_label,
+        zorder=4,
+    )
+
+
 def create_auc_figure(per_seed: pd.DataFrame, path: Path) -> None:
-    """Plot held-out ROC-AUC in numeric seed order."""
-    figure, axis = plt.subplots(figsize=(9, 5.2))
-    colors = {"FA": "tab:blue", "GI": "tab:orange"}
-    for outcome in ("FA", "GI"):
+    """Plot seed ROC-AUC observations grouped by outcome, with mean ± SD."""
+    figure, axis = plt.subplots(figsize=(6, 5.2))
+    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"][:2]
+    for position, (outcome, color) in enumerate(zip(("FA", "GI"), colors)):
         rows = per_seed.loc[per_seed["outcome"].eq(outcome)].sort_values(
             "split_sampling_seed"
         )
-        axis.plot(
-            rows["split_sampling_seed"],
-            rows["roc_auc"],
-            marker="o",
-            label=outcome,
-            color=colors[outcome],
+        _plot_seed_distribution(
+            axis, [position], rows["roc_auc"].to_numpy(float)[:, None], color,
+            jitter_bounds=(-0.025, 0.025),
+            mean_offset=0.0,
+            summary_label="Mean ± SD",
         )
-        axis.axhline(
-            rows["roc_auc"].mean(),
-            color=colors[outcome],
-            linestyle="--",
-            alpha=0.55,
-        )
-    axis.set_xticks(SPLIT_SAMPLING_SEEDS)
-    axis.set_xlabel("split_sampling_seed")
+    axis.set_xticks([0, 1])
+    axis.set_xticklabels(["FA", "GI"])
+    axis.set_xlim(-0.6, 1.6)
     axis.set_ylabel("ROC-AUC")
-    axis.set_title("Predictive robustness across candidate-sampling seeds")
-    axis.grid(alpha=0.25)
-    axis.legend()
+    axis.set_title("Predictive robustness")
+    axis.grid(axis="y", alpha=0.22)
+    axis.spines["top"].set_visible(False)
+    axis.spines["right"].set_visible(False)
+    handles, labels = axis.get_legend_handles_labels()
+    legend_entries = dict(zip(labels, handles))
+    axis.legend(legend_entries.values(), legend_entries.keys(), frameon=False)
     figure.tight_layout()
-    figure.savefig(path, dpi=150)
+    figure.savefig(path, dpi=300)
     plt.close(figure)
+
+
+def _temporal_plot_profiles(window_rows: pd.DataFrame) -> Dict[str, np.ndarray]:
+    """Validate complete saved observations and order them without zero filling."""
+    labels = _ordered_window_labels()
+    prepared = window_rows.copy()
+    prepared["outcome"] = prepared["outcome"].str.strip().str.upper()
+    valid_anchors = prepared["anchor"].isin(ANCHOR_OFFSET_MAP)
+    if not (valid_anchors | prepared["is_full_timeline"].eq(True)).all():
+        raise ValueError("Unexpected temporal window anchor.")
+    prepared["window_label"] = prepared.apply(_window_label, axis=1)
+    keys = ["outcome", "split_sampling_seed", "window_label"]
+    expected = pd.MultiIndex.from_product(
+        [("FA", "GI"), SPLIT_SAMPLING_SEEDS, labels], names=keys
+    )
+    indexed = prepared.set_index(keys)["path_usage_percentage"]
+    if (
+        not indexed.index.is_unique
+        or len(expected.difference(indexed.index))
+        or len(indexed.index.difference(expected))
+    ):
+        raise ValueError(
+            "Temporal plot requires exactly one explicit usage row for every "
+            "outcome, seed, and window; missing/duplicate/unexpected rows found."
+        )
+    values = pd.to_numeric(indexed.reindex(expected), errors="raise").to_numpy(float)
+    if not np.isfinite(values).all() or ((values < 0) | (values > 100)).any():
+        raise ValueError("Temporal usage percentages must be finite and in [0, 100].")
+    profiles = values.reshape(2, len(SPLIT_SAMPLING_SEEDS), len(labels))
+    return dict(zip(("FA", "GI"), profiles))
 
 
 def create_temporal_usage_figure(
     window_rows: pd.DataFrame,
     path: Path,
 ) -> None:
-    """Plot all seed profiles and their mean in one two-panel figure."""
+    """Plot categorical window usage observations and mean ± sample SD.
+
+    Shading identifies Birth windows contained in the predefined 0–6 month
+    region (FA), or the NOW −1 to NOW window (GI). Nested Birth windows remain
+    separate categories; their usage is never combined into a region metric.
+    """
     labels = _ordered_window_labels()
-    prepared = window_rows.copy()
-    prepared["window_label"] = prepared.apply(_window_label, axis=1)
+    profiles = _temporal_plot_profiles(window_rows)
     figure, axes = plt.subplots(
         2, 1, figsize=(14, 9), sharex=True, sharey=True
     )
-    outcome_colors = {"FA": "tab:blue", "GI": "tab:orange"}
+    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"][:2]
     x = np.arange(len(labels))
-    for axis, outcome in zip(axes, ("FA", "GI")):
-        outcome_rows = prepared.loc[prepared["outcome"].eq(outcome)]
-        profiles = []
-        for seed_index, seed in enumerate(SPLIT_SAMPLING_SEEDS):
-            values = (
-                outcome_rows.loc[outcome_rows["split_sampling_seed"].eq(seed)]
-                .set_index("window_label")["path_usage_percentage"]
-                .reindex(labels, fill_value=0.0)
-                .to_numpy(dtype=float)
-            )
-            profiles.append(values)
-            axis.plot(
-                x,
-                values,
-                color="0.55",
-                linewidth=0.9,
-                alpha=0.35,
-                label="Individual seeds" if seed_index == 0 else None,
-            )
-        profile_array = np.asarray(profiles)
-        mean = profile_array.mean(axis=0)
-        sd = profile_array.std(axis=0, ddof=1)
-        axis.fill_between(
-            x,
-            np.maximum(0, mean - sd),
-            mean + sd,
-            color=outcome_colors[outcome],
-            alpha=0.16,
-            label="Mean ± sample SD",
+    birth_count = sum(label.startswith("Birth") for label in labels)
+    now_end = len(labels) - 1
+    for panel, axis, outcome, color in zip("ab", axes, ("FA", "GI"), colors):
+        if outcome == "FA":
+            highlighted = [
+                labels.index(f"Birth +{offset:g}")
+                for offset in ANCHOR_OFFSET_MAP["Birth Date Anchor"]
+                if offset is not None and 0 < offset <= 6
+            ]
+            region_label = "Birth windows within 0–6 months"
+        else:
+            highlighted = [labels.index("NOW -1")]
+            region_label = "NOW −1 to NOW"
+        axis.axvspan(
+            min(highlighted) - 0.5,
+            max(highlighted) + 0.5,
+            color="#d8b365",
+            alpha=0.18,
+            label=region_label,
+            zorder=0,
         )
-        axis.plot(
-            x,
-            mean,
-            color=outcome_colors[outcome],
-            linewidth=2.5,
-            marker="o",
-            markersize=3,
-            label=f"{outcome} mean",
-        )
-        axis.axvline(8.5, color="black", linewidth=0.8, alpha=0.45)
-        axis.axvline(16.5, color="black", linewidth=0.8, alpha=0.45)
-        axis.set_ylabel("Temporal split usage (%)")
-        axis.set_title(outcome)
+        _plot_seed_distribution(axis, x, profiles[outcome], color)
+        for boundary in (birth_count - 0.5, now_end - 0.5):
+            axis.axvline(boundary, color="0.5", linewidth=0.8, alpha=0.45)
+        for center, group in (
+            ((birth_count - 1) / 2, "Birth Date Anchor"),
+            ((birth_count + now_end - 1) / 2, "NOW Anchor"),
+            (now_end, "Full Timeline"),
+        ):
+            axis.text(
+                center, 1.02, group, transform=axis.get_xaxis_transform(),
+                ha="center", va="bottom", fontsize=10,
+            )
+        axis.set_ylabel("Temporal usage (%)")
+        axis.set_title(f"({panel}) {outcome}", loc="left", pad=30)
         axis.grid(axis="y", alpha=0.22)
-        axis.legend(loc="upper right")
+        axis.spines["top"].set_visible(False)
+        axis.spines["right"].set_visible(False)
+        axis.legend(
+            loc="upper right", bbox_to_anchor=(1, 1.22), ncol=3,
+            frameon=False, fontsize=9,
+        )
     axes[-1].set_xticks(x)
     axes[-1].set_xticklabels(labels, rotation=45, ha="right")
-    axes[-1].set_xlabel("Temporal window")
-    figure.suptitle(
-        "Temporal usage robustness across candidate-sampling seeds"
-    )
+    axes[-1].set_xlabel("Temporal window (categorical; offsets in months)")
+    axes[-1].set_xlim(-0.6, len(labels) - 0.4)
     figure.tight_layout()
-    figure.savefig(path, dpi=150)
+    figure.savefig(path, dpi=300)
     plt.close(figure)
 
 
@@ -1275,7 +1342,7 @@ def _prepare_run(
         and not config_path.is_file()
     ):
         raise RuntimeError(
-            "The Experiment 2 output directory is non-empty but has no "
+            "The Ensemble Robustness output directory is non-empty but has no "
             "experiment_config.json."
         )
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1295,7 +1362,7 @@ def _prepare_run(
     if config_path.exists():
         saved_config = _read_json(config_path)
         if saved_config.get("configuration_fingerprint") != fingerprint:
-            raise RuntimeError("Existing Experiment 2 configuration differs.")
+            raise RuntimeError("Existing Ensemble Robustness configuration differs.")
     else:
         atomic_write_json(
             {
@@ -1497,7 +1564,7 @@ def run_experiment(
         name: sha256_file(path) for name, path in INPUT_PATHS.items()
     }
     if input_hashes_after != input_hashes_before:
-        raise RuntimeError("A V2 input changed during Experiment 2.")
+        raise RuntimeError("A V2 input changed during Ensemble Robustness.")
     return {
         "status": "complete" if all_complete else "incomplete",
         "completed_seeds": sum(

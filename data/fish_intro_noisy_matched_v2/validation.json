@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "patients": 5000,
+  "blocks": 500,
+  "observations": 128645,
+  "marginal_history_mismatches": 0,
+  "joint_nonfish_history_mismatches": 0,
+  "documentation_nonfish_history_mismatches": 0,
+  "version": "fish_intro_noisy_matched_v2",
+  "config": {
+    "seed": 42,
+    "blocks": 500,
+    "test_fraction": 0.2,
+    "gi_mean": 5.0,
+    "vomiting_mean": 3.0,
+    "fish_min_months": 6,
+    "fish_max_months": 24,
+    "candidate_times": 256,
+    "max_attempts_per_block": 100,
+    "cough_episode_mean": 3.0,
+    "sleep_episode_mean": 2.0,
+    "cluster_probability": 0.4,
+    "cluster_max_extra": 2,
+    "cluster_max_days": 3,
+    "doctor_visit_mean": 2.0,
+    "minor_injury_mean": 0.5,
+    "vaccination_months": [
+      2,
+      4,
+      6,
+      12,
+      18,
+      24
+    ],
+    "vaccination_probability": 0.85,
+    "vaccination_jitter_days": 10
+  },
+  "feature_order": [
+    "Birth Date Anchor",
+    "Cough",
+    "DoctorVisit",
+    "MinorInjury",
+    "FishIntroduction",
+    "GI",
+    "RoutineVaccination",
+    "SleepDisturbance",
+    "Vomiting"
+  ],
+  "matching": {
+    "attempted_history_pairs": 508,
+    "accepted_blocks": 500,
+    "rejected_history_pairs": 8,
+    "acceptance_fraction": 0.984251968503937,
+    "max_attempts_observed": 2
+  },
+  "label_mechanism": "Independent Bernoulli(0.90 if R=1 else 0.05)"
+}

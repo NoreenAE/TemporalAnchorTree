@@ -123,10 +123,139 @@ def test_run_experiment_creates_comparison_after_both_outcomes(
         "create_temporal_usage_comparison",
         fake_create_comparison,
     )
+    def fake_create_roc_comparison(run_output_dir, results):
+        assert events == ["fa", "gi", "comparison"]
+        assert set(results) == {"fa", "gi"}
+        assert run_output_dir == output_dir
+        events.append("roc")
+
+    monkeypatch.setattr(
+        experiment, "create_roc_comparison", fake_create_roc_comparison
+    )
+    def fake_create_thesis_trees(run_output_dir):
+        assert events == ["fa", "gi", "comparison", "roc"]
+        assert run_output_dir == output_dir
+        events.append("trees")
+
+    monkeypatch.setattr(
+        experiment, "create_thesis_tree_figures", fake_create_thesis_trees
+    )
 
     result = experiment.run_experiment()
 
-    assert events == ["fa", "gi", "comparison"]
+    assert events == ["fa", "gi", "comparison", "roc", "trees"]
     assert result["artifacts"]["temporal_usage_comparison"] == str(
         output_dir / experiment.TEMPORAL_USAGE_COMPARISON_FILENAME
     )
+
+
+def test_roc_comparison_uses_saved_continuous_scores(monkeypatch, tmp_path):
+    from matplotlib.figure import Figure
+    from settree.eval_utils import save_roc_curves
+
+    captured = []
+    original_savefig = Figure.savefig
+
+    def capture_figure(figure, *args, **kwargs):
+        captured.append(figure.axes[0])
+        return original_savefig(figure, *args, **kwargs)
+
+    def forbid_model_use(*args, **kwargs):
+        raise AssertionError("Plotting must not fit or predict.")
+
+    monkeypatch.setattr(Figure, "savefig", capture_figure)
+    monkeypatch.setattr(experiment.TemporalTree, "fit", forbid_model_use)
+    monkeypatch.setattr(experiment.TemporalTree, "predict", forbid_model_use)
+    labels = [0, 0, 1, 1]
+    scores = [0.1, 0.4, 0.35, 0.8]
+    for outcome in ("fa", "gi"):
+        directory = tmp_path / outcome
+        directory.mkdir()
+        pd.DataFrame({"label": labels, "score": scores}).to_csv(
+            directory / "test_predictions.csv", index=False
+        )
+        (directory / "metrics_and_temporal_summary.json").write_text(
+            json.dumps({"performance": {"roc_auc": 0.75}}),
+            encoding="utf-8",
+        )
+
+    output = experiment.create_roc_comparison(tmp_path)
+    assert output == tmp_path / "roc_curves_fa_vs_gi.png"
+    assert output.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    axis = captured[-1]
+    assert axis.get_title() == "ROC Curves for FA and GI"
+    assert axis.get_xlabel() == "False Positive Rate"
+    assert axis.get_ylabel() == "True Positive Rate"
+    assert axis.get_legend_handles_labels()[1] == [
+        "FA (AUC = 0.750)", "GI (AUC = 0.750)"
+    ]
+    for line in axis.lines[:2]:
+        np.testing.assert_allclose(line.get_xdata(), [0, 0, 0.5, 0.5, 1])
+        np.testing.assert_allclose(line.get_ydata(), [0, 0.5, 0.5, 1, 1])
+    np.testing.assert_allclose(axis.lines[2].get_xdata(), [0, 1])
+    np.testing.assert_allclose(axis.lines[2].get_ydata(), [0, 1])
+
+    save_roc_curves({"ROC": (labels, scores, 0.75)}, tmp_path / "roc_curve.png")
+    assert captured[-1].get_legend_handles_labels()[1] == ["ROC (AUC = 0.750)"]
+
+
+def test_thesis_trees_render_saved_rules_without_model_use(monkeypatch, tmp_path):
+    from matplotlib.figure import Figure
+    from settree.eval_utils import _thesis_tree_label
+
+    nodes = [
+        {"node_id": 0, "type": "split", "feature": "FormulaYN",
+         "anchor": "Birth Date Anchor", "offset": 6, "aggregation": "mean",
+         "threshold": 0.42, "left_child": 1, "right_child": 2},
+        {"node_id": 1, "type": "leaf", "num_patients": 20, "prediction": 0.1},
+        {"node_id": 2, "type": "leaf", "num_patients": 30, "prediction": 0.8},
+    ]
+    originals = {}
+    for outcome, records in (("fa", nodes), ("gi", [nodes[1]])):
+        directory = tmp_path / outcome
+        directory.mkdir()
+        path = directory / "tree.json"
+        path.write_text(json.dumps(records), encoding="utf-8")
+        originals[path] = path.read_bytes()
+
+    def forbid_model_use(*args, **kwargs):
+        raise AssertionError("Tree plotting must not execute a model.")
+
+    monkeypatch.setattr(experiment.TemporalTree, "fit", forbid_model_use)
+    monkeypatch.setattr(experiment.TemporalTree, "predict", forbid_model_use)
+    captured = []
+    original_savefig = Figure.savefig
+
+    def inspect_figure(figure, *args, **kwargs):
+        figure.canvas.draw()
+        renderer = figure.canvas.get_renderer()
+        for axis in figure.axes:
+            boxes = [
+                text.get_bbox_patch().get_window_extent(renderer)
+                for text in axis.texts if text.get_zorder() == 3
+            ]
+            for index, box in enumerate(boxes):
+                assert not any(box.overlaps(other) for other in boxes[index + 1:])
+                assert not box.overlaps(axis._left_title.get_window_extent(renderer))
+            captured.append(([text.get_text() for text in axis.texts],
+                             axis.get_title(loc="left")))
+        return original_savefig(figure, *args, **kwargs)
+
+    monkeypatch.setattr(Figure, "savefig", inspect_figure)
+    paths = experiment.create_thesis_tree_figures(tmp_path)
+    assert paths == {
+        "fa": tmp_path / "fa" / "fa_tree_thesis.png",
+        "gi": tmp_path / "gi" / "gi_tree_thesis.png",
+        "combined": tmp_path / "learned_trees_fa_vs_gi_thesis.png",
+    }
+    assert all(path.read_bytes().startswith(b"\x89PNG") for path in paths.values())
+    assert all(path.read_bytes() == content for path, content in originals.items())
+    assert "FormulaYN\nBirth Date: 0–6 months\nMean ≤ 0.42" in captured[0][0]
+    assert "Patients = 20\nP(positive) = 0.100" in captured[0][0]
+    assert captured[-2][1] == "(a) FA learned tree"
+    assert captured[-1][1] == "(b) GI learned tree"
+    assert "NOW: −1 to 0 months" in _thesis_tree_label(
+        dict(nodes[0], anchor="NOW Anchor", offset=-1)
+    )
+    assert "Full timeline" in _thesis_tree_label(dict(nodes[0], offset=None))
+    assert "0–21 days" in _thesis_tree_label(dict(nodes[0], offset=0.7))

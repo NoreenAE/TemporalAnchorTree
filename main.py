@@ -8,7 +8,9 @@ import pandas as pd
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 
-from settree.eval_utils import evaluate_TemporalTree, plot_tree_structure
+from settree.eval_utils import (
+    evaluate_TemporalTree, plot_tree_structure, save_roc_curves,
+)
 from settree.temporal_explainability import (
     derive_monthly_bin_edges,
     run_temporal_explainability,
@@ -303,6 +305,12 @@ def evaluate_model(model, test_data, y_test, output_dir=None, plot_tree=False):
     y_predicted = (predictions >= 0.5).astype(int)
     # print('Predicted labels:', y_predicted)
     results = evaluate_TemporalTree(y_test, y_predicted, y_probabilities=predictions)
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        save_roc_curves(
+            {"ROC": (y_test, predictions, results["auc_roc"])},
+            output_dir / "roc_curve.png",
+        )
     if plot_tree and isinstance(model, TemporalTreeEnsemble):
         print(
             "[ENSEMBLE] Tree plotting is skipped because the current plot "

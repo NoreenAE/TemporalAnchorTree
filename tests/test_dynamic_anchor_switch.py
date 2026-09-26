@@ -121,12 +121,9 @@ def test_explicit_true_matches_the_omitted_default_exactly():
     default_model = _tree().fit(X, y)
     explicit_model = _tree(use_dynamic_anchors=True).fit(X, y)
 
-    assert _tree_signature(default_model.tree) == _tree_signature(
-        explicit_model.tree
-    )
+    assert _tree_signature(default_model.tree) == _tree_signature(explicit_model.tree)
     np.testing.assert_array_equal(
-        default_model.predict(X),
-        explicit_model.predict(X),
+        default_model.predict(X), explicit_model.predict(X),
     )
     assert default_model.generated_groups == explicit_model.generated_groups
     assert default_model.evaluated_threshold_candidates == (
@@ -166,8 +163,7 @@ def test_disabling_dynamic_anchors_keeps_every_descendant_on_fixed_anchors():
 
     assert len(observed_anchor_lists) > 1
     assert all(
-        anchor_list == tuple(FIXED_ANCHORS)
-        for anchor_list in observed_anchor_lists
+        anchor_list == tuple(FIXED_ANCHORS) for anchor_list in observed_anchor_lists
     )
     assert set(_split_anchors(model.tree)).issubset(FIXED_ANCHORS)
 
@@ -184,3 +180,41 @@ def test_prediction_and_leaf_routing_work_in_both_anchor_modes():
         np.testing.assert_array_equal(predictions, combined_predictions)
         np.testing.assert_array_equal(leaf_ids, combined_leaf_ids)
         assert predictions.shape == leaf_ids.shape == (len(y),)
+
+
+def test_source_node_ids_are_deterministic_and_persisted():
+    import pickle
+
+    def split_ids(node):
+        if node.is_leaf():
+            return []
+        return [node.source_node_id, *split_ids(node.left), *split_ids(node.right)]
+
+    X, y = _training_data()
+    first = _tree().fit(X, y)
+    second = _tree().fit(X, y)
+    ids = split_ids(first.tree)
+    assert len(ids) == len(set(ids))
+    assert ids == split_ids(second.tree)
+    restored = pickle.loads(pickle.dumps(first))
+    assert split_ids(restored.tree) == ids
+    np.testing.assert_array_equal(restored.predict(X), first.predict(X))
+    np.testing.assert_array_equal(restored.apply(X), first.apply(X))
+
+
+def test_legacy_dynamic_tree_requires_retraining_but_fixed_tree_loads():
+    import pickle
+    import pytest
+
+    X, y = _training_data()
+    for enabled in (True, False):
+        model = _tree(use_dynamic_anchors=enabled).fit(X, y)
+        del model._dynamic_anchor_version
+        payload = pickle.dumps(model)
+        if enabled:
+            with pytest.raises(ValueError, match="Legacy dynamic-anchor.*Retrain"):
+                pickle.loads(payload)
+        else:
+            np.testing.assert_array_equal(
+                pickle.loads(payload).predict(X), model.predict(X)
+            )

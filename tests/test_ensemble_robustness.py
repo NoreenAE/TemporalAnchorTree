@@ -5,12 +5,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments import experiment_2_robustness_v2 as experiment
+from experiments import ensemble_robustness as experiment
 from settree.temporal_tree import TemporalLeaf, TemporalSplitNode, TemporalTree
 
 
 VALID_CONFIGURATION = {
-    "candidate_id": "C02",
     "candidate_sampling_rate": 0.4,
     "max_depth": 3,
     "min_samples_split": 40,
@@ -116,17 +115,34 @@ def _window_rows():
 
 
 def test_configuration_is_explicit_and_placeholders_block_execution():
-    assert experiment.SELECTED_MODEL_CONFIGURATION == {
-        "candidate_id": "REPLACE_AFTER_SEARCH_COMPLETES",
-        "candidate_sampling_rate": None,
-        "max_depth": None,
-        "min_samples_split": None,
-        "min_samples_leaf": None,
-        "min_impurity_decrease": None,
+    expected_fields = {
+        "candidate_sampling_rate",
+        "max_depth",
+        "min_samples_split",
+        "min_samples_leaf",
+        "min_impurity_decrease",
     }
+    assert set(experiment.SELECTED_MODEL_CONFIGURATION) == expected_fields
+    assert experiment.REQUIRED_SELECTED_FIELDS == expected_fields
+    assert experiment.validate_selected_configuration(VALID_CONFIGURATION) == (
+        VALID_CONFIGURATION
+    )
 
-    with pytest.raises(ValueError, match="placeholders remain"):
-        experiment.validate_selected_configuration()
+    for field in expected_fields:
+        with pytest.raises(ValueError, match="placeholders remain"):
+            experiment.validate_selected_configuration(
+                {**VALID_CONFIGURATION, field: None}
+            )
+
+
+def test_candidate_id_is_not_a_configuration_or_provenance_field():
+    with pytest.raises(ValueError, match="extra=\\['candidate_id'\\]"):
+        experiment.validate_selected_configuration(
+            {**VALID_CONFIGURATION, "candidate_id": "C02"}
+        )
+    config = experiment.scientific_configuration(VALID_CONFIGURATION, {}, "split")
+    assert config["selected_model_configuration"] == VALID_CONFIGURATION
+    assert "candidate_id" not in json.dumps(config)
 
 
 def test_design_has_exact_seeds_offsets_aggregations_and_fixed_anchors():
@@ -141,6 +157,28 @@ def test_design_has_exact_seeds_offsets_aggregations_and_fixed_anchors():
         window["is_full_timeline"]
         for window in experiment.effective_windows()
     ) == 1
+
+
+def test_recorded_aggregations_match_model_callables():
+    model = experiment.build_model(42)
+    config = experiment.scientific_configuration(VALID_CONFIGURATION, {}, "split")
+    assert config["aggregations"] == list(model.aggregation_funcs)
+    assert tuple(model.aggregation_funcs) == experiment.AGGREGATION_NAMES
+    values = np.array([1.0, 2.0, 6.0])
+    expected = {"mean": 3.0, "sum": 9.0, "max": 6.0, "count": 3}
+    assert {
+        name: function(values)
+        for name, function in model.aggregation_funcs.items()
+    } == expected
+
+
+def test_aggregation_names_control_mapping_and_validator_rejects_changes(monkeypatch):
+    monkeypatch.setattr(experiment, "AGGREGATION_NAMES", ("mean", "max"))
+    assert tuple(experiment.aggregation_functions()) == ("mean", "max")
+    config = experiment.scientific_configuration(VALID_CONFIGURATION, {}, "split")
+    assert config["aggregations"] == ["mean", "max"]
+    with pytest.raises(ValueError, match="aggregation set changed"):
+        experiment.validate_experiment_design(selected=VALID_CONFIGURATION)
 
 
 @pytest.mark.parametrize(
@@ -378,6 +416,45 @@ def test_window_summary_counts_unused_seeds_as_zero():
     assert now_minus_one["percentage_of_seeds_where_used"] == 50.0
 
 
+def test_temporal_plot_reads_lowercase_csv_outcomes_without_losing_values(tmp_path):
+    rows = _window_rows()
+    rows["outcome"] = rows["outcome"].str.lower()
+    for seed in experiment.SPLIT_SAMPLING_SEEDS:
+        directory = tmp_path / "seeds" / f"seed_{seed}"
+        directory.mkdir(parents=True)
+        for outcome in ("FA", "GI"):
+            rows.loc[
+                rows["split_sampling_seed"].eq(seed)
+                & rows["outcome"].eq(outcome.lower())
+            ].to_csv(directory / f"{outcome}_temporal_window_usage.csv", index=False)
+    profiles = experiment._temporal_plot_profiles(
+        experiment._collect_window_rows(tmp_path)
+    )
+    labels = experiment._ordered_window_labels()
+    np.testing.assert_allclose(profiles["FA"][:, labels.index("Birth +1")], 20)
+    np.testing.assert_allclose(
+        profiles["GI"][:, labels.index("NOW -1")], [20] * 5 + [0] * 5
+    )
+    np.testing.assert_allclose(profiles["GI"][:, labels.index("Full Timeline")], 0)
+
+
+@pytest.mark.parametrize("problem", ["missing", "duplicate", "outcome", "window", "nan"])
+def test_temporal_plot_rejects_invalid_rows_instead_of_zero_filling(problem):
+    rows = _window_rows()
+    if problem == "missing":
+        rows = rows.iloc[1:]
+    elif problem == "duplicate":
+        rows = pd.concat([rows, rows.iloc[:1]], ignore_index=True)
+    elif problem == "outcome":
+        rows.loc[0, "outcome"] = "unknown"
+    elif problem == "window":
+        rows.loc[1, "offset"] = 99
+    else:
+        rows.loc[0, "path_usage_percentage"] = np.nan
+    with pytest.raises(ValueError):
+        experiment._temporal_plot_profiles(rows)
+
+
 def test_figures_are_limited_to_the_two_approved_summaries(tmp_path):
     per_seed = _per_seed_table()
     windows = _window_rows()
@@ -393,6 +470,83 @@ def test_figures_are_limited_to_the_two_approved_summaries(tmp_path):
         "auc_across_seeds.png",
         "temporal_usage_across_seeds.png",
     ]
+
+
+def test_figure_points_error_bars_and_categorical_highlights(monkeypatch, tmp_path):
+    from matplotlib.collections import PathCollection
+
+    figures = []
+    original_close = experiment.plt.close
+    monkeypatch.setattr(experiment.plt, "close", lambda figure: figures.append(figure))
+    try:
+        experiment.create_auc_figure(_per_seed_table(), tmp_path / "auc.png")
+        experiment.create_temporal_usage_figure(_window_rows(), tmp_path / "usage.png")
+        auc_axis = figures[-2].axes[0]
+        assert [tick.get_text() for tick in auc_axis.get_xticklabels()] == ["FA", "GI"]
+        assert [text.get_text() for text in auc_axis.get_legend().get_texts()] == [
+            "Individual seeds", "Mean ± SD",
+        ]
+        temporal_axes = figures[-1].axes
+        for axis in (auc_axis, *temporal_axes):
+            # Only category separators may have line segments; observations
+            # and error-bar markers must never connect categories or seeds.
+            for line in axis.lines:
+                if line.get_linestyle() not in ("None", "none", "", " "):
+                    assert len(set(line.get_xdata())) == 1
+            points = [c for c in axis.collections if isinstance(c, PathCollection)]
+            expected_count = 10 if axis is auc_axis else 180
+            for collection, errorbar in zip(points, axis.containers):
+                observed = collection.get_offsets()[:, 1].astype(float)
+                assert len(observed) == expected_count
+                observed = observed.reshape(10, -1)
+                means = observed.mean(axis=0)
+                sd = observed.std(axis=0, ddof=1)
+                np.testing.assert_allclose(errorbar.lines[0].get_ydata(), means)
+                segments = errorbar.lines[2][0].get_segments()
+                if axis is auc_axis:
+                    center = list(axis.containers).index(errorbar)
+                    np.testing.assert_allclose(
+                        errorbar.lines[0].get_xdata(), [center]
+                    )
+                    np.testing.assert_allclose(np.asarray(segments)[:, :, 0], center)
+                    positions = collection.get_offsets()[:, 0].astype(float)
+                    assert np.max(np.abs(positions - center)) <= 0.025 + 1e-12
+                    assert positions.mean() == pytest.approx(center)
+                np.testing.assert_allclose(
+                    np.asarray(segments)[:, :, 1],
+                    np.column_stack((means - sd, means + sd)),
+                )
+        gi_points = temporal_axes[1].collections[0].get_offsets()[:, 1]
+        assert np.count_nonzero(gi_points == 0) == 175
+        for axis, expected_span in zip(temporal_axes, ((-0.5, 6.5), (15.5, 16.5))):
+            patch = axis.patches[0]
+            vertices = patch.get_patch_transform().transform(patch.get_path().vertices)
+            assert (vertices[:, 0].min(), vertices[:, 0].max()) == expected_span
+    finally:
+        for figure in figures:
+            original_close(figure)
+
+
+def test_summary_retains_anchor_dominance_and_gi_usage_statistics():
+    summary = experiment.summarize_per_seed(_per_seed_table())
+    values = summary.set_index(["outcome", "metric", "statistic"])["value"]
+    for outcome in ("FA", "GI"):
+        for metric in (
+            "birth_usage_percentage", "now_usage_percentage",
+            "full_timeline_usage_percentage",
+        ):
+            assert (outcome, metric, "mean") in values.index
+            assert values.loc[(outcome, metric, "sd")] == 0
+        assert values.loc[(outcome, "expected_anchor_dominant", "count")] == 10
+        assert values.loc[(outcome, "expected_anchor_dominant", "percentage")] == 100
+    for metric, scale in (
+        ("now_minus_1_path_usage_percentage", 1),
+        ("now_minus_1_patient_coverage_percentage", 2),
+    ):
+        assert values.loc[("GI", metric, "mean")] == pytest.approx(4.5 * scale)
+        assert values.loc[("GI", metric, "sd")] == pytest.approx(
+            np.std(np.arange(10) * scale, ddof=1)
+        )
 
 
 def test_central_manifest_finalizes_and_verifies_completed_seed(tmp_path):
@@ -480,6 +634,9 @@ def test_placeholder_blocks_before_loading_or_writing(
         )
 
     monkeypatch.setattr(experiment, "load_inputs", forbidden_load)
+    monkeypatch.setitem(
+        experiment.SELECTED_MODEL_CONFIGURATION, "candidate_sampling_rate", None
+    )
 
     with pytest.raises(ValueError, match="placeholders remain"):
         experiment.run_experiment(output_dir=tmp_path / "results")
@@ -497,7 +654,7 @@ def test_mocked_full_run_writes_only_approved_outputs_and_resumes(
         path = tmp_path / f"{name}.pkl"
         path.write_bytes(name.encode("utf-8"))
         input_paths[name] = path
-    output_dir = tmp_path / "experiment_2"
+    output_dir = tmp_path / "ensemble_robustness"
     split = pd.DataFrame(
         {
             "patient_id": ["P1", "P2"],

@@ -34,7 +34,9 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from settree.eval_utils import plot_tree_structure  # noqa: E402
+from settree.eval_utils import (  # noqa: E402
+    plot_tree_structure, save_roc_curves, save_thesis_tree_figures,
+)
 from settree.temporal_explainability import (  # noqa: E402
     derive_monthly_bin_edges,
     load_temporal_usage_artifacts,
@@ -44,16 +46,16 @@ from settree.temporal_explainability import (  # noqa: E402
 from settree.temporal_tree import TemporalTree  # noqa: E402
 
 
-EXPERIMENT_NAME = "experiment_1_fa_vs_gi_on_5000V3clean_patients_A1_minS20_minL10_more_offsets2_minGAIN0.0005"
+EXPERIMENT_NAME = "experiment_1_fa_vs_gi_on_5000V3clean_patients_A=0.4_minS20_minL10_more_offsets2_minGAIN0.0005"
 EXPERIMENT_DESCRIPTION = (
-    "min GAIN, 0.0005 ,wider offset ranges, coinFlip A=1, Same validated longitudinal X (5000) v2 and identical TemporalTree settings; "
+    "min GAIN, 0.0005 ,wider offset ranges, coinFlip A=0.4, Same validated longitudinal X (5000) v2 and identical TemporalTree settings; "
     "only the FA versus GI outcome label changes."
 )
-RANDOM_STATE = 42
+RANDOM_STATE = 48
 TEST_SIZE = 0.30
 DECISION_THRESHOLD = 0.50
-CANDIDATE_SAMPLING_RATE = 1
-SPLIT_SAMPLING_SEED = 42
+CANDIDATE_SAMPLING_RATE = 0.4
+SPLIT_SAMPLING_SEED = 48
 MIN_IMPURITY_DECREASE = 0.0005 # 0 = off
 USE_DYNAMIC_ANCHORS = False
 VERBOSE = 1
@@ -65,7 +67,7 @@ INPUT_PATHS = {
     "gi": DATA_DIR / "temporal_benchmark_gi_labels_5000.pkl",
 }
 OUTPUT_DIR = (
-    REPOSITORY_ROOT / "experiments" / "results" / "experiment_1_5000V3clean__moreOFFSETS2_patients_A1_minS20_minL10_minGAIN0.0005"
+    REPOSITORY_ROOT / "experiments" / "results" / "experiment_1_5000V3clean__moreOFFSETS2_patients_A=0.4_minS20_minL10_minGAIN0.0005"
 )
 
 ANCHOR_OFFSET_MAP = {
@@ -106,9 +108,7 @@ OUTCOMES = {
         "true_region": "NOW Anchor: -1 calendar month to NOW",
     },
 }
-TEMPORAL_USAGE_COMPARISON_FILENAME = (
-    "temporal_usage_comparison_fa_vs_gi.png"
-)
+TEMPORAL_USAGE_COMPARISON_FILENAME = "temporal_split_usage_fa_vs_gi_thesis.png"
 
 
 def aggregation_functions() -> Dict[str, object]:
@@ -518,6 +518,10 @@ def run_outcome(
         },
     }
     write_json(result, output_dir / "metrics_and_temporal_summary.json")
+    save_roc_curves(
+        {"ROC": (y_test, test_scores, performance["roc_auc"])},
+        output_dir / "roc_curve.png",
+    )
     return result
 
 
@@ -576,17 +580,51 @@ def create_temporal_usage_comparison(output_dir: Path) -> Path:
         )
         for outcome in OUTCOMES
     }
-    subtitle = (
-        f"A = {CANDIDATE_SAMPLING_RATE:g} | "
-        "min_samples_split = "
-        f"{MODEL_HYPERPARAMETERS['min_samples_split']} | "
-        "min_samples_leaf = "
-        f"{MODEL_HYPERPARAMETERS['min_samples_leaf']}"
-    )
     return plot_temporal_usage_comparison(
         usage_by_outcome=usage_by_outcome,
         output_path=output_dir / TEMPORAL_USAGE_COMPARISON_FILENAME,
-        subtitle=subtitle,
+    )
+
+
+def create_thesis_tree_figures(output_dir: Path) -> dict:
+    """Render the two saved trees and their combined panel without model use."""
+    return save_thesis_tree_figures(
+        {outcome: output_dir / outcome / "tree.json" for outcome in OUTCOMES},
+        output_dir,
+    )
+
+
+def create_roc_comparison(
+    output_dir: Path,
+    results: Optional[Mapping[str, dict]] = None,
+    predictions_filename: str = "test_predictions.csv",
+) -> Path:
+    """Save FA/GI ROC curves using saved predictions, without loading models.
+
+    Reuse evaluation AUCs from results, or from saved outcome summaries when
+    plotting a completed Experiment 1. Missing artifacts raise an error.
+    """
+    curves = {}
+    for outcome in OUTCOMES:
+        outcome_dir = output_dir / outcome
+        predictions = pd.read_csv(outcome_dir / predictions_filename)
+        if results is None:
+            result = json.loads(
+                (outcome_dir / "metrics_and_temporal_summary.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+        else:
+            result = results[outcome]
+        curves[outcome.upper()] = (
+            predictions["label"],
+            predictions["score"],
+            result["performance"]["roc_auc"],
+        )
+    return save_roc_curves(
+        curves,
+        output_dir / "roc_curves_fa_vs_gi.png",
+        title="ROC Curves for FA and GI",
     )
 
 
@@ -722,6 +760,8 @@ def run_experiment() -> dict:
         raise RuntimeError(
             "An immutable benchmark input changed during the run."
         )
+    create_roc_comparison(OUTPUT_DIR, results)
+    create_thesis_tree_figures(OUTPUT_DIR)
     return comparison
 
 

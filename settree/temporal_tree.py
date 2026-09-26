@@ -15,7 +15,6 @@ from sklearn.base import BaseEstimator
 from collections import deque
 from typing import Tuple
 from .anchor_utils import (
-    _aggregation_anchor_dates,
     _offset_to_dateoffset,
     create_branch_anchors,
     get_time_window_mask,
@@ -36,7 +35,8 @@ class TemporalSplitNode:
         depth: int = 0,
         impurity: float = None, # value: float = None,  # ← NEW: For leaf prediction
         left=None,
-        right=None
+        right=None,
+        source_node_id: Optional[int] = None,
     ):
         
         """
@@ -55,7 +55,9 @@ class TemporalSplitNode:
         - impurity: Optional impurity score at the node.
         - left: Left child node.
         - right: Right child node.
+        - source_node_id: Persisted tree-local split ID used for anchor identity.
         """
+        self.source_node_id = source_node_id
         self.feature = feature
         self.threshold = threshold
         self.aggregation = aggregation
@@ -102,6 +104,12 @@ class TemporalLeaf:
         return f"Leaf(value={self.value}, num_patients={self.num_patients})"
     
     def describe(self):
+        if isinstance(self.value, np.ndarray):
+            probabilities = np.array2string(self.value, precision=2)
+            return (
+                f"Leaf: Probabilities = {probabilities} "
+                f"(patients: {self.num_patients})"
+            )
         return f"Leaf: Predict = {self.value:.2f} (patients: {self.num_patients})"
 
 class TemporalTree(BaseEstimator):
@@ -209,11 +217,14 @@ class TemporalTree(BaseEstimator):
             create dynamic anchors. Values may be one of
             ``binary_event_indicator``, ``event_occurrence``,
             ``event_magnitude``, or ``state_measurement``. A state measurement
-            may opt into COUNT anchors with
-            ``{"type": "state_measurement", "count_anchor": True}``.
-            Features without metadata do not create dynamic anchors. Binary
-            MEAN anchors identify positive-event times, not all observations
-            needed to reconstruct the mean.
+            accepts the legacy ``count_anchor`` option, but it no longer
+            restricts eligibility. All four types support COUNT, SUM, MAX,
+            and MEAN. Both branches may gain a new available anchor:
+            MAX selects the earliest maximum, binary SUM the earliest 1,
+            and other cases the earliest contributing observation. Values
+            contain one timestamp or an empty list for unavailable anchors.
+            Empty lists represent unavailable patient-specific timestamps.
+            Features without metadata do not create dynamic anchors.
         """
 
         self.max_depth = max_depth
@@ -240,9 +251,17 @@ class TemporalTree(BaseEstimator):
             'count': lambda x: x.size
         }
         self.tree = None
+        self._dynamic_anchor_version = 2
 
     def __setstate__(self, state):
-        """Restore old serialized trees with dynamic anchors enabled."""
+        """Reject fitted legacy dynamic-anchor trees instead of renaming anchors."""
+        if (state.get("tree") is not None
+                and state.get("use_dynamic_anchors", True)
+                and state.get("_dynamic_anchor_version") != 2):
+            raise ValueError(
+                "Legacy dynamic-anchor tree is incompatible with source-node "
+                "anchor identities. Retrain the model; conversion is not supported."
+            )
         self.__dict__.update(state)
         if "use_dynamic_anchors" not in self.__dict__:
             self.use_dynamic_anchors = True
@@ -400,7 +419,8 @@ class TemporalTree(BaseEstimator):
 
         # Classification-specific
         if self.is_classification:
-            self.n_classes_ = y.nunique()
+            self.classes_ = np.unique(y)
+            self.n_classes_ = len(self.classes_)
         else:
             self.n_classes_ = None
 
@@ -436,13 +456,15 @@ class TemporalTree(BaseEstimator):
                 "Stopping: too few samples or max depth reached. "
                 f"samples:{num_patients}, depth:{depth}",
             )
-            prediction = y_target.mode()[0] if self.is_classification else y_target.mean()
+            prediction = self._leaf_prediction(y_target)
             return self._create_leaf(prediction, num_patients, depth)
 
         if self.is_classification and y_target.nunique() == 1:
             self._log(1, "         → LEAF | reason=homogeneous_label")
             self._log(3, "Stopping: homogeneous classification label.")
-            return self._create_leaf(y_target.iloc[0], num_patients, depth)
+            return self._create_leaf(
+                self._leaf_prediction(y_target), num_patients, depth
+            )
 
         elif not self.is_classification and y_target.nunique() == 1:
             self._log(1, "         → LEAF | reason=homogeneous_value")
@@ -466,6 +488,13 @@ class TemporalTree(BaseEstimator):
     #         return self._create_leaf(y.iloc[0], num_patients, depth)
     #     return None
     
+    def _leaf_prediction(self, y: pd.Series):
+        """Return class frequencies in classes_ order, or the regression mean."""
+        if not self.is_classification:
+            return y.mean()
+        counts = y.value_counts().reindex(self.classes_, fill_value=0)
+        return counts.to_numpy(dtype=float) / len(y)
+
     def _create_leaf(self, value, num_patients, depth): # __add_leaf
             """Create and register a leaf node with a unique ID (sn)."""
             leaf = TemporalLeaf(value=value, num_patients=num_patients, depth=depth)
@@ -513,7 +542,7 @@ class TemporalTree(BaseEstimator):
         if not best_split:
             self._log(1, "         → LEAF | reason=no_valid_split")
             self._log(3, "Stopping: No valid split found.")
-            prediction = y.mode()[0] if self.is_classification else y.mean()
+            prediction = self._leaf_prediction(y)
             return self._create_leaf(prediction, num_patients, depth)
 
         # Preserve the historical path exactly when the new criterion is
@@ -542,9 +571,7 @@ class TemporalTree(BaseEstimator):
                     f"gain={gain:.6g} | "
                     f"required={self.min_impurity_decrease:.6g}",
                 )
-                prediction = (
-                    y.mode()[0] if self.is_classification else y.mean()
-                )
+                prediction = self._leaf_prediction(y)
                 return self._create_leaf(prediction, num_patients, depth)
 
         anchor, offset = best_split["time_window"]
@@ -576,6 +603,7 @@ class TemporalTree(BaseEstimator):
         self._log(3, "Fitting TemporalDecisionTree...")
         self._validate_input(X, y)
         self.init(X, y)
+        self._dynamic_anchor_version = 2
 
         self._log(
             1,
@@ -597,15 +625,13 @@ class TemporalTree(BaseEstimator):
         return self
 
     def _dynamic_anchor_key(self, node, direction: str):
-        source_anchor, offset = node.time_window
-        return (
-            node.feature,
-            node.aggregation,
-            direction,
-            float(node.threshold),
-            source_anchor,
-            offset,
-        )
+        """Identify the persisted source node; direction does not affect identity."""
+        source_id = getattr(node, "source_node_id", None)
+        if source_id is None:
+            raise ValueError(
+                "Dynamic-anchor source node has no persisted ID. Retrain the model."
+            )
+        return source_id
 
     def _validate_feature_semantics(self) -> None:
         """Validate explicit feature metadata used for dynamic anchors."""
@@ -659,42 +685,23 @@ class TemporalTree(BaseEstimator):
             return None
 
         specification = self.feature_semantics[node.feature]
-        if isinstance(specification, str):
-            feature_type = specification
-            count_anchor = False
-        else:
-            feature_type = specification["type"]
-            count_anchor = specification.get("count_anchor", False)
-
+        feature_type = (
+            specification if isinstance(specification, str)
+            else specification["type"]
+        )
         aggregation = node.aggregation
-        if feature_type == "binary_event_indicator":
-            if aggregation in {"sum", "mean", "max"}:
-                return "positive_events"
+        if aggregation not in {"count", "sum", "max", "mean"}:
             return None
-        if feature_type == "event_occurrence":
-            return "all_valid" if aggregation == "count" else None
-        if feature_type == "event_magnitude":
-            return "nonzero_contributions" if aggregation == "sum" else None
-        if feature_type == "state_measurement":
-            if aggregation == "max":
-                return "maximum"
-            if aggregation == "count" and count_anchor:
-                return "all_valid"
-        return None
+        if aggregation == "max":
+            return "maximum"
+        if feature_type == "binary_event_indicator" and aggregation == "sum":
+            return "positive_events"
+        return "all_valid"
 
     def _format_dynamic_anchor_name(self, node, direction: str) -> str:
-        source_anchor, offset = node.time_window
-        operator = "<=" if direction == "left" else ">"
-        threshold = f"{float(node.threshold):.3f}"
-        if source_anchor is None and offset is None:
-            return (
-                f"{node.aggregation.upper()}({node.feature}) {operator} "
-                f"{threshold} | Full Timeline Anchor"
-            )
-        return (
-            f"{node.aggregation.upper()}({node.feature}) {operator} "
-            f"{threshold} | {source_anchor} +{offset}m Anchor"
-        )
+        """Return the same logical anchor name for either branch of this node."""
+        source_id = self._dynamic_anchor_key(node, direction)
+        return f"Node {source_id} | {node.aggregation.upper()}({node.feature}) Anchor"
 
     def _validate_one_anchor_row_per_patient(
         self,
@@ -738,9 +745,11 @@ class TemporalTree(BaseEstimator):
             return anchor_name, anchors.copy(), pd.DataFrame(), anchor_registry.copy()
 
         anchor_name = self._format_dynamic_anchor_name(node, direction)
-        next_anchors = anchors + [anchor_name]
+        # Branch copies share a logical name, never patient rows or registries.
+        next_anchors = anchors.copy()
         next_anchor_registry = anchor_registry.copy()
         next_anchor_registry[anchor_key] = anchor_name
+        next_anchors.append(anchor_name)
         anchor_df = create_branch_anchors(
             patient_ids=patient_ids,
             X_branch=X_branch,
@@ -772,12 +781,15 @@ class TemporalTree(BaseEstimator):
         if root.is_leaf():
             return root
 
+        next_source_id = 0
         queue = deque()
         queue.append((root, X, y, 0, self.anchors_list.copy(), {}))
         # print(f'queue: {queue}')
         while queue:
             self._log(3, f'[build] depth={self.depth}')
             node, X_node, y_node, depth, anchors, anchor_registry = queue.popleft()
+            node.source_node_id = next_source_id
+            next_source_id += 1
 
             # --- 1. Aggregate for this split ---
             self._log(3, 'Inside _build - aggregate on best split')
@@ -1055,73 +1067,25 @@ class TemporalTree(BaseEstimator):
         if anchor_name in row["feature_name"].values:
             return row
 
-        prev_anchor_name, offset = node.time_window
-        patient_data = row[row["feature_name"] == node.feature]
-
-        if patient_data.empty:
-            anchor_dates = []
-        else:
-            if prev_anchor_name is None and offset is None:
-                time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
-            else:
-                anchor_value = row[row["feature_name"] == prev_anchor_name]["value"]
-                if len(anchor_value) != 1:
-                    missing_count = int(anchor_value.empty)
-                    duplicate_count = int(len(anchor_value) > 1)
-                    raise ValueError(
-                        f"Each patient must have exactly one {prev_anchor_name} entry in 'feature_name'. "
-                        f"Missing anchor for {missing_count} patients "
-                        f"(examples: {[patient_id] if missing_count else []}); "
-                        f"duplicate anchor rows for {duplicate_count} patients "
-                        f"(examples: {[patient_id] if duplicate_count else []})."
-                    )
-                anchor_raw = anchor_value.values[0]
-                if isinstance(anchor_raw, (list, np.ndarray)) and len(anchor_raw) == 0:
-                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
-                elif not isinstance(anchor_raw, (list, np.ndarray)) and pd.isnull(anchor_raw):
-                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
-                elif isinstance(anchor_raw, pd.Timestamp):
-                    anchor_time = pd.to_datetime(anchor_raw)
-                    offset_time = anchor_time + _offset_to_dateoffset(offset)
-                    time_mask = (
-                        (patient_data["time"] >= anchor_time) & (patient_data["time"] <= offset_time)
-                        if offset >= 0 else
-                        (patient_data["time"] <= anchor_time) & (patient_data["time"] >= offset_time)
-                    )
-                elif isinstance(anchor_raw, (list, np.ndarray)):
-                    anchor_times = pd.to_datetime(anchor_raw)
-                    date_offset = _offset_to_dateoffset(offset)
-                    offset_times = [dt + date_offset for dt in anchor_times]
-
-                    def time_filter(time_val):
-                        return any(
-                            (time_val <= o and r <= time_val) if offset >= 0 else (time_val >= o and r >= time_val)
-                            for r, o in zip(anchor_times, offset_times)
-                        )
-
-                    time_mask = patient_data["time"].apply(time_filter)
-                else:
-                    time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
-
-            anchor_dates = _aggregation_anchor_dates(
-                patient_data.loc[time_mask],
-                node.aggregation,
-                anchor_selection,
-            )
-
-        anchor_df = pd.DataFrame([{
-            "patient_id": patient_id,
-            "time": np.nan,
-            "feature_name": anchor_name,
-            "value": anchor_dates
-        }])
+        anchor_df = create_branch_anchors(
+            patient_ids=[patient_id],
+            X_branch=row,
+            anchor_name=anchor_name,
+            direction=direction,
+            feature=node.feature,
+            threshold=node.threshold,
+            time_window=node.time_window,
+            aggregation=node.aggregation,
+            anchor_selection=anchor_selection,
+        )
         return pd.concat([row, anchor_df], ignore_index=True)
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:
+        """Return class labels or regression values in patient appearance order."""
         if self.tree is None:
             raise ValueError("Model not fitted. Call `.fit()` first.")
         if self.is_classification:
-            return np.argmax(self.predict_proba(X), axis=1)
+            return self.classes_[np.argmax(self.predict_proba(X), axis=1)]
 
         X = X.copy()
         X["time"] = pd.to_datetime(X["time"])
@@ -1143,7 +1107,10 @@ class TemporalTree(BaseEstimator):
             float: The predicted value (regression or class label).
         """
         if node.is_leaf():
-            return node.value if not self.is_classification else np.argmax(node.value)
+            return (
+                self.classes_[np.argmax(node.value)]
+                if self.is_classification else node.value
+            )
 
         # Aggregate and make the decision
         aggregated_value = self._aggregate_feature_over_time(
@@ -1185,6 +1152,12 @@ class TemporalTree(BaseEstimator):
         return self._predict_proba_row(row, next_node)
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
+        """Return probabilities with columns ordered by sorted fitted classes_.
+
+        Only classes observed during fit are included. For binary 0/1 labels,
+        select the column where classes_ == 1 for positive-class ROC-AUC.
+        Ties in predict resolve to the first class in this order.
+        """
         if not self.is_classification:
             raise ValueError("`predict_proba` is only supported for classification trees.")
 

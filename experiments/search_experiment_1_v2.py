@@ -30,6 +30,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from experiments import experiment_1_fa_vs_gi as experiment_1
+from settree.eval_utils import save_roc_curves
 from settree.temporal_explainability import (
     aggregate_temporal_usage,
     derive_monthly_bin_edges,
@@ -681,7 +682,7 @@ def run_outcome(
 
     tree_path = output_dir / "tree.json"
     experiment_1.export_tree_json(model, tree_path)
-    return {
+    result = {
         "outcome": outcome,
         "performance": performance,
         "temporal_recovery_score": recovery_score,
@@ -719,6 +720,11 @@ def run_outcome(
             "histogram": str(histogram_path) if save_plots else None,
         },
     }
+    save_roc_curves(
+        {"ROC": (y_evaluation, scores, performance["roc_auc"])},
+        output_dir / "roc_curve.png",
+    )
+    return result
 
 
 def _completed_result(run_dir: Path, expected_fingerprint: str) -> Optional[dict]:
@@ -1208,6 +1214,9 @@ def run_final_candidate(
             "pair_runtime_seconds": perf_counter() - started,
         })
         comparison_path = _save_combined_usage_plot(candidate_dir)
+        experiment_1.create_roc_comparison(
+            candidate_dir, outcomes, predictions_filename="predictions.csv"
+        )
         metrics = {
             "rank": rank,
             "ranking_basis": "validation only",

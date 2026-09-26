@@ -75,8 +75,7 @@ def _fractional_tree(**kwargs):
     ],
 )
 def test_offset_conversion_preserves_calendar_months_and_signed_fractional_days(
-    offset,
-    expected,
+    offset, expected,
 ):
     anchor = pd.Timestamp("2026-01-10")
 
@@ -110,22 +109,13 @@ def test_fractional_aggregation_and_full_timeline_boundaries():
     model = TemporalTree(verbose=0)
 
     fractional, _ = model._aggregate_feature_over_time(
-        X,
-        "signal",
-        (ANCHOR, 0.7),
-        "sum",
+        X, "signal", (ANCHOR, 0.7), "sum",
     )
     calendar_month, _ = model._aggregate_feature_over_time(
-        X,
-        "signal",
-        (ANCHOR, 1),
-        "sum",
+        X, "signal", (ANCHOR, 1), "sum",
     )
     full_timeline, resolved_anchor = model._aggregate_feature_over_time(
-        X,
-        "signal",
-        (None, None),
-        "sum",
+        X, "signal", (None, None), "sum",
     )
 
     np.testing.assert_array_equal(fractional, [1.0])
@@ -178,34 +168,33 @@ def test_fractional_dynamic_anchor_boundary_matches_training_and_prediction():
         ]
     )
     node = TemporalSplitNode(
+        source_node_id=0,
         feature="signal",
         threshold=0.5,
         aggregation="max",
         time_window=(ANCHOR, 0.7),
     )
-    model = TemporalTree(
-        feature_semantics={"signal": "state_measurement"},
-    )
-    anchor_name = model._format_dynamic_anchor_name(node, "right")
+    model = TemporalTree(feature_semantics={"signal": "state_measurement"},)
+    anchor_name = model._format_dynamic_anchor_name(node, "left")
 
     training_anchor = create_branch_anchors(
         ["P1"],
         row,
         anchor_name,
-        "right",
+        "left",
         "signal",
         0.5,
         (ANCHOR, 0.7),
         aggregation="max",
     )
-    prediction_data = model._append_prediction_branch_anchor(row, node, "right")
+    prediction_data = model._append_prediction_branch_anchor(row, node, "left")
     prediction_anchor = prediction_data.loc[
         prediction_data["feature_name"].eq(anchor_name), "value"
     ].iloc[0]
 
     assert training_anchor.loc[0, "value"] == [pd.Timestamp("2026-01-31")]
     assert prediction_anchor == training_anchor.loc[0, "value"]
-    assert "+0.7m Anchor" in anchor_name
+    assert anchor_name == "Node 0 | MAX(signal) Anchor"
 
 
 @pytest.mark.parametrize("invalid_offset", [True, "0.7", np.nan, np.inf, -np.inf])
@@ -217,9 +206,7 @@ def test_invalid_offsets_still_fail_clearly(invalid_offset):
         model.fit(X, y)
 
 
-def test_fractional_explainability_preserves_audit_offset_and_monthly_bins(
-    tmp_path,
-):
+def test_fractional_explainability_preserves_audit_offset_and_monthly_bins(tmp_path,):
     X, y = _fractional_training_data()
     model = _fractional_tree().fit(X, y)
     bin_edges = derive_monthly_bin_edges({ANCHOR: [None, 0.7]})

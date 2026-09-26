@@ -24,7 +24,7 @@ def _aggregation_anchor_dates(
     aggregation: str,
     anchor_selection: str = None,
 ) -> list:
-    """Return chronologically ordered timestamps supporting an aggregate."""
+    """Return the earliest eligible timestamp as a singleton list, or []."""
     numeric_values = pd.to_numeric(patient_data["value"], errors="coerce")
     valid_data = patient_data.loc[numeric_values.notna()].copy()
     if valid_data.empty:
@@ -53,7 +53,7 @@ def _aggregation_anchor_dates(
         kind="mergesort",
         na_position="last",
     )
-    return ordered_data["time"].tolist()
+    return ordered_data["time"].dropna().head(1).tolist()
 
 
 def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
@@ -73,8 +73,9 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
         aggregation (str): Patient-level aggregation used by the split.
         anchor_selection (str or None): Semantic timestamp-selection rule.
 
-        ``direction`` and ``threshold`` identify the branch but are deliberately
-        not reapplied to individual raw values.
+        Either branch may contain a timestamp when an eligible observation
+        exists in the evaluated window. The threshold is not reapplied to raw values.
+        An unavailable timestamp is represented by [], never a valid window.
 
     Returns:
         pd.DataFrame: New anchor rows, one per patient.
@@ -83,7 +84,7 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
     grouped = X_branch.groupby("patient_id")
     prev_anchor_name, offset = time_window
 
-    if not (prev_anchor_name is None and offset is None):
+    if isinstance(prev_anchor_name, str) and offset is not None:
         reference_feature = X_branch[X_branch['feature_name'] == prev_anchor_name][['patient_id', 'value']]
         anchor_counts = reference_feature.groupby('patient_id').size()
         expected_patients = pd.Index(patient_ids)
@@ -122,14 +123,20 @@ def create_branch_anchors(patient_ids, X_branch, anchor_name, direction,
             continue
 
         # Retrieve anchor reference value (from previous anchor)
-        if prev_anchor_name is None and offset is None:
+        if prev_anchor_name is None or offset is None:
             time_mask = pd.Series([True] * len(patient_data), index=patient_data.index)
         else:
-            anchor_value = full_patient_data[full_patient_data['feature_name'] == prev_anchor_name]['value']
+            anchor_value = (
+                pd.Series([prev_anchor_name])
+                if isinstance(prev_anchor_name, pd.Timestamp)
+                else full_patient_data.loc[
+                    full_patient_data["feature_name"] == prev_anchor_name, "value"
+                ]
+            )
             if anchor_value.empty:
                 time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
             else:
-                anchor_raw = anchor_value.values[0]
+                anchor_raw = anchor_value.iloc[0]
                 if isinstance(anchor_raw, (list, np.ndarray)) and len(anchor_raw) == 0:
                     time_mask = pd.Series([False] * len(patient_data), index=patient_data.index)
                 elif not isinstance(anchor_raw, (list, np.ndarray)) and pd.isnull(anchor_raw):

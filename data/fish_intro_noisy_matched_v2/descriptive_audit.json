@@ -1,0 +1,365 @@
+{
+  "interpretation": "AUCs are raw descriptive scores, not fitted models. Joint signature checks use block membership only for auditing, not as a predictor.",
+  "cohorts": {
+    "all": {
+      "groups": {
+        "0": {
+          "n": 2000,
+          "feature_mean_counts": {
+            "Cough": 4.819,
+            "DoctorVisit": 1.997,
+            "MinorInjury": 0.499,
+            "FishIntroduction": 1.0,
+            "GI": 5.052,
+            "RoutineVaccination": 5.126,
+            "SleepDisturbance": 3.413,
+            "Vomiting": 3.023
+          },
+          "feature_count_sd": {
+            "Cough": 3.1255597197591394,
+            "DoctorVisit": 1.4765097495513764,
+            "MinorInjury": 0.7072829169167635,
+            "FishIntroduction": 0.0,
+            "GI": 2.298681789414206,
+            "RoutineVaccination": 0.8605197540577137,
+            "SleepDisturbance": 2.5584573187618425,
+            "Vomiting": 1.7221945235624423
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 460.78576365831947,
+            "DoctorVisit": 464.8447167278683,
+            "FishIntroduction": 454.0993288194444,
+            "GI": 462.59610726225355,
+            "MinorInjury": 448.62178614172865,
+            "RoutineVaccination": 334.8295200281622,
+            "SleepDisturbance": 462.2695458608711,
+            "Vomiting": 451.6234331046855
+          },
+          "observation_density_mean": 24.929,
+          "followup_days_mean": 913.176
+        },
+        "1": {
+          "n": 2000,
+          "feature_mean_counts": {
+            "Cough": 4.819,
+            "DoctorVisit": 1.997,
+            "MinorInjury": 0.499,
+            "FishIntroduction": 1.0,
+            "GI": 5.052,
+            "RoutineVaccination": 5.126,
+            "SleepDisturbance": 3.413,
+            "Vomiting": 3.023
+          },
+          "feature_count_sd": {
+            "Cough": 3.1255597197591394,
+            "DoctorVisit": 1.4765097495513764,
+            "MinorInjury": 0.7072829169167635,
+            "FishIntroduction": 0.0,
+            "GI": 2.298681789414206,
+            "RoutineVaccination": 0.8605197540577139,
+            "SleepDisturbance": 2.5584573187618425,
+            "Vomiting": 1.7221945235624423
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 460.7857636583196,
+            "DoctorVisit": 464.8447167278683,
+            "FishIntroduction": 454.0993288194444,
+            "GI": 462.59610726225355,
+            "MinorInjury": 448.62178614172865,
+            "RoutineVaccination": 334.82952002816216,
+            "SleepDisturbance": 462.2695458608712,
+            "Vomiting": 451.6234331046856
+          },
+          "observation_density_mean": 24.929,
+          "followup_days_mean": 913.176
+        }
+      },
+      "count_age_density_R_auc": {
+        "count_Cough": 0.5,
+        "count_DoctorVisit": 0.5,
+        "count_MinorInjury": 0.5,
+        "count_FishIntroduction": 0.5,
+        "count_GI": 0.49999999999999994,
+        "count_RoutineVaccination": 0.49999999999999994,
+        "count_SleepDisturbance": 0.5000000000000001,
+        "count_Vomiting": 0.5,
+        "fish_age": 0.49999999999999994,
+        "observation_density": 0.49999999999999994
+      },
+      "fixed_age_single_score_R_auc_range": [
+        0.49999999999999994,
+        0.5000000000000001
+      ],
+      "joint_fixed_age_signatures": {
+        "nonfish": {
+          "children_with_opposite_R_signature": 4000,
+          "denominator": 4000
+        },
+        "fish_and_symptoms": {
+          "children_with_opposite_R_signature": 40,
+          "denominator": 4000
+        },
+        "all_features": {
+          "children_with_opposite_R_signature": 40,
+          "denominator": 4000
+        }
+      },
+      "background_response_windows": {
+        "positive_children": 2000,
+        "multiple_symptom_children": 248,
+        "qualifying_symptom_rows": 2266
+      },
+      "documentation": {
+        "n": 5000,
+        "documented": 4000,
+        "FA_prevalence": {
+          "false": 0.061,
+          "true": 0.4805
+        },
+        "FA_auc": 0.6402374274806188,
+        "expected_documented_prevalence": 0.475,
+        "expected_undocumented_prevalence": 0.05
+      }
+    },
+    "train": {
+      "groups": {
+        "0": {
+          "n": 1600,
+          "feature_mean_counts": {
+            "Cough": 4.84375,
+            "DoctorVisit": 1.99625,
+            "MinorInjury": 0.50625,
+            "FishIntroduction": 1.0,
+            "GI": 5.065,
+            "RoutineVaccination": 5.13,
+            "SleepDisturbance": 3.40875,
+            "Vomiting": 3.0125
+          },
+          "feature_count_sd": {
+            "Cough": 3.102878235741962,
+            "DoctorVisit": 1.4815896462667972,
+            "MinorInjury": 0.7143387588630491,
+            "FishIntroduction": 0.0,
+            "GI": 2.299256208417172,
+            "RoutineVaccination": 0.855018660947877,
+            "SleepDisturbance": 2.5657918840964613,
+            "Vomiting": 1.7497878009469312
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 461.30368235065805,
+            "DoctorVisit": 464.8244933787865,
+            "FishIntroduction": 456.77098978587884,
+            "GI": 457.9014259133585,
+            "MinorInjury": 447.51629518175685,
+            "RoutineVaccination": 334.67014753560306,
+            "SleepDisturbance": 459.9514325834604,
+            "Vomiting": 449.50109420623767
+          },
+          "observation_density_mean": 24.9625,
+          "followup_days_mean": 913.21
+        },
+        "1": {
+          "n": 1600,
+          "feature_mean_counts": {
+            "Cough": 4.84375,
+            "DoctorVisit": 1.99625,
+            "MinorInjury": 0.50625,
+            "FishIntroduction": 1.0,
+            "GI": 5.065,
+            "RoutineVaccination": 5.13,
+            "SleepDisturbance": 3.40875,
+            "Vomiting": 3.0125
+          },
+          "feature_count_sd": {
+            "Cough": 3.102878235741962,
+            "DoctorVisit": 1.4815896462667972,
+            "MinorInjury": 0.7143387588630491,
+            "FishIntroduction": 0.0,
+            "GI": 2.299256208417172,
+            "RoutineVaccination": 0.8550186609478769,
+            "SleepDisturbance": 2.5657918840964613,
+            "Vomiting": 1.7497878009469314
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 461.30368235065805,
+            "DoctorVisit": 464.8244933787865,
+            "FishIntroduction": 456.7709897858788,
+            "GI": 457.9014259133585,
+            "MinorInjury": 447.51629518175685,
+            "RoutineVaccination": 334.670147535603,
+            "SleepDisturbance": 459.95143258346053,
+            "Vomiting": 449.50109420623767
+          },
+          "observation_density_mean": 24.9625,
+          "followup_days_mean": 913.21
+        }
+      },
+      "count_age_density_R_auc": {
+        "count_Cough": 0.5,
+        "count_DoctorVisit": 0.5,
+        "count_MinorInjury": 0.5,
+        "count_FishIntroduction": 0.5,
+        "count_GI": 0.5,
+        "count_RoutineVaccination": 0.5,
+        "count_SleepDisturbance": 0.5,
+        "count_Vomiting": 0.5,
+        "fish_age": 0.5,
+        "observation_density": 0.5
+      },
+      "fixed_age_single_score_R_auc_range": [
+        0.4999999999999999,
+        0.5000000000000001
+      ],
+      "joint_fixed_age_signatures": {
+        "nonfish": {
+          "children_with_opposite_R_signature": 3200,
+          "denominator": 3200
+        },
+        "fish_and_symptoms": {
+          "children_with_opposite_R_signature": 24,
+          "denominator": 3200
+        },
+        "all_features": {
+          "children_with_opposite_R_signature": 24,
+          "denominator": 3200
+        }
+      },
+      "background_response_windows": {
+        "positive_children": 1600,
+        "multiple_symptom_children": 202,
+        "qualifying_symptom_rows": 1818
+      },
+      "documentation": {
+        "n": 4000,
+        "documented": 3200,
+        "FA_prevalence": {
+          "false": 0.065,
+          "true": 0.47625
+        },
+        "FA_auc": 0.6377929671139703,
+        "expected_documented_prevalence": 0.475,
+        "expected_undocumented_prevalence": 0.05
+      }
+    },
+    "test": {
+      "groups": {
+        "0": {
+          "n": 400,
+          "feature_mean_counts": {
+            "Cough": 4.72,
+            "DoctorVisit": 2.0,
+            "MinorInjury": 0.47,
+            "FishIntroduction": 1.0,
+            "GI": 5.0,
+            "RoutineVaccination": 5.11,
+            "SleepDisturbance": 3.43,
+            "Vomiting": 3.065
+          },
+          "feature_count_sd": {
+            "Cough": 3.2167481517332397,
+            "DoctorVisit": 1.4578454250050037,
+            "MinorInjury": 0.6784177375086954,
+            "FishIntroduction": 0.0,
+            "GI": 2.2985230083795387,
+            "RoutineVaccination": 0.8830909489175793,
+            "SleepDisturbance": 2.5320205014076964,
+            "Vomiting": 1.6084909411524313
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 458.6597732633986,
+            "DoctorVisit": 464.9254584490746,
+            "FishIntroduction": 443.41268495370355,
+            "GI": 481.6189560879621,
+            "MinorInjury": 453.3848057033097,
+            "RoutineVaccination": 335.46950506677194,
+            "SleepDisturbance": 471.4845530146586,
+            "Vomiting": 459.9673755928651
+          },
+          "observation_density_mean": 24.795,
+          "followup_days_mean": 913.04
+        },
+        "1": {
+          "n": 400,
+          "feature_mean_counts": {
+            "Cough": 4.72,
+            "DoctorVisit": 2.0,
+            "MinorInjury": 0.47,
+            "FishIntroduction": 1.0,
+            "GI": 5.0,
+            "RoutineVaccination": 5.11,
+            "SleepDisturbance": 3.43,
+            "Vomiting": 3.065
+          },
+          "feature_count_sd": {
+            "Cough": 3.2167481517332397,
+            "DoctorVisit": 1.4578454250050037,
+            "MinorInjury": 0.6784177375086954,
+            "FishIntroduction": 0.0,
+            "GI": 2.2985230083795387,
+            "RoutineVaccination": 0.8830909489175793,
+            "SleepDisturbance": 2.5320205014076964,
+            "Vomiting": 1.6084909411524313
+          },
+          "feature_event_mean_age_days": {
+            "Cough": 458.6597732633986,
+            "DoctorVisit": 464.9254584490746,
+            "FishIntroduction": 443.41268495370355,
+            "GI": 481.61895608796215,
+            "MinorInjury": 453.38480570330955,
+            "RoutineVaccination": 335.469505066772,
+            "SleepDisturbance": 471.48455301465873,
+            "Vomiting": 459.9673755928651
+          },
+          "observation_density_mean": 24.795,
+          "followup_days_mean": 913.04
+        }
+      },
+      "count_age_density_R_auc": {
+        "count_Cough": 0.5,
+        "count_DoctorVisit": 0.5,
+        "count_MinorInjury": 0.5,
+        "count_FishIntroduction": 0.5,
+        "count_GI": 0.49999999999999994,
+        "count_RoutineVaccination": 0.5,
+        "count_SleepDisturbance": 0.5,
+        "count_Vomiting": 0.5,
+        "fish_age": 0.49999999999999994,
+        "observation_density": 0.5
+      },
+      "fixed_age_single_score_R_auc_range": [
+        0.49999999999999994,
+        0.5000000000000001
+      ],
+      "joint_fixed_age_signatures": {
+        "nonfish": {
+          "children_with_opposite_R_signature": 800,
+          "denominator": 800
+        },
+        "fish_and_symptoms": {
+          "children_with_opposite_R_signature": 16,
+          "denominator": 800
+        },
+        "all_features": {
+          "children_with_opposite_R_signature": 16,
+          "denominator": 800
+        }
+      },
+      "background_response_windows": {
+        "positive_children": 400,
+        "multiple_symptom_children": 46,
+        "qualifying_symptom_rows": 448
+      },
+      "documentation": {
+        "n": 1000,
+        "documented": 800,
+        "FA_prevalence": {
+          "false": 0.045,
+          "true": 0.4975
+        },
+        "FA_auc": 0.6499890201407907,
+        "expected_documented_prevalence": 0.475,
+        "expected_undocumented_prevalence": 0.05
+      }
+    }
+  }
+}

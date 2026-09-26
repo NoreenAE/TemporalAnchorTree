@@ -72,6 +72,51 @@ gbest_model.fit(set_data, labels)
 
 For further details and examples see: `example.ipynb`.
 
+## Temporal experiment ROC figures
+
+Future runs save a 300 dpi ROC figure using the continuous evaluation scores
+and the ROC-AUC already calculated by the evaluation pipeline:
+
+- `main.py`: `roc_curve.png` in the supplied run output directory.
+- Experiment 1: `fa/roc_curve.png`, `gi/roc_curve.png`, and
+  `roc_curves_fa_vs_gi.png` in the parent result directory after both outcomes.
+- Ensemble Robustness: `FA_roc_curve.png` and `GI_roc_curve.png` in each seed attempt
+  directory, alongside the existing outcome-prefixed artifacts.
+- Experiment 1 V2 search: `roc_curve.png` per outcome evaluation, including
+  validation candidates; final test candidates also receive the combined
+  `roc_curves_fa_vs_gi.png`. Validation plots use validation scores, while final
+  plots use test scores. ROC saving is independent of the search's temporal
+  usage `save_plots` option.
+
+For a completed Experiment 1, the plotting-only helper
+`experiments.experiment_1_fa_vs_gi.create_roc_comparison(Path(result_directory))`
+reads each outcome's `test_predictions.csv` (`label` and `score` columns) and
+`metrics_and_temporal_summary.json`. It writes only the combined PNG and never
+loads a model or calls prediction/training. Missing prediction artifacts cause
+an error; aggregate AUC values alone cannot supply a ROC curve.
+
+## Experiment 1 thesis tree figures
+
+After both outcomes have saved their trees, Experiment 1 automatically adds
+`fa/fa_tree_thesis.png`, `gi/gi_tree_thesis.png`, and the stacked comparison
+`learned_trees_fa_vs_gi_thesis.png` in the parent result directory. The existing
+`tree.json` and `tree.png` artifacts are retained. All three new figures use
+300 dpi and consistent node styling, with separate `(a)` FA and `(b)` GI panels.
+
+Internal nodes show the feature, temporal window, aggregation, and threshold;
+leaves show training patient counts and positive-class probability. Thresholds
+are displayed with six significant digits and probabilities with three decimal
+places. Integer offsets denote calendar months; fractional offsets are shown
+as days using the model's rounded 30-day conversion. Branch labels describe
+the comparison for observed aggregates; missing-value routing is not recorded
+in the existing tree JSON and is not inferred by this visualization.
+
+To generate these figures from a completed run without loading or executing a
+model, call
+`experiments.experiment_1_fa_vs_gi.create_thesis_tree_figures(Path(result_directory))`.
+This helper reads only the two `tree.json` files and writes only the three PNGs.
+It rejects incomplete child links, cycles, and unreachable nodes.
+
 ## Citation
 If you use Set-Tree in your work, please cite:
 ```
@@ -98,3 +143,20 @@ Set-Tree is MIT licensed, as found in the [LICENSE](https://github.com/TAU-MLwel
 
 
 
+## Experiment naming
+
+- Experiment 1 — FA vs. GI: existing files and configuration unchanged.
+- Experiment 2 — Fish Introduction – Dynamic Anchors:
+  `experiments/experiment_2_fish_introduction_dynamic_anchors.py`.
+- Ensemble Robustness:
+  `experiments/ensemble_robustness.py`.
+- Saved-tree ensemble analysis:
+  `experiments/ensemble_robustness_from_saved_trees.py`;
+  documentation: `experiments/ensemble_robustness_from_saved_trees.md`.
+
+Fish data generation remains in `generate_fish_intro_dataset.py`;
+the dataset remains in `data/fish_intro_dataset_distractors/`.
+
+Historical result directories, result-path references, and saved-run identifiers
+retain their original names. This naming-only change does not move results or
+change existing output defaults.

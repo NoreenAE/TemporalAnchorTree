@@ -45,8 +45,6 @@ USAGE_TABLE_COLUMNS = [
 
 TEMPORAL_USAGE_PERCENTAGE_COLUMN = "usage_percentage"
 TEMPORAL_USAGE_ANCHORS = ("Birth Date Anchor", "NOW Anchor")
-
-
 def derive_monthly_bin_edges(
     anchor_offset_map: Mapping,
 ) -> Dict:
@@ -496,6 +494,38 @@ def load_temporal_usage_artifacts(output_dir) -> dict:
     }
 
 
+def _informative_annotation_indices(heights, *, required=()):
+    """Return a small set of bar indices that carry useful labels."""
+    values = np.asarray(heights, dtype=float)
+    nonzero = np.flatnonzero(values > 0)
+    if not len(nonzero):
+        return set()
+
+    selected = {int(nonzero[np.argmax(values[nonzero])])}
+    if len(values) > 1:
+        change_index = int(np.argmax(np.abs(np.diff(values))))
+        selected.update((change_index, change_index + 1))
+    selected.update(int(index) for index in required if 0 <= index < len(values))
+    return selected & set(int(index) for index in nonzero)
+
+
+def _annotate_selected_percentages(axis, bars, heights, indices):
+    """Annotate only selected non-zero bars to keep comparison readable."""
+    for index in sorted(indices):
+        bar = bars[index]
+        height = float(heights[index])
+        axis.annotate(
+            f"{height:.1f}%",
+            xy=(bar.get_x() + bar.get_width() / 2, height),
+            xytext=(0, 4),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+            clip_on=False,
+        )
+
+
 def plot_temporal_usage_comparison(
     usage_by_outcome: Mapping[str, Mapping],
     output_path,
@@ -539,7 +569,7 @@ def plot_temporal_usage_comparison(
     figure, axes = plt.subplots(
         1,
         3,
-        figsize=(16, 6),
+        figsize=(17, 7),
         sharey=True,
         gridspec_kw={"width_ratios": [3.2, 3.2, 1.25]},
     )
@@ -555,6 +585,19 @@ def plot_temporal_usage_comparison(
         if not bins:
             raise ValueError(f"No saved monthly bins found for {anchor!r}.")
         positions = np.arange(len(bins))
+        if anchor == "Birth Date Anchor":
+            region_start, region_end = 0, 6
+        else:
+            region_start, region_end = -1, 0
+        first_region_bin = bins.index((float(region_start), float(region_start + 1)))
+        last_region_bin = bins.index((float(region_end - 1), float(region_end)))
+        axis.axvspan(
+            first_region_bin - 0.5,
+            last_region_bin + 0.5,
+            color="#d8b365",
+            alpha=0.18,
+            zorder=0,
+        )
         for outcome_index, outcome in enumerate(("FA", "GI")):
             anchor_usage = prepared[outcome]["usage_table"].loc[
                 prepared[outcome]["usage_table"]["anchor"].eq(anchor)
@@ -576,18 +619,28 @@ def plot_temporal_usage_comparison(
                 heights,
                 width=bar_width,
                 color=outcome_colors[outcome],
+                zorder=2,
             )
-            _annotate_nonzero_percentages(axis, bars, heights)
+            required = ()
+            if outcome == "GI" and anchor == "NOW Anchor":
+                required = (bins.index((-1.0, 0.0)),)
+            _annotate_selected_percentages(
+                axis,
+                bars,
+                heights,
+                _informative_annotation_indices(heights, required=required),
+            )
         axis.set_xticks(positions)
         axis.set_xticklabels(
             [f"{start:g}–{end:g}" for start, end in bins],
             rotation=35,
             ha="right",
         )
-        axis.set_title(anchor)
-        axis.set_xlabel("Months Relative to Anchor", labelpad=8)
+        axis.set_title(anchor, fontsize=14, pad=12)
+        axis.set_xlabel("Months Relative to Anchor", labelpad=8, fontsize=12)
+        axis.tick_params(axis="both", labelsize=10)
         axis.set_ylim(0, 100)
-        axis.grid(axis="y", alpha=0.25)
+        axis.grid(axis="y", alpha=0.25, zorder=1)
 
     full_timeline_axis = axes[2]
     full_heights = [
@@ -601,25 +654,38 @@ def plot_temporal_usage_comparison(
     )
     full_timeline_axis.set_xticks(np.arange(2))
     full_timeline_axis.set_xticklabels(["FA", "GI"])
-    full_timeline_axis.set_title("Full Timeline")
+    full_timeline_axis.set_title("Full Timeline", fontsize=14, pad=12)
     full_timeline_axis.set_ylim(0, 100)
-    full_timeline_axis.grid(axis="y", alpha=0.25)
-    _annotate_nonzero_percentages(
+    full_timeline_axis.tick_params(axis="both", labelsize=10)
+    full_timeline_axis.grid(axis="y", alpha=0.25, zorder=1)
+    _annotate_selected_percentages(
         full_timeline_axis,
         full_bars,
         full_heights,
+        _informative_annotation_indices(full_heights),
     )
+    for axis, label in zip(axes, ("(a)", "(b)", "(c)")):
+        axis.text(
+            -0.02,
+            1.02,
+            label,
+            transform=axis.transAxes,
+            ha="left",
+            va="bottom",
+            fontsize=14,
+            fontweight="bold",
+            clip_on=False,
+        )
 
     figure.text(
         0.014,
         0.51,
-        "Temporal split usage (%)",
+        "Temporal usage (%)",
         rotation="vertical",
         va="center",
+        fontsize=13,
     )
-    figure.suptitle("FA vs GI Temporal Usage Comparison", y=0.97, fontsize=16)
-    if subtitle:
-        figure.text(0.5, 0.925, subtitle, ha="center", fontsize=10)
+    figure.suptitle("Temporal Split Usage for FA and GI", y=0.97, fontsize=19)
     figure.legend(
         handles=[
             Patch(facecolor=outcome_colors[outcome], label=outcome)
@@ -629,17 +695,12 @@ def plot_temporal_usage_comparison(
         bbox_to_anchor=(0.5, 0.90),
         ncol=2,
         frameon=False,
-    )
-    figure.text(
-        0.5,
-        0.035,
-        f"Evaluated patients: {evaluated_patient_count}",
-        ha="center",
+        fontsize=12,
     )
     figure.subplots_adjust(
         left=0.07,
         right=0.985,
-        bottom=0.20,
+        bottom=0.23,
         top=0.82,
         wspace=0.16,
     )
