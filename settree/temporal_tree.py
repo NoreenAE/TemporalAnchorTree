@@ -1,6 +1,5 @@
 #%%
 import numpy as np
-from collections import defaultdict
 import math
 from numbers import Real
 from pandas import Timestamp
@@ -874,51 +873,6 @@ class TemporalTree(BaseEstimator):
         return root
 
 
-    def compute_feature_importances(self, normalize: bool = True):
-        """
-        Computes feature importances based on total impurity reduction across the tree.
-
-        Returns:
-            Dict[str, float]: Mapping from feature name to importance score (normalized if requested).
-        """
-        importances = defaultdict(float)
-
-        def _recurse(node):
-            if node is None or node.is_leaf():
-                return
-
-            # Retrieve impurity and number of samples for parent and children
-            parent_imp = node.impurity
-            n = node.num_patients
-
-            left = node.left
-            right = node.right
-
-            if left is None or right is None:
-                return
-
-            n_l = left.num_patients
-            n_r = right.num_patients
-            imp_l = getattr(left, 'impurity', 0)
-            imp_r = getattr(right, 'impurity', 0)
-
-            gain = (parent_imp * n) - (imp_l * n_l + imp_r * n_r)
-            importances[node.feature] += gain
-
-            _recurse(left)
-            _recurse(right)
-
-        _recurse(self.tree)
-
-        # Convert to dict and normalize
-        importances = dict(importances)
-
-        if normalize:
-            total = sum(importances.values())
-            if total > 0:
-                importances = {k: v / total for k, v in importances.items()}
-
-        return importances
 
 # here
     # def _traverse(self, X_set, node):
@@ -1004,35 +958,6 @@ class TemporalTree(BaseEstimator):
     #         return node.value if prob else node.value.argmax()
     #     return node.value, node.sn
 
-    # def compute_feature_importances(self, normalize=True):
-    #     """Computes the importance of each feature (aka variable)."""
-
-    #     def get_all_nodes(root, mem):
-    #         if isinstance(root.right, SetSplitNode) and isinstance(root.left, SetSplitNode):
-    #             mem.append(root)
-    #         if isinstance(root.right, SetSplitNode):
-    #             get_all_nodes(root.right, mem)
-    #         if isinstance(root.left, SetSplitNode):
-    #             get_all_nodes(root.left, mem)
-    #         return mem
-
-    #     importances = np.zeros((self.n_features,))
-    #     nodes = get_all_nodes(self.tree_, mem=[])
-    #     for split_node in nodes:
-    #             importances[split_node.feature] += (split_node.weighted_n_node_samples * split_node.impurity -
-    #                                                 split_node.left.weighted_n_node_samples * split_node.left.impurity -
-    #                                                 split_node.right.weighted_n_node_samples * split_node.right.impurity)
-
-    #     importances /= nodes[0].weighted_n_node_samples
-
-    #     if normalize:
-    #         normalizer = np.sum(importances)
-
-    #         if normalizer > 0.0:
-    #             # Avoid dividing by zero (e.g., when root is pure)
-    #             importances /= normalizer
-
-    #     return importances
 
     def _get_leaf_id(self, row: pd.DataFrame, node) -> int:
         """Returns the unique ID (sn) of the leaf node reached by the patient."""

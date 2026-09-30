@@ -351,35 +351,6 @@ class SetTree(BaseEstimator):
             return node.value if prob else node.value.argmax()
         return node.value, node.sn
 
-    def compute_feature_importances(self, normalize=True):
-        """Computes the importance of each feature (aka variable)."""
-
-        def get_all_nodes(root, mem):
-            if isinstance(root.right, SetSplitNode) and isinstance(root.left, SetSplitNode):
-                mem.append(root)
-            if isinstance(root.right, SetSplitNode):
-                get_all_nodes(root.right, mem)
-            if isinstance(root.left, SetSplitNode):
-                get_all_nodes(root.left, mem)
-            return mem
-
-        importances = np.zeros((self.n_features,))
-        nodes = get_all_nodes(self.tree_, mem=[])
-        for split_node in nodes:
-                importances[split_node.feature] += (split_node.weighted_n_node_samples * split_node.impurity -
-                                                    split_node.left.weighted_n_node_samples * split_node.left.impurity -
-                                                    split_node.right.weighted_n_node_samples * split_node.right.impurity)
-
-        importances /= nodes[0].weighted_n_node_samples
-
-        if normalize:
-            normalizer = np.sum(importances)
-
-            if normalizer > 0.0:
-                # Avoid dividing by zero (e.g., when root is pure)
-                importances /= normalizer
-
-        return importances
 
 
     def predict(self, X_set):
