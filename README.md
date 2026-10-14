@@ -117,6 +117,55 @@ model, call
 This helper reads only the two `tree.json` files and writes only the three PNGs.
 It rejects incomplete child links, cycles, and unreachable nodes.
 
+## Final Experiment 2 temporal-reference explainability
+
+After Dynamic ON saves its tree, predictions, and anchor trace, the noisy
+matched V2 runner automatically compares temporal-reference usage before/at
+versus after FishIntroduction anchor creation. It uses only anchor-created
+held-out TEST patients, without loading or invoking a trained model.
+Experiment 1 and Experiment 2.1 remain unaffected. Post-processing failures
+issue an explicit warning while retaining scientific outputs and allowing the
+ON/OFF workflow to continue.
+
+To reconstruct the current final saved result with its independent audit checks:
+
+```bash
+python -B -m experiments.experiment_2_temporal_explainability --verify-current
+```
+
+For another completed noisy matched V2 run, use `--results PATH` without
+`--verify-current`. Output directories must be new; `--output` can select a
+new destination. The default is `dynamic_on/temporal_explainability_transition/`
+inside the result directory, containing:
+
+- `temporal_reference_transition.png` (300 DPI) and `.pdf` (vector).
+- `temporal_reference_transition.csv`: stage, source-reference category, visit
+  count, stage denominator, population size, and percentage.
+- `temporal_reference_transition_audit.json`: source hashes, creation boundaries,
+  every included visit's stage assignment, and patient-level diagnostics.
+
+The same anchor-created TEST population is used in both panels. Each patient's
+first saved nonempty FishIntroduction-derived anchor creation defines the
+boundary in **tree traversal order**, not clinical time. The creating split is
+included in BEFORE/AT creation and excluded from AFTER creation. Later creations
+are recorded in the audit and do not reset the boundary.
+
+Each patient–split visit contributes exactly once, classified by its window's
+source reference rather than the split feature. Each panel divides by **all
+split visits in its own stage**, so mutually exclusive reference percentages
+sum to 100%. Empty-event and unavailable-window evaluations still count as
+visited references; availability is audited separately. An empty AFTER stage
+has undefined percentages and is explicitly labelled as having no downstream
+visits. The primary metric is visits, while patient coverage and combinations
+of post-anchor references are secondary diagnostics. Additional references are
+reported and plotted explicitly rather than discarded. Full Timeline remains
+as a zero category when unused to support the direct before/after comparison.
+
+All population sizes, creation positions, categories, counts, and percentages
+are reconstructed dynamically. No model configuration or scientific evaluation
+is changed. Earlier histogram/progression outputs remain in their original
+folders, and their calculation helpers remain available for reproducibility.
+
 ## Citation
 If you use Set-Tree in your work, please cite:
 ```

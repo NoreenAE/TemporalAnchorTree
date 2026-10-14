@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "patients": 5000,
+  "blocks": 500,
+  "observations": 128645,
+  "marginal_history_mismatches": 0,
+  "joint_nonfish_history_mismatches": 0,
+  "documentation_nonfish_history_mismatches": 0,
+  "version": "fish_intro_noisy_matched_v2",
+  "config": {
+    "seed": 42,
+    "blocks": 500,
+    "test_fraction": 0.3,
+    "gi_mean": 5.0,
+    "vomiting_mean": 3.0,
+    "fish_min_months": 6,
+    "fish_max_months": 24,
+    "candidate_times": 256,
+    "max_attempts_per_block": 100,
+    "cough_episode_mean": 3.0,
+    "sleep_episode_mean": 2.0,
+    "cluster_probability": 0.4,
+    "cluster_max_extra": 2,
+    "cluster_max_days": 3,
+    "doctor_visit_mean": 2.0,
+    "minor_injury_mean": 0.5,
+    "vaccination_months": [
+      2,
+      4,
+      6,
+      12,
+      18,
+      24
+    ],
+    "vaccination_probability": 0.85,
+    "vaccination_jitter_days": 10
+  },
+  "split_provenance": {
+    "source": "/mnt/drive1/home/noreena/TemporalDecisionTree_clean/experiments/results/experiment_2_noisy_matched_v2",
+    "source_sha256": {
+      "observations.csv": "c6cbaf03efff12425c3c60541b9b2334f2c4c473c6aea8253c5a455a5c5c4c2c",
+      "patients_and_split.csv": "79f07324bde1476d57f3cd157d0fa4505c6a2a806ef69df6e961f28fe5731b28",
+      "validation.json": "ef0274a80629a37798763d2340a952c5f0119b8e37d8d0c63d193db629c3b459",
+      "descriptive_audit.json": "a1eb7a8b650a952b9b2430556a50578e4bb9106bb3bfa8d994f9b3cbdd938d50",
+      "manifest.json": "6e217858128552a143e48937c80209a4c403270c4f89670a662d6e06b90da704"
+    },
+    "script_sha256": "05a8b3c32541273782147208be7059a25f539e293bbf5b77a126cfddf4b57e03",
+    "changed_fields": [
+      "partition"
+    ],
+    "split_rng": "SeedSequence(seed=42).spawn(6)[4]; choice without replacement",
+    "train_children": 3500,
+    "test_children": 1500,
+    "original_test_blocks_retained": 35
+  }
+}

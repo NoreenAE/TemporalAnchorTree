@@ -1,0 +1,99 @@
+{
+  "saved_run": "experiments/results/experiment_2_noisy_matched_v2",
+  "model": "Dynamic Anchoring ON",
+  "source_sha256": {
+    "observations.csv": "c6cbaf03efff12425c3c60541b9b2334f2c4c473c6aea8253c5a455a5c5c4c2c",
+    "patients_and_split.csv": "79f07324bde1476d57f3cd157d0fa4505c6a2a806ef69df6e961f28fe5731b28",
+    "manifest.json": "6e217858128552a143e48937c80209a4c403270c4f89670a662d6e06b90da704",
+    "dynamic_on/patient_predictions.csv": "a4ad2bd739f9bab53c0f8235f228b0a1f870dd067c4ab1c29099c8d5c068e054",
+    "dynamic_on/tree.json": "66191deecd0a00d1a13612d485bc83e3150760b77243d20e044c712fb43f17a9",
+    "anchor_usage_test_creations.csv": "3d1703517d0669c770e4a8babf5f54dd8be84b6fb06563eb739cc07d41757294",
+    "anchor_usage_test_windows.csv": "36b41e1b9f78b441f21814d29ebcc5207285379ccd64483e968242a2c23608c7"
+  },
+  "visualization_script_sha256": "c3abff662463f218faf9439242ad256fc28c7363b05f0c75290a50527ad7087a",
+  "selection_rule": "Smallest patient_id in each TEST, documented, fish-anchor-created label/symptom category; saved available windows validated afterwards. No scores, correctness, or visual criteria used.",
+  "eligible_candidate_counts": {
+    "1": 338,
+    "0": 337
+  },
+  "symptom_window_rule": "FishIntroduction < event <= FishIntroduction + DateOffset(months=1)",
+  "age_coordinates": "Linear interpolation between birth + DateOffset(months=m) ticks; window endpoints transformed independently from exact timestamps.",
+  "validation_passed": true,
+  "model_loaded": false,
+  "model_trained_or_refit": false,
+  "predictions_recomputed": false,
+  "patients": [
+    {
+      "patient_id": "N0006_04",
+      "partition": "test",
+      "true_FA": 1,
+      "saved_dynamic_on_prediction_probability": 0.9157088122605364,
+      "fish_introduction_timestamp": "2011-05-01T03:59:20",
+      "window_end_timestamp": "2011-06-01T03:59:20",
+      "fish_anchor_created": true,
+      "fish_anchor_available": true,
+      "qualifying_GI_events": [],
+      "qualifying_Vomiting_events": [
+        "2011-05-04T00:44:05"
+      ],
+      "saved_symptom_window_visits": [
+        {
+          "node_id": 1,
+          "feature": "GI",
+          "aggregation": "sum",
+          "threshold": 3.0,
+          "direction": "right",
+          "eligible_symptom_count": 0,
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor"
+        },
+        {
+          "node_id": 5,
+          "feature": "Vomiting",
+          "aggregation": "sum",
+          "threshold": 2.0,
+          "direction": "left",
+          "eligible_symptom_count": 1,
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor"
+        }
+      ],
+      "reason": "Documented introduction and saved created/available fish anchor; FA=1; 1 qualifying GI/Vomiting event(s)."
+    },
+    {
+      "patient_id": "N0006_01",
+      "partition": "test",
+      "true_FA": 0,
+      "saved_dynamic_on_prediction_probability": 0.051336146272855133,
+      "fish_introduction_timestamp": "2011-08-13T00:42:19",
+      "window_end_timestamp": "2011-09-13T00:42:19",
+      "fish_anchor_created": true,
+      "fish_anchor_available": true,
+      "qualifying_GI_events": [],
+      "qualifying_Vomiting_events": [],
+      "saved_symptom_window_visits": [
+        {
+          "node_id": 1,
+          "feature": "GI",
+          "aggregation": "sum",
+          "threshold": 3.0,
+          "direction": "right",
+          "eligible_symptom_count": 0,
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor"
+        },
+        {
+          "node_id": 5,
+          "feature": "Vomiting",
+          "aggregation": "sum",
+          "threshold": 2.0,
+          "direction": "right",
+          "eligible_symptom_count": 0,
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor"
+        }
+      ],
+      "reason": "Documented introduction and saved created/available fish anchor; FA=0; 0 qualifying GI/Vomiting event(s)."
+    }
+  ],
+  "classification_threshold": null,
+  "classification_threshold_defined": false,
+  "classification_threshold_applied": false,
+  "score_interpretation": "Experiment 2 evaluated continuous model scores; it did not define or apply a classification threshold or produce predicted FA class labels. Scores are rounded to three decimals only in the figure titles."
+}

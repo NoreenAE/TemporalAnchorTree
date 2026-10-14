@@ -1,6 +1,10 @@
 """Run the saved noisy V2 benchmark using the unchanged Experiment 2 ON/OFF code.
 
 Dataset generation is separate. Importing this module never trains or predicts.
+After Dynamic ON saves its artifacts, downstream-only temporal-reference usage
+before/at and after fish-anchor creation is plotted for anchor-created TEST patients.
+Post-processing failures are reported
+without interrupting the scientific ON/OFF runs or changing their results.
 """
 from __future__ import annotations
 
@@ -11,6 +15,7 @@ import json
 from pathlib import Path
 import shutil
 import sys
+import warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -108,12 +113,15 @@ def main() -> None:
     sources = (Path(__file__), ROOT / "generate_fish_intro_noisy_v2.py",
                ROOT / "experiments/experiment_2_fish_introduction_dynamic_anchors.py",
                ROOT / "experiments/experiment_2_outputs.py",
+               ROOT / "experiments/experiment_2_temporal_explainability.py",
                ROOT / "settree/temporal_tree.py", ROOT / "settree/anchor_utils.py")
     write_json(args.output / "configuration.json", dict(
         dataset_version=VERSION, parameters=parameters, aggregations=list(MODEL_CONFIG["aggregation_funcs"]),
         runs=MODEL_RUNS, dataset_directory=str(args.data_dir.resolve()),
         dataset_config=validation["config"],
-        split="80/20 blocks by default; both runs use identical saved assignments",
+        split=(f"{100 * (1 - validation['config'].get('test_fraction', .2)):.0f}/"
+               f"{100 * validation['config'].get('test_fraction', .2):.0f} blocks; "
+               "both runs use identical saved assignments"),
         sha256={str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in sources},
     ))
@@ -125,6 +133,21 @@ def main() -> None:
             run["USE_DYNAMIC_ANCHORS"], data, patients, output,
             model_config=MODEL_CONFIG,
         )
+        if run["name"] == "dynamic_on":
+            # Only this final-experiment runner owns the new post-processing.
+            # The shared run_model and Experiment 2.1 remain unaffected.
+            try:
+                from experiments.experiment_2_temporal_explainability import (
+                    save_temporal_reference_usage,
+                )
+                save_temporal_reference_usage(args.output)
+            except Exception as error:
+                warnings.warn(
+                    "Dynamic ON temporal-reference visualization failed; "
+                    f"saved scientific results are retained: {error}",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
     write_json(args.output / "comparison.json", results)
     save_experiment_outputs(args.output)
 

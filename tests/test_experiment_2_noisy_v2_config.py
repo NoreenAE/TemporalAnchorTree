@@ -60,6 +60,8 @@ def test_changes_reach_actual_model_before_fit(monkeypatch, tmp_path, name, valu
 
 
 def test_v2_main_passes_local_configuration_and_same_cohort(monkeypatch, tmp_path):
+    from experiments import experiment_2_temporal_explainability as explainability
+
     source = tmp_path / 'input'
     source.mkdir()
     for name in v2.DATASET_FILES:
@@ -80,6 +82,8 @@ def test_v2_main_passes_local_configuration_and_same_cohort(monkeypatch, tmp_pat
 
     monkeypatch.setattr(v2, 'run_model', record)
     monkeypatch.setattr(v2, 'save_experiment_outputs', lambda path: None)
+    monkeypatch.setattr(explainability, 'save_temporal_reference_usage',
+                        lambda path: None)
     output = tmp_path / 'results'
     monkeypatch.setattr('sys.argv', ['runner', '--data-dir', str(source),
                                     '--output', str(output)])
