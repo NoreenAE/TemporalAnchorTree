@@ -1,0 +1,122 @@
+{
+  "absolute_tolerance": 1e-12,
+  "relative_tolerance": 0,
+  "runs": {
+    "dynamic_on": {
+      "configuration": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "predictions": {
+        "patient_ids_equal": true,
+        "patient_order_equal": true,
+        "metadata_and_anchor_flags_equal": true,
+        "n": 5000,
+        "exact_score_matches": 5000,
+        "scores_beyond_tolerance": 0,
+        "max_absolute_score_difference": 0.0,
+        "passed": true
+      },
+      "metrics": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "tree": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "anchor_trace": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "fit_runtime_seconds": {
+        "original": 267.1762319980189,
+        "reproduced": 282.4898869115859
+      },
+      "diagnostics": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "auc": {
+        "test_overall": {
+          "original": 0.9170627012110992,
+          "reproduced": 0.9170627012110992
+        },
+        "test_documented": {
+          "original": 0.9315857896447411,
+          "reproduced": 0.9315857896447411
+        }
+      },
+      "passed": true
+    },
+    "dynamic_off": {
+      "configuration": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "predictions": {
+        "patient_ids_equal": true,
+        "patient_order_equal": true,
+        "metadata_and_anchor_flags_equal": true,
+        "n": 5000,
+        "exact_score_matches": 5000,
+        "scores_beyond_tolerance": 0,
+        "max_absolute_score_difference": 0.0,
+        "passed": true
+      },
+      "metrics": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "tree": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "anchor_trace": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "fit_runtime_seconds": {
+        "original": 79.1367705417797,
+        "reproduced": 86.45339559949934
+      },
+      "diagnostics": {
+        "exact_equal": true,
+        "within_tolerance": true,
+        "differences_beyond_tolerance": 0,
+        "examples": []
+      },
+      "auc": {
+        "test_overall": {
+          "original": 0.6646543830354961,
+          "reproduced": 0.6646543830354961
+        },
+        "test_documented": {
+          "original": 0.5261319032975825,
+          "reproduced": 0.5261319032975825
+        }
+      },
+      "passed": true
+    }
+  },
+  "passed": true,
+  "input_hashes_unchanged": true
+}

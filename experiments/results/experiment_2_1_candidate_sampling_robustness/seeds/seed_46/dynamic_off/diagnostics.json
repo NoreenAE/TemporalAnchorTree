@@ -1,0 +1,251 @@
+{
+  "training_runtime_seconds": 84.70447495020926,
+  "training_runtime_scope": "model.fit including training-anchor capture; excludes prediction audit",
+  "selected_features": [
+    "DoctorVisit",
+    "FishIntroduction",
+    "SleepDisturbance",
+    "Vomiting"
+  ],
+  "selected_feature_split_counts": {
+    "DoctorVisit": 1,
+    "FishIntroduction": 3,
+    "SleepDisturbance": 1,
+    "Vomiting": 2
+  },
+  "distractor_split_counts": {
+    "MinorInjury": 0,
+    "Cough": 0,
+    "RoutineVaccination": 0,
+    "SleepDisturbance": 1,
+    "DoctorVisit": 1
+  },
+  "distractor_splits": [
+    {
+      "node_id": 9,
+      "depth": 2,
+      "patients": 134,
+      "type": "split",
+      "feature": "DoctorVisit",
+      "aggregation": "sum",
+      "window": [
+        "Birth Date Anchor",
+        13
+      ],
+      "threshold": 2.0,
+      "missing_direction": "right",
+      "available_anchors": [
+        "Birth Date Anchor"
+      ],
+      "left": 10,
+      "right": 11,
+      "source_node_id": 5,
+      "is_distractor_split": true
+    },
+    {
+      "node_id": 12,
+      "depth": 2,
+      "patients": 666,
+      "type": "split",
+      "feature": "SleepDisturbance",
+      "aggregation": "sum",
+      "window": [
+        "Birth Date Anchor",
+        18
+      ],
+      "threshold": 2.0,
+      "missing_direction": "right",
+      "available_anchors": [
+        "Birth Date Anchor"
+      ],
+      "left": 13,
+      "right": 14,
+      "source_node_id": 6,
+      "is_distractor_split": true
+    }
+  ],
+  "mechanism_checks_passed": true,
+  "audit_failures": [],
+  "audited_split_visits": 15000,
+  "coverage": {
+    "train": {
+      "documented_patients": 3200,
+      "fish_anchor_created": 0,
+      "fish_anchor_coverage": 0.0,
+      "available_fish_anchor_used": 0
+    },
+    "test": {
+      "documented_patients": 800,
+      "fish_anchor_created": 0,
+      "fish_anchor_coverage": 0.0,
+      "available_fish_anchor_used": 0
+    }
+  },
+  "fish_anchor_creation_by_branch": {
+    "left": 0,
+    "right": 0
+  },
+  "symptom_nodes_using_fish_anchor": [],
+  "metrics": {
+    "test_overall": {
+      "n": 1000,
+      "FA_cases": 407,
+      "roc_auc": 0.6554499463437069,
+      "brier": 0.20933251450006896,
+      "mean_prediction": 0.39409814275214927,
+      "prevalence": 0.407,
+      "calibration": [
+        {
+          "lower": 0.0,
+          "upper": 0.1,
+          "n": 183,
+          "mean_prediction": 0.051312136318913064,
+          "observed_FA": 0.04918032786885246
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.2,
+          "n": 17,
+          "mean_prediction": 0.18421052631578946,
+          "observed_FA": 0.0
+        },
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 44,
+          "mean_prediction": 0.39726027397260266,
+          "observed_FA": 0.38636363636363635
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 756,
+          "mean_prediction": 0.48160977619527146,
+          "observed_FA": 0.503968253968254
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.6,
+          "upper": 0.7,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.7,
+          "upper": 0.8,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.9,
+          "upper": 1.0,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        }
+      ]
+    },
+    "test_documented": {
+      "n": 800,
+      "FA_cases": 398,
+      "roc_auc": 0.508350208755219,
+      "brier": 0.2501376175759395,
+      "mean_prediction": 0.47697055357302476,
+      "prevalence": 0.4975,
+      "calibration": [
+        {
+          "lower": 0.0,
+          "upper": 0.1,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.2,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "n": 44,
+          "mean_prediction": 0.39726027397260266,
+          "observed_FA": 0.38636363636363635
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "n": 756,
+          "mean_prediction": 0.48160977619527146,
+          "observed_FA": 0.503968253968254
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.6,
+          "upper": 0.7,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.7,
+          "upper": 0.8,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        },
+        {
+          "lower": 0.9,
+          "upper": 1.0,
+          "n": 0,
+          "mean_prediction": null,
+          "observed_FA": null
+        }
+      ]
+    }
+  }
+}

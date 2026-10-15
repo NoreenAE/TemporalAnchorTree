@@ -1,0 +1,17 @@
+{
+  "seed": 44,
+  "run": "dynamic_off",
+  "protocol_sha256": "d0d44c2e834136667b253da8dadd21cec876d4de1120ceb8eda40246508957fe",
+  "artifact_sha256": {
+    "effective_configuration.json": "3c457f6ad1fe02b69d184ac056cea569d336701fd33207b2b3cd859e355f9555",
+    "patient_predictions.csv": "974f6b4a44d594b9f5c82f66208a0a71c953d9cedc24564fb5b27e62a3632baf",
+    "metrics.json": "d11c3294757a72c6c21e19399627f9bdac86e4a091083beea44dfd6cea35763d",
+    "tree.json": "8380359b6d9f3aab9d0666259878edc2cce2c19a66d88eb46fed463ed1b81e74",
+    "tree.txt": "1a0d54af41b40853d1681fff0ae8fd2b14e2ac1086bcc95f063ee8b3e2d510f1",
+    "anchor_trace.json": "44a5ec00fb746ba70a90ebb58d9b35bb09845b8155d6b7400365b519bcd71762",
+    "diagnostics.json": "d413e8d6b067bef36cc9742474c08e59606c281e3ce9ed3f864f994e6f01114d",
+    "model.pkl": "825be7fb2e3850d9c11e5963703dc29d250202817e52e8e3d0d7fd1236e2845b"
+  },
+  "completed_utc": "2026-09-30T15:53:28.677307+00:00",
+  "total_runtime_seconds": 182.89913463406265
+}

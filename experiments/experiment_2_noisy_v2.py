@@ -13,7 +13,6 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
-import shutil
 import sys
 import warnings
 
@@ -31,6 +30,7 @@ from experiments.experiment_2_fish_introduction_dynamic_anchors import (
     run_model, write_json,
 )
 from experiments.experiment_2_outputs import save_experiment_outputs
+from experiments.experiment_utils import dataset_directory
 
 # Experiment 2 V2 configuration: edit experiment settings here.
 # Partitions and labels come from the saved dataset; no new split is sampled.
@@ -75,7 +75,7 @@ DATASET_FILES = ("observations.csv", "patients_and_split.csv", "validation.json"
 
 def load_dataset(directory: Path) -> tuple:
     """Load one immutable cohort for both switches; validate schema and truth."""
-    directory = Path(directory)
+    directory = dataset_directory(Path(directory))
     validation = json.loads((directory / "validation.json").read_text())
     if validation.get("version") != VERSION:
         raise ValueError("Expected noisy matched V2 data, not a historical renamed dataset")
@@ -106,18 +106,21 @@ def main() -> None:
         parser.error("Output exists; select a new directory")
     data, patients, validation = load_dataset(args.data_dir)
     args.output.mkdir(parents=True, exist_ok=False)
-    for name in DATASET_FILES:
-        shutil.copyfile(args.data_dir / name, args.output / name)
     parameters = deepcopy(MODEL_CONFIG)
     parameters.pop("aggregation_funcs")
     sources = (Path(__file__), ROOT / "generate_fish_intro_noisy_v2.py",
+               ROOT / "project_paths.py",
+               ROOT / "experiments/experiment_utils.py",
                ROOT / "experiments/experiment_2_fish_introduction_dynamic_anchors.py",
                ROOT / "experiments/experiment_2_outputs.py",
                ROOT / "experiments/experiment_2_temporal_explainability.py",
-               ROOT / "settree/temporal_tree.py", ROOT / "settree/anchor_utils.py")
+               ROOT / "experiments/experiment_2_anchor_transition.py",
+               ROOT / "TAT/temporal_tree.py", ROOT / "TAT/anchor_utils.py",
+               ROOT / "TAT/__init__.py", ROOT / "TAT/temporal_tree_ensemble.py",
+               ROOT / "TAT/eval_utils.py", ROOT / "TAT/temporal_explainability.py")
     write_json(args.output / "configuration.json", dict(
         dataset_version=VERSION, parameters=parameters, aggregations=list(MODEL_CONFIG["aggregation_funcs"]),
-        runs=MODEL_RUNS, dataset_directory=str(args.data_dir.resolve()),
+        runs=MODEL_RUNS, dataset_directory=str(dataset_directory(args.data_dir).resolve()),
         dataset_config=validation["config"],
         split=(f"{100 * (1 - validation['config'].get('test_fraction', .2)):.0f}/"
                f"{100 * validation['config'].get('test_fraction', .2):.0f} blocks; "

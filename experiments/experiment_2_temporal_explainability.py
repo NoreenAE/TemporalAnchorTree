@@ -22,10 +22,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from settree.temporal_explainability import (
+from TAT.temporal_explainability import (
     PATH_TABLE_COLUMNS, aggregate_temporal_usage,
     calculate_temporal_usage_percentages, derive_monthly_bin_edges,
 )
+from experiments.experiment_utils import artifact_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RESULTS = ROOT / "experiments/results/experiment_2_noisy_matched_v2"
@@ -54,14 +55,14 @@ def read_json(path: Path):
 def load_test_visits(results: Path, *, allow_other: bool = False
                      ) -> tuple[list[dict], dict, int]:
     """Verify complete saved TEST paths and classify window source anchors."""
-    missing = [str(results / name) for name in INPUTS
-               if not (results / name).is_file()]
+    missing = [str(artifact_path(results, name)) for name in INPUTS
+               if not artifact_path(results, name).is_file()]
     if missing:
         raise FileNotFoundError("Missing saved artifacts:\n" + "\n".join(missing))
     configuration = read_json(results / "configuration.json")
     require(configuration["dataset_version"] == "fish_intro_noisy_matched_v2",
             "Expected the final noisy matched V2 experiment")
-    patients = pd.read_csv(results / "patients_and_split.csv",
+    patients = pd.read_csv(artifact_path(results, "patients_and_split.csv"),
                            dtype={"patient_id": str})
     predictions = pd.read_csv(
         results / "dynamic_on/patient_predictions.csv",

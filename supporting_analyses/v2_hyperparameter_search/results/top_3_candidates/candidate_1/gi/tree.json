@@ -1,0 +1,149 @@
+[
+  {
+    "aggregation": "sum",
+    "anchor": "NOW Anchor",
+    "depth": 0,
+    "feature": "VomitingYN",
+    "left_child": 1,
+    "node_id": 0,
+    "num_patients": 3500,
+    "offset": -1,
+    "right_child": 8,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "aggregation": "max",
+    "anchor": "NOW Anchor",
+    "depth": 1,
+    "feature": "DiarrheaYN",
+    "left_child": 2,
+    "node_id": 1,
+    "num_patients": 2699,
+    "offset": -1,
+    "right_child": 5,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "GISymptomYN",
+    "left_child": 3,
+    "node_id": 2,
+    "num_patients": 1935,
+    "offset": -1,
+    "right_child": 4,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 3,
+    "num_patients": 1345,
+    "prediction": 0.04981412639405204,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 4,
+    "num_patients": 590,
+    "prediction": 0.1,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "Birth Date Anchor",
+    "depth": 2,
+    "feature": "WeightKg",
+    "left_child": 6,
+    "node_id": 5,
+    "num_patients": 764,
+    "offset": 5,
+    "right_child": 7,
+    "threshold": 11.68,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 6,
+    "num_patients": 20,
+    "prediction": 0.5,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 7,
+    "num_patients": 744,
+    "prediction": 0.1532258064516129,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 1,
+    "feature": "WeightKg",
+    "left_child": 9,
+    "node_id": 8,
+    "num_patients": 801,
+    "offset": -18,
+    "right_child": 12,
+    "threshold": 9.524999999999999,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "depth": 2,
+    "feature": "WeightKg",
+    "left_child": 10,
+    "node_id": 9,
+    "num_patients": 715,
+    "offset": 0.7,
+    "right_child": 11,
+    "threshold": 3.52,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 10,
+    "num_patients": 521,
+    "prediction": 0.236084452975048,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 11,
+    "num_patients": 194,
+    "prediction": 0.09278350515463918,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": null,
+    "depth": 2,
+    "feature": "FoodExposureYN",
+    "left_child": 13,
+    "node_id": 12,
+    "num_patients": 86,
+    "offset": null,
+    "right_child": 14,
+    "threshold": 0.6730769230769231,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 13,
+    "num_patients": 47,
+    "prediction": 0.2127659574468085,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 14,
+    "num_patients": 39,
+    "prediction": 0.6153846153846154,
+    "type": "leaf"
+  }
+]

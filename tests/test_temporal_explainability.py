@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from settree.temporal_explainability import (
+from TAT.temporal_explainability import (
     PATH_TABLE_COLUMNS,
     aggregate_temporal_usage,
     calculate_temporal_usage_percentages,
@@ -15,8 +15,8 @@ from settree.temporal_explainability import (
     run_temporal_explainability,
     trace_temporal_decision_paths,
 )
-from settree.temporal_tree import TemporalLeaf, TemporalSplitNode, TemporalTree
-from settree.temporal_tree_ensemble import TemporalTreeEnsemble
+from TAT.temporal_tree import TemporalLeaf, TemporalSplitNode, TemporalTree
+from TAT.temporal_tree_ensemble import TemporalTreeEnsemble
 
 
 BIN_EDGES = {
@@ -241,6 +241,22 @@ def test_load_and_plot_comparison_use_saved_aggregate_artifacts(tmp_path):
             "full_timeline_usages": 2,
         },
     }
+    # The comparison highlights complete monthly ground-truth regions. Fill
+    # unused bins with zeros, as aggregate_temporal_usage does for real exports.
+    monthly_bins = pd.MultiIndex.from_tuples(
+        [
+            (anchor, float(start), float(end))
+            for anchor, edges in BIN_EDGES.items()
+            for start, end in zip(edges[:-1], edges[1:])
+        ],
+        names=["anchor", "bin_start_offset", "bin_end_offset"],
+    )
+    for outcome, table in usage_tables.items():
+        usage_tables[outcome] = (
+            table.set_index(monthly_bins.names)
+            .reindex(monthly_bins, fill_value=0)
+            .reset_index()
+        )
     loaded = {}
     for outcome in ("fa", "gi"):
         directory = tmp_path / outcome
@@ -254,6 +270,9 @@ def test_load_and_plot_comparison_use_saved_aggregate_artifacts(tmp_path):
             encoding="utf-8",
         )
         loaded[outcome] = load_temporal_usage_artifacts(directory)
+        pd.testing.assert_frame_equal(
+            loaded[outcome]["usage_table"], usage_tables[outcome]
+        )
 
     output_path = plot_temporal_usage_comparison(
         loaded,

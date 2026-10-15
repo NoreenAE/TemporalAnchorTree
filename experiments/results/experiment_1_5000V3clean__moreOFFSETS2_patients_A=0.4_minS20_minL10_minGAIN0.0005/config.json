@@ -1,0 +1,229 @@
+{
+  "aggregations": [
+    "mean",
+    "sum",
+    "max",
+    "count"
+  ],
+  "anchor_offset_map": {
+    "Birth Date Anchor": [
+      null,
+      0.7,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      12,
+      18
+    ],
+    "NOW Anchor": [
+      null,
+      -1,
+      -2,
+      -3,
+      -4,
+      -5,
+      -6,
+      -12,
+      -18
+    ]
+  },
+  "candidate_sampling_rate": 0.4,
+  "decision_threshold": 0.5,
+  "description": "Final Experiment 1 with candidate_sampling_rate=0.4; all other training and evaluation settings are preserved.",
+  "effective_candidate_windows": [
+    [
+      null,
+      null
+    ],
+    [
+      "Birth Date Anchor",
+      0.7
+    ],
+    [
+      "Birth Date Anchor",
+      1
+    ],
+    [
+      "Birth Date Anchor",
+      2
+    ],
+    [
+      "Birth Date Anchor",
+      3
+    ],
+    [
+      "Birth Date Anchor",
+      4
+    ],
+    [
+      "Birth Date Anchor",
+      5
+    ],
+    [
+      "Birth Date Anchor",
+      6
+    ],
+    [
+      "Birth Date Anchor",
+      12
+    ],
+    [
+      "Birth Date Anchor",
+      18
+    ],
+    [
+      "NOW Anchor",
+      -1
+    ],
+    [
+      "NOW Anchor",
+      -2
+    ],
+    [
+      "NOW Anchor",
+      -3
+    ],
+    [
+      "NOW Anchor",
+      -4
+    ],
+    [
+      "NOW Anchor",
+      -5
+    ],
+    [
+      "NOW Anchor",
+      -6
+    ],
+    [
+      "NOW Anchor",
+      -12
+    ],
+    [
+      "NOW Anchor",
+      -18
+    ]
+  ],
+  "effective_full_timeline_window_count": 1,
+  "experiment_name": "finding_best_A_for_exp_1_A_0.4",
+  "input_paths": {
+    "fa": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_fa_labels_5000.pkl",
+    "gi": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_gi_labels_5000.pkl",
+    "x": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_5000.pkl"
+  },
+  "input_sha256": {
+    "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+    "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+    "x": "f8f1aefb02c6ccb64d0ce5e94eca76fd8922153c931472d95d15a5a1dc82b1e9"
+  },
+  "min_impurity_decrease": 0.0005,
+  "model_hyperparameters": {
+    "anchor_offset_list": [
+      null
+    ],
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        null,
+        0.7,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        18
+      ],
+      "NOW Anchor": [
+        null,
+        -1,
+        -2,
+        -3,
+        -4,
+        -5,
+        -6,
+        -12,
+        -18
+      ]
+    },
+    "anchors_list": [
+      "Birth Date Anchor",
+      "NOW Anchor"
+    ],
+    "candidate_sampling_rate": 0.4,
+    "criterion": "mse",
+    "is_classification": false,
+    "learn_missing_direction": false,
+    "max_depth": 3,
+    "min_impurity_decrease": 0.0005,
+    "min_samples_leaf": 10,
+    "min_samples_split": 20,
+    "random_state": 42,
+    "split_sampling_seed": 42,
+    "use_dynamic_anchors": false,
+    "verbose": 1
+  },
+  "outcomes": {
+    "fa": {
+      "label_path": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_fa_labels_5000.pkl",
+      "true_region": "Birth Date Anchor: 0 to +6 calendar months"
+    },
+    "gi": {
+      "label_path": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_gi_labels_5000.pkl",
+      "true_region": "NOW Anchor: -1 calendar month to NOW"
+    }
+  },
+  "output_directory": "experiments/results/finding_best_A_for_exp_1/A_0.4",
+  "random_state": 42,
+  "split_sampling_seed": 42,
+  "split_strategy": "one joint-stratified FA/GI patient split",
+  "temporal_explainability_bin_edges": {
+    "Birth Date Anchor": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "NOW Anchor": [
+      -18,
+      -17,
+      -16,
+      -15,
+      -14,
+      -13,
+      -12,
+      -11,
+      -10,
+      -9,
+      -8,
+      -7,
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0
+    ]
+  },
+  "test_size": 0.3,
+  "use_dynamic_anchors": false
+}

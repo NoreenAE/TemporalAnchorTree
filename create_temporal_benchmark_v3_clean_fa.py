@@ -1,4 +1,9 @@
-"""Derive a label-independent distractor permutation from V2, without training."""
+"""Generate final Experiment 1 V3 Clean FA data, without training a model.
+
+The unchanged longitudinal/FA/GI components live in generators/. Intermediate
+artifacts are staged temporarily; no historical dataset directory is required.
+An explicit --source-dir may instead reuse compatible existing base artifacts.
+"""
 from __future__ import annotations
 
 import argparse
@@ -12,9 +17,10 @@ import numpy as np
 import pandas as pd
 from scipy.stats import rankdata
 
-SOURCE = Path("data/temporal_benchmark_v2")
-OLD_V3 = Path("data/temporal_benchmark_v3")
-OUTPUT = Path("data/temporal_benchmark_v3_clean_fa")
+from project_paths import portable_metadata
+
+ROOT = Path(__file__).resolve().parent
+OUTPUT = ROOT / "data/temporal_benchmark_v3_clean_fa"
 X_NAME = "temporal_benchmark_5000.pkl"
 SEED = 20260909
 PROTECTED = (
@@ -346,22 +352,38 @@ def validate(source: pd.DataFrame, result: pd.DataFrame) -> dict:
 
 
 def create(
-    source: Path = SOURCE, output: Path = OUTPUT, old_v3: Path = OLD_V3
+    source: Path | None = None, output: Path = OUTPUT, old_v3: Path | None = None
 ) -> dict:
-    """Build in a staging directory, preserving source artifacts and old V3."""
-    source, output, old_v3 = (
-        source.resolve(),
-        output.resolve(),
-        old_v3.resolve(),
-    )
+    """Generate from scratch, or transform explicitly supplied base artifacts.
+
+    An optional old_v3 directory is snapshotted only for historical audits;
+    neither it nor a saved intermediate dataset is required by default.
+    """
+    output = output.resolve()
+    if source is None:
+        if output.exists():
+            raise FileExistsError(output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(
+            prefix=".experiment1_base_", dir=output.parent,
+        ) as temporary:
+            source = Path(temporary) / "base"
+            generate_base_artifacts(source)
+            return create(source=source, output=output, old_v3=old_v3)
+    source = source.resolve()
+    old_v3 = old_v3.resolve() if old_v3 is not None else None
+    protected = {"v2": source}
+    if old_v3 is not None:
+        protected["old_v3"] = old_v3
+    protected_paths = tuple(protected.values())
     if output.exists() or any(
         output == p or p in output.parents or output in p.parents
-        for p in (source, old_v3)
+        for p in protected_paths
     ):
         raise FileExistsError(
             "Output must be new and separate from V2 and old V3"
         )
-    initial = {"v2": snapshot(source), "old_v3": snapshot(old_v3)}
+    initial = {name: snapshot(path) for name, path in protected.items()}
     data = pd.read_pickle(source / X_NAME)
     ground = pd.read_pickle(
         source / "temporal_benchmark_ground_truth_5000.pkl"
@@ -396,7 +418,7 @@ def create(
         late_feeding_flagged_summaries=int(late.strong.sum()),
     )
     metadata = {
-        "source": str(source),
+        "source": "generated intermediate base" if source.parent.name.startswith(".experiment1_base_") else str(source),
         "seed": SEED,
         "rng": "PCG64",
         "protected_features": PROTECTED,
@@ -426,9 +448,9 @@ def create(
                 if copied[path.name] != initial["v2"][path.name]["sha256"]:
                     raise AssertionError("Copied protected artifact differs")
         assert_exact_frame(result, pd.read_pickle(stage / X_NAME))
-        final = {"v2": snapshot(source), "old_v3": snapshot(old_v3)}
+        final = {name: snapshot(path) for name, path in protected.items()}
         if final != initial:
-            raise AssertionError("V2 or old V3 changed")
+            raise AssertionError("A protected source directory changed")
         validation.update(
             source_directories_untouched=True,
             copied_artifact_sha256=copied,
@@ -445,7 +467,7 @@ def create(
             ("validation_summary.json", validation),
         ]:
             (stage / name).write_text(
-                json.dumps(content, indent=2, allow_nan=False) + "\n"
+                json.dumps(portable_metadata(content), indent=2, allow_nan=False) + "\n"
             )
         stage.replace(output)
     print(
@@ -461,10 +483,53 @@ def create(
     return validation
 
 
+def generate_base_artifacts(output: Path) -> None:
+    """Stage the original 5000-patient base with unchanged scientific settings."""
+    from generators.experiment1_longitudinal import (
+        BenchmarkConfig, PUBLICATION_V2_PROFILE, generate_benchmark, save_benchmark,
+    )
+    from generators.experiment1_gi import (
+        GIConfig, generate_gi_benchmark, save_gi_benchmark,
+        independence_audit, temporal_specificity_audit, sha256_file,
+    )
+
+    config = BenchmarkConfig(
+        n_patients=5000, output_dir=output, generation_profile=PUBLICATION_V2_PROFILE,
+    )
+    base = generate_benchmark(config)
+    paths = save_benchmark(base, config)
+    gi_config = GIConfig(
+        n_patients=5000, output_dir=output, benchmark_version="publication_v2_gi_v1",
+    )
+    gi = generate_gi_benchmark(base.data, gi_config)
+    gi.metadata["source_artifacts"] = {
+        key: {"path": path.name, "sha256": sha256_file(path)}
+        for key, path in {
+            "longitudinal_x": paths["data"], "fa_labels": paths["fa_labels"],
+            "fa_ground_truth": paths["ground_truth"],
+        }.items()
+    }
+    gi.metadata["temporal_specificity_audit"] = temporal_specificity_audit(base.data)
+    gi.metadata["independence_audit"] = independence_audit(
+        gi, base.fa_labels, base.ground_truth,
+    )
+    gi.metadata["validation"]["checks"].update(
+        source_artifact_hashes_unchanged=True, same_x_fa_gi_patient_ids=True,
+    )
+    # Only output-location metadata changes; all data/label values are unchanged.
+    base.metadata["output_directory"] = "generated intermediate base"
+    paths["metadata"].write_text(json.dumps(base.metadata, indent=2, sort_keys=True))
+    save_gi_benchmark(gi, gi_config)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-dir", type=Path, default=SOURCE)
+    parser.add_argument("--source-dir", type=Path, default=None,
+                        help="Optional existing base artifacts; default regenerates them.")
     parser.add_argument("--output-dir", type=Path, default=OUTPUT)
-    parser.add_argument("--old-v3-dir", type=Path, default=OLD_V3)
+    parser.add_argument(
+        "--old-v3-dir", type=Path, default=None,
+        help="Optionally verify that an existing old-V3 directory is untouched.",
+    )
     args = parser.parse_args()
     create(args.source_dir, args.output_dir, args.old_v3_dir)

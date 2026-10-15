@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from sklearn.base import clone
 
-from settree.temporal_tree import TemporalLeaf, TemporalSplitNode, TemporalTree
+from TAT.temporal_tree import TemporalLeaf, TemporalSplitNode, TemporalTree
 
 
 def _known_gain_data(num_features=1):

@@ -10,6 +10,7 @@ The population matches Experiment 2's ROC: all held-out test patients.
 from __future__ import annotations
 
 from pathlib import Path
+import argparse
 
 import matplotlib
 
@@ -25,14 +26,15 @@ OUTPUT = BASELINE / "roc_on_vs_off_across_six_seeds.png"
 COLORS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9")
 
 
-def save_combined_roc() -> Path:
+def save_combined_roc(output: Path | None = None) -> Path:
     """Save twelve ROC curves using only persisted labels and model scores.
 
     Require identical held-out IDs and labels across all runs. Exclusive file
     creation prevents replacement of an existing combined figure.
     """
-    if OUTPUT.exists():
-        raise FileExistsError(OUTPUT)
+    output = Path(output) if output is not None else OUTPUT
+    if output.exists():
+        raise FileExistsError(output)
     curves = []
     reference = None
     for seed, color in zip(range(42, 48), COLORS):
@@ -80,13 +82,16 @@ def save_combined_roc() -> Path:
             axis.grid(color="0.9", linewidth=0.6)
             axis.legend(loc="lower right", frameon=False)
             figure.tight_layout()
-            with OUTPUT.open("xb") as handle:
+            output.parent.mkdir(parents=True, exist_ok=True)
+            with output.open("xb") as handle:
                 figure.savefig(handle, format="png", dpi=300,
                                bbox_inches="tight", facecolor="white")
         finally:
             plt.close(figure)
-    return OUTPUT
+    return output
 
 
 if __name__ == "__main__":
-    print(save_combined_roc())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    print(save_combined_roc(parser.parse_args().output))

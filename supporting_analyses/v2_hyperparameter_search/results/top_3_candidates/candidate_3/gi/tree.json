@@ -1,0 +1,189 @@
+[
+  {
+    "aggregation": "sum",
+    "anchor": "NOW Anchor",
+    "depth": 0,
+    "feature": "VomitingYN",
+    "left_child": 1,
+    "node_id": 0,
+    "num_patients": 3500,
+    "offset": -1,
+    "right_child": 10,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 1,
+    "feature": "DiarrheaYN",
+    "left_child": 2,
+    "node_id": 1,
+    "num_patients": 2699,
+    "offset": -1,
+    "right_child": 3,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "depth": 2,
+    "node_id": 2,
+    "num_patients": 1935,
+    "prediction": 0.06511627906976744,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "GISymptomYN",
+    "left_child": 4,
+    "node_id": 3,
+    "num_patients": 764,
+    "offset": -1,
+    "right_child": 7,
+    "threshold": 0.25,
+    "type": "split"
+  },
+  {
+    "aggregation": "count",
+    "anchor": "Birth Date Anchor",
+    "depth": 3,
+    "feature": "BreastMilkYN",
+    "left_child": 5,
+    "node_id": 4,
+    "num_patients": 558,
+    "offset": 6,
+    "right_child": 6,
+    "threshold": 17.0,
+    "type": "split"
+  },
+  {
+    "depth": 4,
+    "node_id": 5,
+    "num_patients": 53,
+    "prediction": 0.2641509433962264,
+    "type": "leaf"
+  },
+  {
+    "depth": 4,
+    "node_id": 6,
+    "num_patients": 505,
+    "prediction": 0.11287128712871287,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 3,
+    "feature": "WeightKg",
+    "left_child": 8,
+    "node_id": 7,
+    "num_patients": 206,
+    "offset": -6,
+    "right_child": 9,
+    "threshold": 10.29,
+    "type": "split"
+  },
+  {
+    "depth": 4,
+    "node_id": 8,
+    "num_patients": 47,
+    "prediction": 0.44680851063829785,
+    "type": "leaf"
+  },
+  {
+    "depth": 4,
+    "node_id": 9,
+    "num_patients": 159,
+    "prediction": 0.20125786163522014,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 1,
+    "feature": "WeightKg",
+    "left_child": 11,
+    "node_id": 10,
+    "num_patients": 801,
+    "offset": -12,
+    "right_child": 18,
+    "threshold": 11.215,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "DiarrheaYN",
+    "left_child": 12,
+    "node_id": 11,
+    "num_patients": 780,
+    "offset": -1,
+    "right_child": 15,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "depth": 3,
+    "feature": "BreastMilkYN",
+    "left_child": 13,
+    "node_id": 12,
+    "num_patients": 563,
+    "offset": 18,
+    "right_child": 14,
+    "threshold": 0.16666666666666666,
+    "type": "split"
+  },
+  {
+    "depth": 4,
+    "node_id": 13,
+    "num_patients": 50,
+    "prediction": 0.38,
+    "type": "leaf"
+  },
+  {
+    "depth": 4,
+    "node_id": 14,
+    "num_patients": 513,
+    "prediction": 0.15789473684210525,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "max",
+    "anchor": "Birth Date Anchor",
+    "depth": 3,
+    "feature": "WeightKg",
+    "left_child": 16,
+    "node_id": 15,
+    "num_patients": 217,
+    "offset": 5,
+    "right_child": 17,
+    "threshold": 5.58,
+    "type": "split"
+  },
+  {
+    "depth": 4,
+    "node_id": 16,
+    "num_patients": 20,
+    "prediction": 0.65,
+    "type": "leaf"
+  },
+  {
+    "depth": 4,
+    "node_id": 17,
+    "num_patients": 197,
+    "prediction": 0.25380710659898476,
+    "type": "leaf"
+  },
+  {
+    "depth": 2,
+    "node_id": 18,
+    "num_patients": 21,
+    "prediction": 0.5714285714285714,
+    "type": "leaf"
+  }
+]

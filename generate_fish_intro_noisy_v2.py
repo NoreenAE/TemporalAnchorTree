@@ -2,7 +2,7 @@
 
 Symptom histories are sampled without window exclusions. Matching selects
 unaltered histories and fish timestamps with opposite response relationships.
-See experiments/experiment_2_noisy_v2.md for conditioning and interpretation.
+This standalone generator does not import historical experiment scripts.
 """
 from __future__ import annotations
 
@@ -17,11 +17,17 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
 
-from generate_fish_intro_dataset import BIRTH, FISH, SYMPTOMS, FEATURE_ORDER
-
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DATA_DIR = ROOT / "data/fish_intro_noisy_matched_v2"
 VERSION = "fish_intro_noisy_matched_v2"
+BIRTH = "Birth Date Anchor"
+FISH = "FishIntroduction"
+SYMPTOMS = ("GI", "Vomiting")
+# Preserve encounter order: it affects RNG assignment and model split ties.
+FEATURE_ORDER = (
+    BIRTH, "Cough", "DoctorVisit", "MinorInjury", FISH, "GI",
+    "RoutineVaccination", "SleepDisturbance", "Vomiting",
+)
 EVENT_FEATURES = tuple(f for f in FEATURE_ORDER if f != BIRTH)
 DISTRACTORS = tuple(f for f in EVENT_FEATURES if f not in (FISH, *SYMPTOMS))
 OBSERVATION_COLUMNS = ["patient_id", "time", "feature_name", "value"]

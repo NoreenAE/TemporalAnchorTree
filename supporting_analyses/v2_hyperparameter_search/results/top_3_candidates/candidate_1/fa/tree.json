@@ -1,0 +1,149 @@
+[
+  {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "depth": 0,
+    "feature": "FormulaYN",
+    "left_child": 1,
+    "node_id": 0,
+    "num_patients": 3500,
+    "offset": 6,
+    "right_child": 8,
+    "threshold": 0.3157894736842105,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 1,
+    "feature": "LengthCm",
+    "left_child": 2,
+    "node_id": 1,
+    "num_patients": 992,
+    "offset": -18,
+    "right_child": 5,
+    "threshold": 70.75,
+    "type": "split"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "LengthCm",
+    "left_child": 3,
+    "node_id": 2,
+    "num_patients": 560,
+    "offset": -12,
+    "right_child": 4,
+    "threshold": 148.3,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 3,
+    "num_patients": 113,
+    "prediction": 0.34513274336283184,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 4,
+    "num_patients": 447,
+    "prediction": 0.21476510067114093,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "GISymptomYN",
+    "left_child": 6,
+    "node_id": 5,
+    "num_patients": 432,
+    "offset": -12,
+    "right_child": 7,
+    "threshold": 0.18518518518518517,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 6,
+    "num_patients": 390,
+    "prediction": 0.1282051282051282,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 7,
+    "num_patients": 42,
+    "prediction": 0.35714285714285715,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "Birth Date Anchor",
+    "depth": 1,
+    "feature": "FormulaYN",
+    "left_child": 9,
+    "node_id": 8,
+    "num_patients": 2508,
+    "offset": 6,
+    "right_child": 12,
+    "threshold": 18.0,
+    "type": "split"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "BreastMilkYN",
+    "left_child": 10,
+    "node_id": 9,
+    "num_patients": 1673,
+    "offset": -4,
+    "right_child": 11,
+    "threshold": 0.0,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 10,
+    "num_patients": 169,
+    "prediction": 0.15976331360946747,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 11,
+    "num_patients": 1504,
+    "prediction": 0.07047872340425532,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "NOW Anchor",
+    "depth": 2,
+    "feature": "LengthCm",
+    "left_child": 13,
+    "node_id": 12,
+    "num_patients": 835,
+    "offset": -1,
+    "right_child": 14,
+    "threshold": 79.2,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 13,
+    "num_patients": 61,
+    "prediction": 0.09836065573770492,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 14,
+    "num_patients": 774,
+    "prediction": 0.01808785529715762,
+    "type": "leaf"
+  }
+]

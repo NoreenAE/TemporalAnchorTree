@@ -10,7 +10,7 @@
     "anchor_usage_test_creations.csv": "3d1703517d0669c770e4a8babf5f54dd8be84b6fb06563eb739cc07d41757294",
     "anchor_usage_test_windows.csv": "36b41e1b9f78b441f21814d29ebcc5207285379ccd64483e968242a2c23608c7"
   },
-  "visualization_script_sha256": "c3abff662463f218faf9439242ad256fc28c7363b05f0c75290a50527ad7087a",
+  "visualization_script_sha256": "2621d7fda3fe0fe7c0f9169228ad38a697d2f6d52cdb550f54c2450cd5ebc392",
   "selection_rule": "Smallest patient_id in each TEST, documented, fish-anchor-created label/symptom category; saved available windows validated afterwards. No scores, correctness, or visual criteria used.",
   "eligible_candidate_counts": {
     "1": 338,

@@ -1,0 +1,438 @@
+{
+  "candidate_configurations": [
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C01",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 3,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 10,
+      "min_samples_split": 20,
+      "rationale": "Broad-space baseline with moderate sample regularization and no gain threshold.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C02",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 3,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Isolates stronger sample regularization from the baseline while leaving the gain threshold disabled.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C03",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 3,
+      "min_impurity_decrease": 0.0005,
+      "min_samples_leaf": 10,
+      "min_samples_split": 20,
+      "rationale": "Isolates the smallest gain threshold from C01 at the same depth and sample constraints.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C04",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 4,
+      "min_impurity_decrease": 0.0005,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Adds one level of capacity with stronger sample regularization and a small gain threshold to suppress broad-space distractors.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C05",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 4,
+      "min_impurity_decrease": 0.001,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Strengthens only the gain requirement relative to C04 at depth four.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C06",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 4,
+      "min_impurity_decrease": 0.002,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Tests the strongest planned gain threshold at depth four without crossing a full grid.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C07",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 5,
+      "min_impurity_decrease": 0.001,
+      "min_samples_leaf": 30,
+      "min_samples_split": 60,
+      "rationale": "Tests depth five only with stronger split, leaf, and gain regularization appropriate to the broad search space.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C08",
+      "candidate_sampling_rate": 0.6,
+      "max_depth": 4,
+      "min_impurity_decrease": 0.001,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Tests whether denser candidate sampling improves broad-space recovery using the balanced depth-four regularization setting from C05.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    }
+  ],
+  "dataset_version": "V2",
+  "estimated_runtime": {
+    "basis": "Saved V2 A=0.4 broad-window runs required about 54 minutes per FA/GI pair at depth three on 3,500 training patients. Screening uses 2,625 training patients, but depth-four/five trees, A=0.6, multi-seed confirmation, and final full-training refits add substantial overhead.",
+    "estimated_wall_clock_hours_range": [
+      18,
+      30
+    ],
+    "maximum_individual_tree_fits": 38,
+    "maximum_model_pairs": 19
+  },
+  "finalist_selection": "Top three screening combined scores plus the highest mean FA/GI temporal recovery candidate; duplicates are filled by combined score until four finalists are selected.",
+  "fixed_temporal_search_space": {
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        null,
+        0.7,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        18
+      ],
+      "NOW Anchor": [
+        null,
+        -1,
+        -2,
+        -3,
+        -4,
+        -5,
+        -6,
+        -12,
+        -18
+      ]
+    },
+    "full_timeline_behavior": "None retains TemporalTree's existing deduplicated Full Timeline behavior.",
+    "optimized_during_search": false
+  },
+  "input_paths": {
+    "fa": "historical_not_distributed/experiment1_v2/temporal_benchmark_fa_labels_5000.pkl",
+    "gi": "historical_not_distributed/experiment1_v2/temporal_benchmark_gi_labels_5000.pkl",
+    "x": "historical_not_distributed/experiment1_v2/temporal_benchmark_5000.pkl"
+  },
+  "input_sha256": {
+    "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+    "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+    "x": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199"
+  },
+  "n_finalists": 4,
+  "n_screening_configurations": 8,
+  "n_top_candidates": 3,
+  "previous_result_evidence": {
+    "v2_a_0_1": {
+      "candidate_sampling_rate": 0.1,
+      "conclusion": "Excluded because it was clearly weaker than A=0.4.",
+      "fa_roc_auc": 0.6017,
+      "gi_roc_auc": 0.6215
+    },
+    "v2_a_0_4_reference": {
+      "candidate_sampling_rate": 0.4,
+      "conclusion": "Retained as the evidence-based baseline.",
+      "observed_pair_training_minutes": 39.7
+    },
+    "v2_wide_offsets": {
+      "conclusion": "The broad 0.7/1-6/12/18 and -1-6/-12/-18 search space is fixed for every candidate. Its distractor usage and higher runtime are part of the revised scientific stress test, not parameters to optimize away.",
+      "observed_pair_training_minutes_range": [
+        53.7,
+        65.4
+      ]
+    }
+  },
+  "representative_seed": "Sampling seed whose combined validation score is closest to the candidate's median across seeds; lower seed breaks exact ties.",
+  "scientific_question": "Which TemporalTree hyperparameter configuration provides the best balance of predictive performance and temporal recovery when the model is exposed to a broad set of candidate temporal windows, including irrelevant alternatives?",
+  "scoring": {
+    "auc_skill": "clip(2 * (ROC_AUC - 0.5), 0, 1)",
+    "average_precision_skill": "clip((Average Precision - evaluation prevalence) / (1 - evaluation prevalence), 0, 1)",
+    "combined_score": "Unweighted mean of FA AUC skill, FA AP skill, FA temporal recovery, GI AUC skill, GI AP skill, and GI temporal recovery.",
+    "finalist_rank": "Descending mean combined validation score minus one sample SD across sampling seeds; mean combined score and candidate_id break ties.",
+    "pareto_reporting": "A finalist is Pareto-optimal when no other finalist is at least as good on all six mean normalized components and strictly better on at least one. Pareto status is reported but does not replace the predeclared stability-adjusted ranking.",
+    "temporal_recovery": "Mean per-split overlap fraction with the outcome's known temporal region on the correct anchor. For a used interval W and true interval T, relevance = length(W intersection T) / length(W). Wrong anchors, Full Timeline, and zero-width windows receive 0."
+  },
+  "screening_seed": 42,
+  "search_name": "experiment_1_v2_smart_hyperparameter_search",
+  "split_protocol": {
+    "inner_split_seed": 137,
+    "joint_stratification": "FA label + GI label",
+    "outer_split_seed": 42,
+    "outer_test_size": 0.3,
+    "selection_uses_test_set": false,
+    "validation_fraction_of_outer_train": 0.25
+  },
+  "stability_seeds": [
+    42,
+    43,
+    44
+  ]
+}

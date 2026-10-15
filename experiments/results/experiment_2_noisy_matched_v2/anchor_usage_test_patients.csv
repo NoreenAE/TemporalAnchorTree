@@ -1,0 +1,2001 @@
+patient_id,run,documented,birth,fish_time,dynamic_anchor_created,dynamic_anchor_used,fish_anchor_created,fish_anchor_used,fish_anchor_used_for_symptom,created_not_used,documented_no_anchor
+N0006_01,dynamic_on,True,2010-04-17,2011-08-13 00:42:19,True,True,True,True,True,False,False
+N0006_02,dynamic_on,True,2010-04-17,2011-05-01 03:59:20,True,True,True,True,True,False,False
+N0006_03,dynamic_on,False,2010-04-17,,True,False,False,False,False,False,False
+N0006_04,dynamic_on,True,2010-04-17,2011-05-01 03:59:20,True,True,True,True,True,False,False
+N0006_05,dynamic_on,True,2010-04-17,2011-08-13 00:42:19,True,True,True,True,True,False,False
+N0006_06,dynamic_on,True,2010-04-17,2011-08-13 00:42:19,True,True,True,True,True,False,False
+N0006_07,dynamic_on,True,2010-04-17,2011-05-01 03:59:20,True,True,True,True,True,False,False
+N0006_08,dynamic_on,True,2010-04-17,2011-08-13 00:42:19,True,True,True,True,True,False,False
+N0006_09,dynamic_on,False,2010-04-17,,True,False,False,False,False,False,False
+N0006_10,dynamic_on,True,2010-04-17,2011-05-01 03:59:20,True,True,True,True,True,False,False
+N0007_01,dynamic_on,True,2012-11-28,2014-07-17 12:40:39,True,True,True,True,True,False,False
+N0007_02,dynamic_on,True,2012-11-28,2014-07-17 12:40:39,True,True,True,True,True,False,False
+N0007_03,dynamic_on,True,2012-11-28,2014-03-22 10:12:58,True,True,True,True,True,False,False
+N0007_04,dynamic_on,False,2012-11-28,,True,False,False,False,False,False,False
+N0007_05,dynamic_on,False,2012-11-28,,True,False,False,False,False,False,False
+N0007_06,dynamic_on,True,2012-11-28,2014-03-22 10:12:58,True,True,True,True,True,False,False
+N0007_07,dynamic_on,True,2012-11-28,2014-07-17 12:40:39,True,True,True,True,True,False,False
+N0007_08,dynamic_on,True,2012-11-28,2014-07-17 12:40:39,True,True,True,True,True,False,False
+N0007_09,dynamic_on,True,2012-11-28,2014-03-22 10:12:58,True,True,True,True,True,False,False
+N0007_10,dynamic_on,True,2012-11-28,2014-03-22 10:12:58,True,True,True,True,True,False,False
+N0015_01,dynamic_on,True,2012-11-03,2013-07-26 00:25:48,True,True,True,True,True,False,False
+N0015_02,dynamic_on,True,2012-11-03,2014-07-12 08:05:08,True,True,True,True,True,False,False
+N0015_03,dynamic_on,True,2012-11-03,2013-07-26 00:25:48,True,True,True,True,True,False,False
+N0015_04,dynamic_on,True,2012-11-03,2014-07-12 08:05:08,True,True,True,True,True,False,False
+N0015_05,dynamic_on,False,2012-11-03,,True,False,False,False,False,False,False
+N0015_06,dynamic_on,True,2012-11-03,2014-07-12 08:05:08,True,True,True,True,True,False,False
+N0015_07,dynamic_on,True,2012-11-03,2013-07-26 00:25:48,True,True,True,True,True,False,False
+N0015_08,dynamic_on,False,2012-11-03,,True,False,False,False,False,False,False
+N0015_09,dynamic_on,True,2012-11-03,2013-07-26 00:25:48,True,True,True,True,True,False,False
+N0015_10,dynamic_on,True,2012-11-03,2014-07-12 08:05:08,True,True,True,True,True,False,False
+N0018_01,dynamic_on,True,2014-01-08,2016-01-02 01:00:53,True,False,False,False,False,False,True
+N0018_02,dynamic_on,True,2014-01-08,2014-08-14 05:47:11,True,True,True,True,True,False,False
+N0018_03,dynamic_on,False,2014-01-08,,True,False,False,False,False,False,False
+N0018_04,dynamic_on,True,2014-01-08,2014-08-14 05:47:11,True,True,True,True,True,False,False
+N0018_05,dynamic_on,False,2014-01-08,,True,False,False,False,False,False,False
+N0018_06,dynamic_on,True,2014-01-08,2016-01-02 01:00:53,True,False,False,False,False,False,True
+N0018_07,dynamic_on,True,2014-01-08,2016-01-02 01:00:53,True,False,False,False,False,False,True
+N0018_08,dynamic_on,True,2014-01-08,2016-01-02 01:00:53,True,False,False,False,False,False,True
+N0018_09,dynamic_on,True,2014-01-08,2014-08-14 05:47:11,True,True,True,True,True,False,False
+N0018_10,dynamic_on,True,2014-01-08,2014-08-14 05:47:11,True,True,True,True,True,False,False
+N0026_01,dynamic_on,True,2011-09-26,2013-08-10 19:25:58,True,False,False,False,False,False,True
+N0026_02,dynamic_on,True,2011-09-26,2013-05-21 19:26:54,True,True,True,True,True,False,False
+N0026_03,dynamic_on,False,2011-09-26,,True,False,False,False,False,False,False
+N0026_04,dynamic_on,True,2011-09-26,2013-08-10 19:25:58,True,False,False,False,False,False,True
+N0026_05,dynamic_on,False,2011-09-26,,True,False,False,False,False,False,False
+N0026_06,dynamic_on,True,2011-09-26,2013-05-21 19:26:54,True,True,True,True,True,False,False
+N0026_07,dynamic_on,True,2011-09-26,2013-05-21 19:26:54,True,True,True,True,True,False,False
+N0026_08,dynamic_on,True,2011-09-26,2013-08-10 19:25:58,True,False,False,False,False,False,True
+N0026_09,dynamic_on,True,2011-09-26,2013-08-10 19:25:58,True,False,False,False,False,False,True
+N0026_10,dynamic_on,True,2011-09-26,2013-05-21 19:26:54,True,True,True,True,True,False,False
+N0027_01,dynamic_on,True,2012-04-02,2012-11-01 00:40:33,True,True,True,True,True,False,False
+N0027_02,dynamic_on,True,2012-04-02,2013-01-30 14:07:00,True,True,True,True,True,False,False
+N0027_03,dynamic_on,True,2012-04-02,2013-01-30 14:07:00,True,True,True,True,True,False,False
+N0027_04,dynamic_on,False,2012-04-02,,True,False,False,False,False,False,False
+N0027_05,dynamic_on,False,2012-04-02,,True,False,False,False,False,False,False
+N0027_06,dynamic_on,True,2012-04-02,2012-11-01 00:40:33,True,True,True,True,True,False,False
+N0027_07,dynamic_on,True,2012-04-02,2012-11-01 00:40:33,True,True,True,True,True,False,False
+N0027_08,dynamic_on,True,2012-04-02,2013-01-30 14:07:00,True,True,True,True,True,False,False
+N0027_09,dynamic_on,True,2012-04-02,2013-01-30 14:07:00,True,True,True,True,True,False,False
+N0027_10,dynamic_on,True,2012-04-02,2012-11-01 00:40:33,True,True,True,True,True,False,False
+N0031_01,dynamic_on,True,2013-11-02,2015-02-09 20:42:51,True,True,True,True,True,False,False
+N0031_02,dynamic_on,True,2013-11-02,2015-02-09 20:42:51,True,True,True,True,True,False,False
+N0031_03,dynamic_on,True,2013-11-02,2014-08-05 19:24:21,True,True,True,True,True,False,False
+N0031_04,dynamic_on,True,2013-11-02,2015-02-09 20:42:51,True,True,True,True,True,False,False
+N0031_05,dynamic_on,True,2013-11-02,2014-08-05 19:24:21,True,True,True,True,True,False,False
+N0031_06,dynamic_on,False,2013-11-02,,True,False,False,False,False,False,False
+N0031_07,dynamic_on,True,2013-11-02,2014-08-05 19:24:21,True,True,True,True,True,False,False
+N0031_08,dynamic_on,True,2013-11-02,2015-02-09 20:42:51,True,True,True,True,True,False,False
+N0031_09,dynamic_on,True,2013-11-02,2014-08-05 19:24:21,True,True,True,True,True,False,False
+N0031_10,dynamic_on,False,2013-11-02,,True,False,False,False,False,False,False
+N0037_01,dynamic_on,True,2012-02-10,2013-06-03 20:35:08,True,True,True,True,True,False,False
+N0037_02,dynamic_on,False,2012-02-10,,True,False,False,False,False,False,False
+N0037_03,dynamic_on,False,2012-02-10,,True,False,False,False,False,False,False
+N0037_04,dynamic_on,True,2012-02-10,2013-06-03 20:35:08,True,True,True,True,True,False,False
+N0037_05,dynamic_on,True,2012-02-10,2013-04-25 13:59:05,True,True,True,True,True,False,False
+N0037_06,dynamic_on,True,2012-02-10,2013-04-25 13:59:05,True,True,True,True,True,False,False
+N0037_07,dynamic_on,True,2012-02-10,2013-04-25 13:59:05,True,True,True,True,True,False,False
+N0037_08,dynamic_on,True,2012-02-10,2013-06-03 20:35:08,True,True,True,True,True,False,False
+N0037_09,dynamic_on,True,2012-02-10,2013-04-25 13:59:05,True,True,True,True,True,False,False
+N0037_10,dynamic_on,True,2012-02-10,2013-06-03 20:35:08,True,True,True,True,True,False,False
+N0039_01,dynamic_on,True,2010-06-30,2011-01-13 04:24:15,True,True,True,True,True,False,False
+N0039_02,dynamic_on,True,2010-06-30,2011-01-13 04:24:15,True,True,True,True,True,False,False
+N0039_03,dynamic_on,True,2010-06-30,2011-01-13 04:24:15,True,True,True,True,True,False,False
+N0039_04,dynamic_on,True,2010-06-30,2011-05-10 09:20:59,True,True,True,True,True,False,False
+N0039_05,dynamic_on,False,2010-06-30,,True,False,False,False,False,False,False
+N0039_06,dynamic_on,True,2010-06-30,2011-05-10 09:20:59,True,True,True,True,True,False,False
+N0039_07,dynamic_on,False,2010-06-30,,True,False,False,False,False,False,False
+N0039_08,dynamic_on,True,2010-06-30,2011-05-10 09:20:59,True,True,True,True,True,False,False
+N0039_09,dynamic_on,True,2010-06-30,2011-01-13 04:24:15,True,True,True,True,True,False,False
+N0039_10,dynamic_on,True,2010-06-30,2011-05-10 09:20:59,True,True,True,True,True,False,False
+N0060_01,dynamic_on,True,2013-02-06,2014-07-02 06:53:36,True,True,True,True,True,False,False
+N0060_02,dynamic_on,False,2013-02-06,,True,False,False,False,False,False,False
+N0060_03,dynamic_on,True,2013-02-06,2014-11-17 01:27:09,True,True,True,True,True,False,False
+N0060_04,dynamic_on,True,2013-02-06,2014-07-02 06:53:36,True,True,True,True,True,False,False
+N0060_05,dynamic_on,True,2013-02-06,2014-07-02 06:53:36,True,True,True,True,True,False,False
+N0060_06,dynamic_on,True,2013-02-06,2014-11-17 01:27:09,True,True,True,True,True,False,False
+N0060_07,dynamic_on,False,2013-02-06,,True,False,False,False,False,False,False
+N0060_08,dynamic_on,True,2013-02-06,2014-07-02 06:53:36,True,True,True,True,True,False,False
+N0060_09,dynamic_on,True,2013-02-06,2014-11-17 01:27:09,True,True,True,True,True,False,False
+N0060_10,dynamic_on,True,2013-02-06,2014-11-17 01:27:09,True,True,True,True,True,False,False
+N0066_01,dynamic_on,True,2011-04-05,2012-04-15 04:46:14,True,True,True,True,True,False,False
+N0066_02,dynamic_on,False,2011-04-05,,True,False,False,False,False,False,False
+N0066_03,dynamic_on,True,2011-04-05,2012-04-15 04:46:14,True,True,True,True,True,False,False
+N0066_04,dynamic_on,True,2011-04-05,2012-04-15 04:46:14,True,True,True,True,True,False,False
+N0066_05,dynamic_on,True,2011-04-05,2012-09-05 07:47:52,True,True,True,True,True,False,False
+N0066_06,dynamic_on,True,2011-04-05,2012-09-05 07:47:52,True,True,True,True,True,False,False
+N0066_07,dynamic_on,True,2011-04-05,2012-04-15 04:46:14,True,True,True,True,True,False,False
+N0066_08,dynamic_on,True,2011-04-05,2012-09-05 07:47:52,True,True,True,True,True,False,False
+N0066_09,dynamic_on,True,2011-04-05,2012-09-05 07:47:52,True,True,True,True,True,False,False
+N0066_10,dynamic_on,False,2011-04-05,,True,False,False,False,False,False,False
+N0067_01,dynamic_on,True,2013-09-24,2014-10-28 10:04:36,True,True,True,True,True,False,False
+N0067_02,dynamic_on,True,2013-09-24,2015-06-21 11:53:41,True,True,True,True,True,False,False
+N0067_03,dynamic_on,True,2013-09-24,2014-10-28 10:04:36,True,True,True,True,True,False,False
+N0067_04,dynamic_on,True,2013-09-24,2015-06-21 11:53:41,True,True,True,True,True,False,False
+N0067_05,dynamic_on,True,2013-09-24,2015-06-21 11:53:41,True,True,True,True,True,False,False
+N0067_06,dynamic_on,True,2013-09-24,2014-10-28 10:04:36,True,True,True,True,True,False,False
+N0067_07,dynamic_on,False,2013-09-24,,True,False,False,False,False,False,False
+N0067_08,dynamic_on,True,2013-09-24,2015-06-21 11:53:41,True,True,True,True,True,False,False
+N0067_09,dynamic_on,True,2013-09-24,2014-10-28 10:04:36,True,True,True,True,True,False,False
+N0067_10,dynamic_on,False,2013-09-24,,True,False,False,False,False,False,False
+N0070_01,dynamic_on,True,2013-10-28,2015-02-07 21:08:09,True,True,True,True,True,False,False
+N0070_02,dynamic_on,True,2013-10-28,2015-02-07 21:08:09,True,True,True,True,True,False,False
+N0070_03,dynamic_on,True,2013-10-28,2015-02-07 21:08:09,True,True,True,True,True,False,False
+N0070_04,dynamic_on,True,2013-10-28,2014-05-16 13:01:25,True,True,True,True,True,False,False
+N0070_05,dynamic_on,False,2013-10-28,,True,False,False,False,False,False,False
+N0070_06,dynamic_on,True,2013-10-28,2015-02-07 21:08:09,True,True,True,True,True,False,False
+N0070_07,dynamic_on,True,2013-10-28,2014-05-16 13:01:25,True,True,True,True,True,False,False
+N0070_08,dynamic_on,True,2013-10-28,2014-05-16 13:01:25,True,True,True,True,True,False,False
+N0070_09,dynamic_on,False,2013-10-28,,True,False,False,False,False,False,False
+N0070_10,dynamic_on,True,2013-10-28,2014-05-16 13:01:25,True,True,True,True,True,False,False
+N0080_01,dynamic_on,True,2011-02-25,2012-02-07 16:45:14,True,True,True,True,True,False,False
+N0080_02,dynamic_on,True,2011-02-25,2011-09-02 19:18:34,True,True,True,True,True,False,False
+N0080_03,dynamic_on,False,2011-02-25,,True,False,False,False,False,False,False
+N0080_04,dynamic_on,True,2011-02-25,2011-09-02 19:18:34,True,True,True,True,True,False,False
+N0080_05,dynamic_on,False,2011-02-25,,True,False,False,False,False,False,False
+N0080_06,dynamic_on,True,2011-02-25,2011-09-02 19:18:34,True,True,True,True,True,False,False
+N0080_07,dynamic_on,True,2011-02-25,2012-02-07 16:45:14,True,True,True,True,True,False,False
+N0080_08,dynamic_on,True,2011-02-25,2012-02-07 16:45:14,True,True,True,True,True,False,False
+N0080_09,dynamic_on,True,2011-02-25,2012-02-07 16:45:14,True,True,True,True,True,False,False
+N0080_10,dynamic_on,True,2011-02-25,2011-09-02 19:18:34,True,True,True,True,True,False,False
+N0096_01,dynamic_on,True,2011-08-21,2013-02-16 15:57:21,True,True,True,True,True,False,False
+N0096_02,dynamic_on,True,2011-08-21,2012-08-08 03:10:25,True,True,True,True,True,False,False
+N0096_03,dynamic_on,False,2011-08-21,,True,False,False,False,False,False,False
+N0096_04,dynamic_on,False,2011-08-21,,True,False,False,False,False,False,False
+N0096_05,dynamic_on,True,2011-08-21,2013-02-16 15:57:21,True,True,True,True,True,False,False
+N0096_06,dynamic_on,True,2011-08-21,2013-02-16 15:57:21,True,True,True,True,True,False,False
+N0096_07,dynamic_on,True,2011-08-21,2012-08-08 03:10:25,True,True,True,True,True,False,False
+N0096_08,dynamic_on,True,2011-08-21,2013-02-16 15:57:21,True,True,True,True,True,False,False
+N0096_09,dynamic_on,True,2011-08-21,2012-08-08 03:10:25,True,True,True,True,True,False,False
+N0096_10,dynamic_on,True,2011-08-21,2012-08-08 03:10:25,True,True,True,True,True,False,False
+N0097_01,dynamic_on,True,2013-02-19,2014-11-14 14:59:18,True,True,True,True,True,False,False
+N0097_02,dynamic_on,True,2013-02-19,2014-12-31 19:14:38,True,False,False,False,False,False,True
+N0097_03,dynamic_on,True,2013-02-19,2014-12-31 19:14:38,True,False,False,False,False,False,True
+N0097_04,dynamic_on,True,2013-02-19,2014-11-14 14:59:18,True,True,True,True,True,False,False
+N0097_05,dynamic_on,True,2013-02-19,2014-12-31 19:14:38,True,False,False,False,False,False,True
+N0097_06,dynamic_on,False,2013-02-19,,True,False,False,False,False,False,False
+N0097_07,dynamic_on,False,2013-02-19,,True,False,False,False,False,False,False
+N0097_08,dynamic_on,True,2013-02-19,2014-11-14 14:59:18,True,True,True,True,True,False,False
+N0097_09,dynamic_on,True,2013-02-19,2014-12-31 19:14:38,True,False,False,False,False,False,True
+N0097_10,dynamic_on,True,2013-02-19,2014-11-14 14:59:18,True,True,True,True,True,False,False
+N0102_01,dynamic_on,True,2013-11-28,2014-06-04 14:37:02,True,True,True,True,True,False,False
+N0102_02,dynamic_on,False,2013-11-28,,True,False,False,False,False,False,False
+N0102_03,dynamic_on,True,2013-11-28,2014-06-04 14:37:02,True,True,True,True,True,False,False
+N0102_04,dynamic_on,True,2013-11-28,2014-08-07 09:28:05,True,True,True,True,True,False,False
+N0102_05,dynamic_on,False,2013-11-28,,True,False,False,False,False,False,False
+N0102_06,dynamic_on,True,2013-11-28,2014-08-07 09:28:05,True,True,True,True,True,False,False
+N0102_07,dynamic_on,True,2013-11-28,2014-06-04 14:37:02,True,True,True,True,True,False,False
+N0102_08,dynamic_on,True,2013-11-28,2014-08-07 09:28:05,True,True,True,True,True,False,False
+N0102_09,dynamic_on,True,2013-11-28,2014-08-07 09:28:05,True,True,True,True,True,False,False
+N0102_10,dynamic_on,True,2013-11-28,2014-06-04 14:37:02,True,True,True,True,True,False,False
+N0111_01,dynamic_on,True,2014-11-18,2015-11-12 14:08:12,True,True,True,True,True,False,False
+N0111_02,dynamic_on,True,2014-11-18,2015-11-12 14:08:12,True,True,True,True,True,False,False
+N0111_03,dynamic_on,True,2014-11-18,2015-11-12 14:08:12,True,True,True,True,True,False,False
+N0111_04,dynamic_on,True,2014-11-18,2015-05-23 01:53:42,True,True,True,True,True,False,False
+N0111_05,dynamic_on,True,2014-11-18,2015-05-23 01:53:42,True,True,True,True,True,False,False
+N0111_06,dynamic_on,True,2014-11-18,2015-05-23 01:53:42,True,True,True,True,True,False,False
+N0111_07,dynamic_on,False,2014-11-18,,True,False,False,False,False,False,False
+N0111_08,dynamic_on,False,2014-11-18,,True,False,False,False,False,False,False
+N0111_09,dynamic_on,True,2014-11-18,2015-05-23 01:53:42,True,True,True,True,True,False,False
+N0111_10,dynamic_on,True,2014-11-18,2015-11-12 14:08:12,True,True,True,True,True,False,False
+N0127_01,dynamic_on,False,2013-05-02,,True,False,False,False,False,False,False
+N0127_02,dynamic_on,True,2013-05-02,2013-11-17 10:44:49,True,True,True,True,True,False,False
+N0127_03,dynamic_on,True,2013-05-02,2015-01-27 10:09:04,True,True,True,True,True,False,False
+N0127_04,dynamic_on,True,2013-05-02,2015-01-27 10:09:04,True,True,True,True,True,False,False
+N0127_05,dynamic_on,True,2013-05-02,2013-11-17 10:44:49,True,True,True,True,True,False,False
+N0127_06,dynamic_on,True,2013-05-02,2013-11-17 10:44:49,True,True,True,True,True,False,False
+N0127_07,dynamic_on,True,2013-05-02,2013-11-17 10:44:49,True,True,True,True,True,False,False
+N0127_08,dynamic_on,True,2013-05-02,2015-01-27 10:09:04,True,True,True,True,True,False,False
+N0127_09,dynamic_on,True,2013-05-02,2015-01-27 10:09:04,True,True,True,True,True,False,False
+N0127_10,dynamic_on,False,2013-05-02,,True,False,False,False,False,False,False
+N0132_01,dynamic_on,True,2010-09-26,2012-01-14 13:36:42,True,True,True,True,True,False,False
+N0132_02,dynamic_on,False,2010-09-26,,True,False,False,False,False,False,False
+N0132_03,dynamic_on,True,2010-09-26,2011-08-17 06:44:08,True,True,True,True,True,False,False
+N0132_04,dynamic_on,True,2010-09-26,2012-01-14 13:36:42,True,True,True,True,True,False,False
+N0132_05,dynamic_on,True,2010-09-26,2012-01-14 13:36:42,True,True,True,True,True,False,False
+N0132_06,dynamic_on,True,2010-09-26,2011-08-17 06:44:08,True,True,True,True,True,False,False
+N0132_07,dynamic_on,False,2010-09-26,,True,False,False,False,False,False,False
+N0132_08,dynamic_on,True,2010-09-26,2011-08-17 06:44:08,True,True,True,True,True,False,False
+N0132_09,dynamic_on,True,2010-09-26,2012-01-14 13:36:42,True,True,True,True,True,False,False
+N0132_10,dynamic_on,True,2010-09-26,2011-08-17 06:44:08,True,True,True,True,True,False,False
+N0134_01,dynamic_on,False,2014-12-17,,True,False,False,False,False,False,False
+N0134_02,dynamic_on,True,2014-12-17,2015-08-14 02:11:07,True,True,True,True,True,False,False
+N0134_03,dynamic_on,True,2014-12-17,2016-05-15 00:50:09,True,True,True,True,True,False,False
+N0134_04,dynamic_on,False,2014-12-17,,True,False,False,False,False,False,False
+N0134_05,dynamic_on,True,2014-12-17,2015-08-14 02:11:07,True,True,True,True,True,False,False
+N0134_06,dynamic_on,True,2014-12-17,2016-05-15 00:50:09,True,True,True,True,True,False,False
+N0134_07,dynamic_on,True,2014-12-17,2016-05-15 00:50:09,True,True,True,True,True,False,False
+N0134_08,dynamic_on,True,2014-12-17,2016-05-15 00:50:09,True,True,True,True,True,False,False
+N0134_09,dynamic_on,True,2014-12-17,2015-08-14 02:11:07,True,True,True,True,True,False,False
+N0134_10,dynamic_on,True,2014-12-17,2015-08-14 02:11:07,True,True,True,True,True,False,False
+N0139_01,dynamic_on,True,2011-06-02,2013-04-03 13:24:33,True,False,False,False,False,False,True
+N0139_02,dynamic_on,True,2011-06-02,2013-04-03 13:24:33,True,False,False,False,False,False,True
+N0139_03,dynamic_on,True,2011-06-02,2013-01-09 23:42:45,True,True,True,True,True,False,False
+N0139_04,dynamic_on,True,2011-06-02,2013-01-09 23:42:45,True,True,True,True,True,False,False
+N0139_05,dynamic_on,True,2011-06-02,2013-04-03 13:24:33,True,False,False,False,False,False,True
+N0139_06,dynamic_on,True,2011-06-02,2013-01-09 23:42:45,True,True,True,True,True,False,False
+N0139_07,dynamic_on,True,2011-06-02,2013-01-09 23:42:45,True,True,True,True,True,False,False
+N0139_08,dynamic_on,False,2011-06-02,,True,False,False,False,False,False,False
+N0139_09,dynamic_on,False,2011-06-02,,True,False,False,False,False,False,False
+N0139_10,dynamic_on,True,2011-06-02,2013-04-03 13:24:33,True,False,False,False,False,False,True
+N0141_01,dynamic_on,False,2014-12-02,,True,False,False,False,False,False,False
+N0141_02,dynamic_on,False,2014-12-02,,True,False,False,False,False,False,False
+N0141_03,dynamic_on,True,2014-12-02,2015-08-10 08:48:11,True,True,True,True,True,False,False
+N0141_04,dynamic_on,True,2014-12-02,2015-08-10 08:48:11,True,True,True,True,True,False,False
+N0141_05,dynamic_on,True,2014-12-02,2016-10-01 02:18:03,True,True,True,True,True,False,False
+N0141_06,dynamic_on,True,2014-12-02,2016-10-01 02:18:03,True,True,True,True,True,False,False
+N0141_07,dynamic_on,True,2014-12-02,2016-10-01 02:18:03,True,True,True,True,True,False,False
+N0141_08,dynamic_on,True,2014-12-02,2015-08-10 08:48:11,True,True,True,True,True,False,False
+N0141_09,dynamic_on,True,2014-12-02,2015-08-10 08:48:11,True,True,True,True,True,False,False
+N0141_10,dynamic_on,True,2014-12-02,2016-10-01 02:18:03,True,True,True,True,True,False,False
+N0142_01,dynamic_on,True,2011-07-30,2012-03-17 17:26:36,True,True,True,True,True,False,False
+N0142_02,dynamic_on,True,2011-07-30,2012-08-13 18:22:32,True,True,True,True,True,False,False
+N0142_03,dynamic_on,True,2011-07-30,2012-08-13 18:22:32,True,True,True,True,True,False,False
+N0142_04,dynamic_on,True,2011-07-30,2012-03-17 17:26:36,True,True,True,True,True,False,False
+N0142_05,dynamic_on,False,2011-07-30,,True,False,False,False,False,False,False
+N0142_06,dynamic_on,False,2011-07-30,,True,False,False,False,False,False,False
+N0142_07,dynamic_on,True,2011-07-30,2012-03-17 17:26:36,True,True,True,True,True,False,False
+N0142_08,dynamic_on,True,2011-07-30,2012-08-13 18:22:32,True,True,True,True,True,False,False
+N0142_09,dynamic_on,True,2011-07-30,2012-03-17 17:26:36,True,True,True,True,True,False,False
+N0142_10,dynamic_on,True,2011-07-30,2012-08-13 18:22:32,True,True,True,True,True,False,False
+N0144_01,dynamic_on,True,2011-12-17,2013-04-03 11:13:50,True,True,True,True,True,False,False
+N0144_02,dynamic_on,True,2011-12-17,2013-05-11 11:41:53,True,True,True,True,True,False,False
+N0144_03,dynamic_on,True,2011-12-17,2013-04-03 11:13:50,True,True,True,True,True,False,False
+N0144_04,dynamic_on,True,2011-12-17,2013-05-11 11:41:53,True,True,True,True,True,False,False
+N0144_05,dynamic_on,False,2011-12-17,,True,False,False,False,False,False,False
+N0144_06,dynamic_on,True,2011-12-17,2013-05-11 11:41:53,True,True,True,True,True,False,False
+N0144_07,dynamic_on,True,2011-12-17,2013-04-03 11:13:50,True,True,True,True,True,False,False
+N0144_08,dynamic_on,False,2011-12-17,,True,False,False,False,False,False,False
+N0144_09,dynamic_on,True,2011-12-17,2013-05-11 11:41:53,True,True,True,True,True,False,False
+N0144_10,dynamic_on,True,2011-12-17,2013-04-03 11:13:50,True,True,True,True,True,False,False
+N0149_01,dynamic_on,True,2011-10-06,2012-07-12 01:06:15,True,True,True,True,True,False,False
+N0149_02,dynamic_on,True,2011-10-06,2012-07-12 01:06:15,True,True,True,True,True,False,False
+N0149_03,dynamic_on,True,2011-10-06,2012-10-14 11:57:17,True,True,True,True,True,False,False
+N0149_04,dynamic_on,False,2011-10-06,,True,False,False,False,False,False,False
+N0149_05,dynamic_on,True,2011-10-06,2012-10-14 11:57:17,True,True,True,True,True,False,False
+N0149_06,dynamic_on,True,2011-10-06,2012-10-14 11:57:17,True,True,True,True,True,False,False
+N0149_07,dynamic_on,False,2011-10-06,,True,False,False,False,False,False,False
+N0149_08,dynamic_on,True,2011-10-06,2012-10-14 11:57:17,True,True,True,True,True,False,False
+N0149_09,dynamic_on,True,2011-10-06,2012-07-12 01:06:15,True,True,True,True,True,False,False
+N0149_10,dynamic_on,True,2011-10-06,2012-07-12 01:06:15,True,True,True,True,True,False,False
+N0151_01,dynamic_on,True,2012-07-15,2014-02-13 20:18:49,True,True,True,True,True,False,False
+N0151_02,dynamic_on,True,2012-07-15,2014-02-13 20:18:49,True,True,True,True,True,False,False
+N0151_03,dynamic_on,True,2012-07-15,2013-11-07 23:42:31,True,True,True,True,True,False,False
+N0151_04,dynamic_on,True,2012-07-15,2013-11-07 23:42:31,True,True,True,True,True,False,False
+N0151_05,dynamic_on,True,2012-07-15,2014-02-13 20:18:49,True,True,True,True,True,False,False
+N0151_06,dynamic_on,True,2012-07-15,2013-11-07 23:42:31,True,True,True,True,True,False,False
+N0151_07,dynamic_on,False,2012-07-15,,True,False,False,False,False,False,False
+N0151_08,dynamic_on,True,2012-07-15,2014-02-13 20:18:49,True,True,True,True,True,False,False
+N0151_09,dynamic_on,False,2012-07-15,,True,False,False,False,False,False,False
+N0151_10,dynamic_on,True,2012-07-15,2013-11-07 23:42:31,True,True,True,True,True,False,False
+N0152_01,dynamic_on,True,2011-07-14,2013-04-25 11:22:05,True,True,True,True,True,False,False
+N0152_02,dynamic_on,True,2011-07-14,2012-07-01 11:47:43,True,True,True,True,True,False,False
+N0152_03,dynamic_on,True,2011-07-14,2012-07-01 11:47:43,True,True,True,True,True,False,False
+N0152_04,dynamic_on,False,2011-07-14,,True,False,False,False,False,False,False
+N0152_05,dynamic_on,True,2011-07-14,2013-04-25 11:22:05,True,True,True,True,True,False,False
+N0152_06,dynamic_on,True,2011-07-14,2013-04-25 11:22:05,True,True,True,True,True,False,False
+N0152_07,dynamic_on,True,2011-07-14,2012-07-01 11:47:43,True,True,True,True,True,False,False
+N0152_08,dynamic_on,True,2011-07-14,2012-07-01 11:47:43,True,True,True,True,True,False,False
+N0152_09,dynamic_on,False,2011-07-14,,True,False,False,False,False,False,False
+N0152_10,dynamic_on,True,2011-07-14,2013-04-25 11:22:05,True,True,True,True,True,False,False
+N0154_01,dynamic_on,True,2010-01-14,2011-11-09 05:12:47,True,True,True,True,True,False,False
+N0154_02,dynamic_on,True,2010-01-14,2011-11-09 05:12:47,True,True,True,True,True,False,False
+N0154_03,dynamic_on,False,2010-01-14,,True,False,False,False,False,False,False
+N0154_04,dynamic_on,True,2010-01-14,2011-07-24 16:40:05,True,True,True,True,True,False,False
+N0154_05,dynamic_on,True,2010-01-14,2011-07-24 16:40:05,True,True,True,True,True,False,False
+N0154_06,dynamic_on,True,2010-01-14,2011-07-24 16:40:05,True,True,True,True,True,False,False
+N0154_07,dynamic_on,True,2010-01-14,2011-11-09 05:12:47,True,True,True,True,True,False,False
+N0154_08,dynamic_on,True,2010-01-14,2011-07-24 16:40:05,True,True,True,True,True,False,False
+N0154_09,dynamic_on,False,2010-01-14,,True,False,False,False,False,False,False
+N0154_10,dynamic_on,True,2010-01-14,2011-11-09 05:12:47,True,True,True,True,True,False,False
+N0158_01,dynamic_on,True,2013-10-03,2015-03-09 17:21:57,True,True,True,True,True,False,False
+N0158_02,dynamic_on,True,2013-10-03,2015-03-09 17:21:57,True,True,True,True,True,False,False
+N0158_03,dynamic_on,False,2013-10-03,,True,False,False,False,False,False,False
+N0158_04,dynamic_on,True,2013-10-03,2015-07-29 09:13:59,True,True,True,True,True,False,False
+N0158_05,dynamic_on,True,2013-10-03,2015-07-29 09:13:59,True,True,True,True,True,False,False
+N0158_06,dynamic_on,True,2013-10-03,2015-03-09 17:21:57,True,True,True,True,True,False,False
+N0158_07,dynamic_on,True,2013-10-03,2015-07-29 09:13:59,True,True,True,True,True,False,False
+N0158_08,dynamic_on,True,2013-10-03,2015-03-09 17:21:57,True,True,True,True,True,False,False
+N0158_09,dynamic_on,True,2013-10-03,2015-07-29 09:13:59,True,True,True,True,True,False,False
+N0158_10,dynamic_on,False,2013-10-03,,True,False,False,False,False,False,False
+N0162_01,dynamic_on,True,2011-10-09,2013-10-05 19:26:49,True,False,False,False,False,False,True
+N0162_02,dynamic_on,True,2011-10-09,2013-10-05 19:26:49,True,False,False,False,False,False,True
+N0162_03,dynamic_on,True,2011-10-09,2013-05-30 23:29:14,True,True,True,True,True,False,False
+N0162_04,dynamic_on,True,2011-10-09,2013-10-05 19:26:49,True,False,False,False,False,False,True
+N0162_05,dynamic_on,False,2011-10-09,,True,False,False,False,False,False,False
+N0162_06,dynamic_on,True,2011-10-09,2013-05-30 23:29:14,True,True,True,True,True,False,False
+N0162_07,dynamic_on,True,2011-10-09,2013-05-30 23:29:14,True,True,True,True,True,False,False
+N0162_08,dynamic_on,True,2011-10-09,2013-10-05 19:26:49,True,False,False,False,False,False,True
+N0162_09,dynamic_on,True,2011-10-09,2013-05-30 23:29:14,True,True,True,True,True,False,False
+N0162_10,dynamic_on,False,2011-10-09,,True,False,False,False,False,False,False
+N0166_01,dynamic_on,True,2011-11-25,2013-10-05 13:22:44,True,False,False,False,False,False,True
+N0166_02,dynamic_on,False,2011-11-25,,True,False,False,False,False,False,False
+N0166_03,dynamic_on,True,2011-11-25,2012-06-25 06:50:52,True,True,True,True,True,False,False
+N0166_04,dynamic_on,False,2011-11-25,,True,False,False,False,False,False,False
+N0166_05,dynamic_on,True,2011-11-25,2012-06-25 06:50:52,True,True,True,True,True,False,False
+N0166_06,dynamic_on,True,2011-11-25,2012-06-25 06:50:52,True,True,True,True,True,False,False
+N0166_07,dynamic_on,True,2011-11-25,2013-10-05 13:22:44,True,False,False,False,False,False,True
+N0166_08,dynamic_on,True,2011-11-25,2013-10-05 13:22:44,True,False,False,False,False,False,True
+N0166_09,dynamic_on,True,2011-11-25,2012-06-25 06:50:52,True,True,True,True,True,False,False
+N0166_10,dynamic_on,True,2011-11-25,2013-10-05 13:22:44,True,False,False,False,False,False,True
+N0183_01,dynamic_on,True,2014-11-11,2015-11-17 00:33:46,True,True,True,True,True,False,False
+N0183_02,dynamic_on,True,2014-11-11,2015-11-17 00:33:46,True,True,True,True,True,False,False
+N0183_03,dynamic_on,True,2014-11-11,2016-01-18 17:47:10,True,True,True,True,True,False,False
+N0183_04,dynamic_on,True,2014-11-11,2016-01-18 17:47:10,True,True,True,True,True,False,False
+N0183_05,dynamic_on,False,2014-11-11,,True,False,False,False,False,False,False
+N0183_06,dynamic_on,True,2014-11-11,2016-01-18 17:47:10,True,True,True,True,True,False,False
+N0183_07,dynamic_on,True,2014-11-11,2016-01-18 17:47:10,True,True,True,True,True,False,False
+N0183_08,dynamic_on,False,2014-11-11,,True,False,False,False,False,False,False
+N0183_09,dynamic_on,True,2014-11-11,2015-11-17 00:33:46,True,True,True,True,True,False,False
+N0183_10,dynamic_on,True,2014-11-11,2015-11-17 00:33:46,True,True,True,True,True,False,False
+N0190_01,dynamic_on,True,2012-04-09,2013-12-23 13:11:10,True,True,True,True,True,False,False
+N0190_02,dynamic_on,True,2012-04-09,2014-03-26 00:28:23,True,False,False,False,False,False,True
+N0190_03,dynamic_on,True,2012-04-09,2013-12-23 13:11:10,True,True,True,True,True,False,False
+N0190_04,dynamic_on,True,2012-04-09,2014-03-26 00:28:23,True,False,False,False,False,False,True
+N0190_05,dynamic_on,True,2012-04-09,2013-12-23 13:11:10,True,True,True,True,True,False,False
+N0190_06,dynamic_on,True,2012-04-09,2014-03-26 00:28:23,True,False,False,False,False,False,True
+N0190_07,dynamic_on,True,2012-04-09,2013-12-23 13:11:10,True,True,True,True,True,False,False
+N0190_08,dynamic_on,False,2012-04-09,,True,False,False,False,False,False,False
+N0190_09,dynamic_on,False,2012-04-09,,True,False,False,False,False,False,False
+N0190_10,dynamic_on,True,2012-04-09,2014-03-26 00:28:23,True,False,False,False,False,False,True
+N0192_01,dynamic_on,True,2010-01-01,2010-10-16 22:27:01,True,True,True,True,True,False,False
+N0192_02,dynamic_on,True,2010-01-01,2010-07-05 12:49:35,True,True,True,True,True,False,False
+N0192_03,dynamic_on,True,2010-01-01,2010-07-05 12:49:35,True,True,True,True,True,False,False
+N0192_04,dynamic_on,True,2010-01-01,2010-10-16 22:27:01,True,True,True,True,True,False,False
+N0192_05,dynamic_on,True,2010-01-01,2010-07-05 12:49:35,True,True,True,True,True,False,False
+N0192_06,dynamic_on,True,2010-01-01,2010-10-16 22:27:01,True,True,True,True,True,False,False
+N0192_07,dynamic_on,True,2010-01-01,2010-10-16 22:27:01,True,True,True,True,True,False,False
+N0192_08,dynamic_on,True,2010-01-01,2010-07-05 12:49:35,True,True,True,True,True,False,False
+N0192_09,dynamic_on,False,2010-01-01,,True,False,False,False,False,False,False
+N0192_10,dynamic_on,False,2010-01-01,,True,False,False,False,False,False,False
+N0194_01,dynamic_on,True,2010-04-24,2010-12-19 18:00:36,True,True,True,True,True,False,False
+N0194_02,dynamic_on,True,2010-04-24,2011-07-26 01:56:12,True,True,True,True,True,False,False
+N0194_03,dynamic_on,True,2010-04-24,2011-07-26 01:56:12,True,True,True,True,True,False,False
+N0194_04,dynamic_on,True,2010-04-24,2010-12-19 18:00:36,True,True,True,True,True,False,False
+N0194_05,dynamic_on,True,2010-04-24,2011-07-26 01:56:12,True,True,True,True,True,False,False
+N0194_06,dynamic_on,False,2010-04-24,,True,False,False,False,False,False,False
+N0194_07,dynamic_on,True,2010-04-24,2010-12-19 18:00:36,True,True,True,True,True,False,False
+N0194_08,dynamic_on,True,2010-04-24,2010-12-19 18:00:36,True,True,True,True,True,False,False
+N0194_09,dynamic_on,False,2010-04-24,,True,False,False,False,False,False,False
+N0194_10,dynamic_on,True,2010-04-24,2011-07-26 01:56:12,True,True,True,True,True,False,False
+N0195_01,dynamic_on,True,2014-01-01,2014-07-01 16:01:56,True,True,True,True,True,False,False
+N0195_02,dynamic_on,True,2014-01-01,2014-07-01 16:01:56,True,True,True,True,True,False,False
+N0195_03,dynamic_on,False,2014-01-01,,True,False,False,False,False,False,False
+N0195_04,dynamic_on,True,2014-01-01,2015-04-08 03:43:38,True,True,True,True,True,False,False
+N0195_05,dynamic_on,True,2014-01-01,2015-04-08 03:43:38,True,True,True,True,True,False,False
+N0195_06,dynamic_on,True,2014-01-01,2014-07-01 16:01:56,True,True,True,True,True,False,False
+N0195_07,dynamic_on,True,2014-01-01,2015-04-08 03:43:38,True,True,True,True,True,False,False
+N0195_08,dynamic_on,True,2014-01-01,2014-07-01 16:01:56,True,True,True,True,True,False,False
+N0195_09,dynamic_on,True,2014-01-01,2015-04-08 03:43:38,True,True,True,True,True,False,False
+N0195_10,dynamic_on,False,2014-01-01,,True,False,False,False,False,False,False
+N0199_01,dynamic_on,True,2013-07-26,2014-06-24 13:50:37,True,True,True,True,True,False,False
+N0199_02,dynamic_on,True,2013-07-26,2014-06-24 13:50:37,True,True,True,True,True,False,False
+N0199_03,dynamic_on,True,2013-07-26,2014-06-24 13:50:37,True,True,True,True,True,False,False
+N0199_04,dynamic_on,True,2013-07-26,2014-12-23 04:27:32,True,True,True,True,True,False,False
+N0199_05,dynamic_on,False,2013-07-26,,True,False,False,False,False,False,False
+N0199_06,dynamic_on,True,2013-07-26,2014-12-23 04:27:32,True,True,True,True,True,False,False
+N0199_07,dynamic_on,True,2013-07-26,2014-06-24 13:50:37,True,True,True,True,True,False,False
+N0199_08,dynamic_on,False,2013-07-26,,True,False,False,False,False,False,False
+N0199_09,dynamic_on,True,2013-07-26,2014-12-23 04:27:32,True,True,True,True,True,False,False
+N0199_10,dynamic_on,True,2013-07-26,2014-12-23 04:27:32,True,True,True,True,True,False,False
+N0214_01,dynamic_on,True,2014-09-12,2016-04-08 16:02:15,True,True,True,True,True,False,False
+N0214_02,dynamic_on,True,2014-09-12,2016-04-08 16:02:15,True,True,True,True,True,False,False
+N0214_03,dynamic_on,False,2014-09-12,,True,False,False,False,False,False,False
+N0214_04,dynamic_on,False,2014-09-12,,True,False,False,False,False,False,False
+N0214_05,dynamic_on,True,2014-09-12,2016-05-19 15:47:48,True,True,True,True,True,False,False
+N0214_06,dynamic_on,True,2014-09-12,2016-05-19 15:47:48,True,True,True,True,True,False,False
+N0214_07,dynamic_on,True,2014-09-12,2016-04-08 16:02:15,True,True,True,True,True,False,False
+N0214_08,dynamic_on,True,2014-09-12,2016-05-19 15:47:48,True,True,True,True,True,False,False
+N0214_09,dynamic_on,True,2014-09-12,2016-05-19 15:47:48,True,True,True,True,True,False,False
+N0214_10,dynamic_on,True,2014-09-12,2016-04-08 16:02:15,True,True,True,True,True,False,False
+N0215_01,dynamic_on,True,2013-12-01,2014-11-05 20:24:18,True,True,True,True,True,False,False
+N0215_02,dynamic_on,False,2013-12-01,,True,False,False,False,False,False,False
+N0215_03,dynamic_on,False,2013-12-01,,True,False,False,False,False,False,False
+N0215_04,dynamic_on,True,2013-12-01,2015-01-01 09:47:29,True,True,True,True,True,False,False
+N0215_05,dynamic_on,True,2013-12-01,2014-11-05 20:24:18,True,True,True,True,True,False,False
+N0215_06,dynamic_on,True,2013-12-01,2015-01-01 09:47:29,True,True,True,True,True,False,False
+N0215_07,dynamic_on,True,2013-12-01,2015-01-01 09:47:29,True,True,True,True,True,False,False
+N0215_08,dynamic_on,True,2013-12-01,2014-11-05 20:24:18,True,True,True,True,True,False,False
+N0215_09,dynamic_on,True,2013-12-01,2014-11-05 20:24:18,True,True,True,True,True,False,False
+N0215_10,dynamic_on,True,2013-12-01,2015-01-01 09:47:29,True,True,True,True,True,False,False
+N0230_01,dynamic_on,True,2010-04-07,2011-02-15 23:43:59,True,True,True,True,True,False,False
+N0230_02,dynamic_on,False,2010-04-07,,True,False,False,False,False,False,False
+N0230_03,dynamic_on,True,2010-04-07,2010-12-21 20:03:26,True,True,True,True,True,False,False
+N0230_04,dynamic_on,True,2010-04-07,2010-12-21 20:03:26,True,True,True,True,True,False,False
+N0230_05,dynamic_on,True,2010-04-07,2011-02-15 23:43:59,True,True,True,True,True,False,False
+N0230_06,dynamic_on,True,2010-04-07,2011-02-15 23:43:59,True,True,True,True,True,False,False
+N0230_07,dynamic_on,True,2010-04-07,2010-12-21 20:03:26,True,True,True,True,True,False,False
+N0230_08,dynamic_on,True,2010-04-07,2011-02-15 23:43:59,True,True,True,True,True,False,False
+N0230_09,dynamic_on,False,2010-04-07,,True,False,False,False,False,False,False
+N0230_10,dynamic_on,True,2010-04-07,2010-12-21 20:03:26,True,True,True,True,True,False,False
+N0239_01,dynamic_on,True,2011-02-06,2012-07-11 18:45:03,True,True,True,True,True,False,False
+N0239_02,dynamic_on,True,2011-02-06,2012-04-21 19:09:18,True,True,True,True,True,False,False
+N0239_03,dynamic_on,False,2011-02-06,,True,False,False,False,False,False,False
+N0239_04,dynamic_on,True,2011-02-06,2012-07-11 18:45:03,True,True,True,True,True,False,False
+N0239_05,dynamic_on,False,2011-02-06,,True,False,False,False,False,False,False
+N0239_06,dynamic_on,True,2011-02-06,2012-07-11 18:45:03,True,True,True,True,True,False,False
+N0239_07,dynamic_on,True,2011-02-06,2012-04-21 19:09:18,True,True,True,True,True,False,False
+N0239_08,dynamic_on,True,2011-02-06,2012-04-21 19:09:18,True,True,True,True,True,False,False
+N0239_09,dynamic_on,True,2011-02-06,2012-07-11 18:45:03,True,True,True,True,True,False,False
+N0239_10,dynamic_on,True,2011-02-06,2012-04-21 19:09:18,True,True,True,True,True,False,False
+N0241_01,dynamic_on,True,2012-08-18,2013-03-22 20:59:15,True,True,True,True,True,False,False
+N0241_02,dynamic_on,True,2012-08-18,2014-07-31 06:01:30,True,False,False,False,False,False,True
+N0241_03,dynamic_on,True,2012-08-18,2013-03-22 20:59:15,True,True,True,True,True,False,False
+N0241_04,dynamic_on,True,2012-08-18,2014-07-31 06:01:30,True,False,False,False,False,False,True
+N0241_05,dynamic_on,True,2012-08-18,2013-03-22 20:59:15,True,True,True,True,True,False,False
+N0241_06,dynamic_on,True,2012-08-18,2014-07-31 06:01:30,True,False,False,False,False,False,True
+N0241_07,dynamic_on,True,2012-08-18,2013-03-22 20:59:15,True,True,True,True,True,False,False
+N0241_08,dynamic_on,False,2012-08-18,,True,False,False,False,False,False,False
+N0241_09,dynamic_on,True,2012-08-18,2014-07-31 06:01:30,True,False,False,False,False,False,True
+N0241_10,dynamic_on,False,2012-08-18,,True,False,False,False,False,False,False
+N0255_01,dynamic_on,True,2014-04-14,2016-02-25 00:06:31,True,False,False,False,False,False,True
+N0255_02,dynamic_on,True,2014-04-14,2016-02-25 00:06:31,True,False,False,False,False,False,True
+N0255_03,dynamic_on,True,2014-04-14,2014-12-14 19:49:59,True,True,True,True,True,False,False
+N0255_04,dynamic_on,True,2014-04-14,2014-12-14 19:49:59,True,True,True,True,True,False,False
+N0255_05,dynamic_on,True,2014-04-14,2014-12-14 19:49:59,True,True,True,True,True,False,False
+N0255_06,dynamic_on,True,2014-04-14,2016-02-25 00:06:31,True,False,False,False,False,False,True
+N0255_07,dynamic_on,False,2014-04-14,,True,False,False,False,False,False,False
+N0255_08,dynamic_on,False,2014-04-14,,True,False,False,False,False,False,False
+N0255_09,dynamic_on,True,2014-04-14,2016-02-25 00:06:31,True,False,False,False,False,False,True
+N0255_10,dynamic_on,True,2014-04-14,2014-12-14 19:49:59,True,True,True,True,True,False,False
+N0257_01,dynamic_on,False,2014-08-13,,True,False,False,False,False,False,False
+N0257_02,dynamic_on,True,2014-08-13,2015-05-09 09:31:14,True,True,True,True,True,False,False
+N0257_03,dynamic_on,False,2014-08-13,,True,False,False,False,False,False,False
+N0257_04,dynamic_on,True,2014-08-13,2015-05-09 09:31:14,True,True,True,True,True,False,False
+N0257_05,dynamic_on,True,2014-08-13,2015-10-14 13:00:32,True,True,True,True,True,False,False
+N0257_06,dynamic_on,True,2014-08-13,2015-05-09 09:31:14,True,True,True,True,True,False,False
+N0257_07,dynamic_on,True,2014-08-13,2015-10-14 13:00:32,True,True,True,True,True,False,False
+N0257_08,dynamic_on,True,2014-08-13,2015-10-14 13:00:32,True,True,True,True,True,False,False
+N0257_09,dynamic_on,True,2014-08-13,2015-10-14 13:00:32,True,True,True,True,True,False,False
+N0257_10,dynamic_on,True,2014-08-13,2015-05-09 09:31:14,True,True,True,True,True,False,False
+N0260_01,dynamic_on,True,2010-11-12,2012-07-29 00:55:30,True,True,True,True,True,False,False
+N0260_02,dynamic_on,True,2010-11-12,2011-08-12 03:02:13,True,True,True,True,True,False,False
+N0260_03,dynamic_on,True,2010-11-12,2012-07-29 00:55:30,True,True,True,True,True,False,False
+N0260_04,dynamic_on,True,2010-11-12,2012-07-29 00:55:30,True,True,True,True,True,False,False
+N0260_05,dynamic_on,True,2010-11-12,2012-07-29 00:55:30,True,True,True,True,True,False,False
+N0260_06,dynamic_on,False,2010-11-12,,True,False,False,False,False,False,False
+N0260_07,dynamic_on,True,2010-11-12,2011-08-12 03:02:13,True,True,True,True,True,False,False
+N0260_08,dynamic_on,True,2010-11-12,2011-08-12 03:02:13,True,True,True,True,True,False,False
+N0260_09,dynamic_on,False,2010-11-12,,True,False,False,False,False,False,False
+N0260_10,dynamic_on,True,2010-11-12,2011-08-12 03:02:13,True,True,True,True,True,False,False
+N0266_01,dynamic_on,True,2014-06-08,2015-07-05 01:18:57,True,True,True,True,True,False,False
+N0266_02,dynamic_on,True,2014-06-08,2015-07-05 01:18:57,True,True,True,True,True,False,False
+N0266_03,dynamic_on,False,2014-06-08,,True,False,False,False,False,False,False
+N0266_04,dynamic_on,True,2014-06-08,2015-08-23 08:35:12,True,True,True,True,True,False,False
+N0266_05,dynamic_on,True,2014-06-08,2015-08-23 08:35:12,True,True,True,True,True,False,False
+N0266_06,dynamic_on,True,2014-06-08,2015-08-23 08:35:12,True,True,True,True,True,False,False
+N0266_07,dynamic_on,True,2014-06-08,2015-08-23 08:35:12,True,True,True,True,True,False,False
+N0266_08,dynamic_on,True,2014-06-08,2015-07-05 01:18:57,True,True,True,True,True,False,False
+N0266_09,dynamic_on,False,2014-06-08,,True,False,False,False,False,False,False
+N0266_10,dynamic_on,True,2014-06-08,2015-07-05 01:18:57,True,True,True,True,True,False,False
+N0273_01,dynamic_on,True,2011-07-26,2012-05-22 09:50:39,True,True,True,True,True,False,False
+N0273_02,dynamic_on,True,2011-07-26,2012-09-15 00:11:54,True,True,True,True,True,False,False
+N0273_03,dynamic_on,True,2011-07-26,2012-09-15 00:11:54,True,True,True,True,True,False,False
+N0273_04,dynamic_on,True,2011-07-26,2012-05-22 09:50:39,True,True,True,True,True,False,False
+N0273_05,dynamic_on,True,2011-07-26,2012-05-22 09:50:39,True,True,True,True,True,False,False
+N0273_06,dynamic_on,False,2011-07-26,,True,False,False,False,False,False,False
+N0273_07,dynamic_on,False,2011-07-26,,True,False,False,False,False,False,False
+N0273_08,dynamic_on,True,2011-07-26,2012-09-15 00:11:54,True,True,True,True,True,False,False
+N0273_09,dynamic_on,True,2011-07-26,2012-05-22 09:50:39,True,True,True,True,True,False,False
+N0273_10,dynamic_on,True,2011-07-26,2012-09-15 00:11:54,True,True,True,True,True,False,False
+N0274_01,dynamic_on,True,2011-08-12,2012-02-21 04:22:38,True,True,True,True,True,False,False
+N0274_02,dynamic_on,True,2011-08-12,2013-04-22 06:44:14,True,True,True,True,True,False,False
+N0274_03,dynamic_on,False,2011-08-12,,True,False,False,False,False,False,False
+N0274_04,dynamic_on,True,2011-08-12,2012-02-21 04:22:38,True,True,True,True,True,False,False
+N0274_05,dynamic_on,True,2011-08-12,2012-02-21 04:22:38,True,True,True,True,True,False,False
+N0274_06,dynamic_on,False,2011-08-12,,True,False,False,False,False,False,False
+N0274_07,dynamic_on,True,2011-08-12,2012-02-21 04:22:38,True,True,True,True,True,False,False
+N0274_08,dynamic_on,True,2011-08-12,2013-04-22 06:44:14,True,True,True,True,True,False,False
+N0274_09,dynamic_on,True,2011-08-12,2013-04-22 06:44:14,True,True,True,True,True,False,False
+N0274_10,dynamic_on,True,2011-08-12,2013-04-22 06:44:14,True,True,True,True,True,False,False
+N0279_01,dynamic_on,True,2014-02-13,2014-09-30 17:43:27,True,True,True,True,True,False,False
+N0279_02,dynamic_on,True,2014-02-13,2014-11-15 00:09:20,True,True,True,True,True,False,False
+N0279_03,dynamic_on,True,2014-02-13,2014-09-30 17:43:27,True,True,True,True,True,False,False
+N0279_04,dynamic_on,False,2014-02-13,,True,False,False,False,False,False,False
+N0279_05,dynamic_on,True,2014-02-13,2014-09-30 17:43:27,True,True,True,True,True,False,False
+N0279_06,dynamic_on,False,2014-02-13,,True,False,False,False,False,False,False
+N0279_07,dynamic_on,True,2014-02-13,2014-11-15 00:09:20,True,True,True,True,True,False,False
+N0279_08,dynamic_on,True,2014-02-13,2014-11-15 00:09:20,True,True,True,True,True,False,False
+N0279_09,dynamic_on,True,2014-02-13,2014-11-15 00:09:20,True,True,True,True,True,False,False
+N0279_10,dynamic_on,True,2014-02-13,2014-09-30 17:43:27,True,True,True,True,True,False,False
+N0282_01,dynamic_on,False,2010-02-06,,True,False,False,False,False,False,False
+N0282_02,dynamic_on,True,2010-02-06,2011-10-01 03:19:12,True,True,True,True,True,False,False
+N0282_03,dynamic_on,True,2010-02-06,2011-09-11 08:49:58,True,True,True,True,True,False,False
+N0282_04,dynamic_on,True,2010-02-06,2011-09-11 08:49:58,True,True,True,True,True,False,False
+N0282_05,dynamic_on,True,2010-02-06,2011-09-11 08:49:58,True,True,True,True,True,False,False
+N0282_06,dynamic_on,False,2010-02-06,,True,False,False,False,False,False,False
+N0282_07,dynamic_on,True,2010-02-06,2011-09-11 08:49:58,True,True,True,True,True,False,False
+N0282_08,dynamic_on,True,2010-02-06,2011-10-01 03:19:12,True,True,True,True,True,False,False
+N0282_09,dynamic_on,True,2010-02-06,2011-10-01 03:19:12,True,True,True,True,True,False,False
+N0282_10,dynamic_on,True,2010-02-06,2011-10-01 03:19:12,True,True,True,True,True,False,False
+N0285_01,dynamic_on,False,2010-05-25,,True,False,False,False,False,False,False
+N0285_02,dynamic_on,True,2010-05-25,2011-06-08 07:24:13,True,True,True,True,True,False,False
+N0285_03,dynamic_on,True,2010-05-25,2011-06-08 07:24:13,True,True,True,True,True,False,False
+N0285_04,dynamic_on,True,2010-05-25,2011-06-08 07:24:13,True,True,True,True,True,False,False
+N0285_05,dynamic_on,False,2010-05-25,,True,False,False,False,False,False,False
+N0285_06,dynamic_on,True,2010-05-25,2010-12-17 03:50:45,True,True,True,True,True,False,False
+N0285_07,dynamic_on,True,2010-05-25,2010-12-17 03:50:45,True,True,True,True,True,False,False
+N0285_08,dynamic_on,True,2010-05-25,2010-12-17 03:50:45,True,True,True,True,True,False,False
+N0285_09,dynamic_on,True,2010-05-25,2010-12-17 03:50:45,True,True,True,True,True,False,False
+N0285_10,dynamic_on,True,2010-05-25,2011-06-08 07:24:13,True,True,True,True,True,False,False
+N0286_01,dynamic_on,True,2010-11-15,2011-09-10 07:54:56,True,True,True,True,True,False,False
+N0286_02,dynamic_on,True,2010-11-15,2011-09-10 07:54:56,True,True,True,True,True,False,False
+N0286_03,dynamic_on,True,2010-11-15,2011-09-10 07:54:56,True,True,True,True,True,False,False
+N0286_04,dynamic_on,False,2010-11-15,,True,False,False,False,False,False,False
+N0286_05,dynamic_on,True,2010-11-15,2012-08-20 20:47:26,True,True,True,True,True,False,False
+N0286_06,dynamic_on,True,2010-11-15,2012-08-20 20:47:26,True,True,True,True,True,False,False
+N0286_07,dynamic_on,False,2010-11-15,,True,False,False,False,False,False,False
+N0286_08,dynamic_on,True,2010-11-15,2011-09-10 07:54:56,True,True,True,True,True,False,False
+N0286_09,dynamic_on,True,2010-11-15,2012-08-20 20:47:26,True,True,True,True,True,False,False
+N0286_10,dynamic_on,True,2010-11-15,2012-08-20 20:47:26,True,True,True,True,True,False,False
+N0288_01,dynamic_on,True,2014-07-22,2015-12-30 07:08:27,True,True,True,True,True,False,False
+N0288_02,dynamic_on,False,2014-07-22,,True,False,False,False,False,False,False
+N0288_03,dynamic_on,True,2014-07-22,2015-08-19 07:47:47,True,True,True,True,True,False,False
+N0288_04,dynamic_on,True,2014-07-22,2015-08-19 07:47:47,True,True,True,True,True,False,False
+N0288_05,dynamic_on,False,2014-07-22,,True,False,False,False,False,False,False
+N0288_06,dynamic_on,True,2014-07-22,2015-12-30 07:08:27,True,True,True,True,True,False,False
+N0288_07,dynamic_on,True,2014-07-22,2015-08-19 07:47:47,True,True,True,True,True,False,False
+N0288_08,dynamic_on,True,2014-07-22,2015-12-30 07:08:27,True,True,True,True,True,False,False
+N0288_09,dynamic_on,True,2014-07-22,2015-08-19 07:47:47,True,True,True,True,True,False,False
+N0288_10,dynamic_on,True,2014-07-22,2015-12-30 07:08:27,True,True,True,True,True,False,False
+N0294_01,dynamic_on,False,2011-06-26,,True,False,False,False,False,False,False
+N0294_02,dynamic_on,True,2011-06-26,2012-05-31 15:31:15,True,True,True,True,True,False,False
+N0294_03,dynamic_on,True,2011-06-26,2012-05-31 15:31:15,True,True,True,True,True,False,False
+N0294_04,dynamic_on,True,2011-06-26,2012-05-31 15:31:15,True,True,True,True,True,False,False
+N0294_05,dynamic_on,True,2011-06-26,2012-10-25 10:02:56,True,True,True,True,True,False,False
+N0294_06,dynamic_on,True,2011-06-26,2012-10-25 10:02:56,True,True,True,True,True,False,False
+N0294_07,dynamic_on,True,2011-06-26,2012-10-25 10:02:56,True,True,True,True,True,False,False
+N0294_08,dynamic_on,False,2011-06-26,,True,False,False,False,False,False,False
+N0294_09,dynamic_on,True,2011-06-26,2012-10-25 10:02:56,True,True,True,True,True,False,False
+N0294_10,dynamic_on,True,2011-06-26,2012-05-31 15:31:15,True,True,True,True,True,False,False
+N0295_01,dynamic_on,False,2012-12-23,,True,False,False,False,False,False,False
+N0295_02,dynamic_on,False,2012-12-23,,True,False,False,False,False,False,False
+N0295_03,dynamic_on,True,2012-12-23,2014-11-06 23:54:46,True,False,False,False,False,False,True
+N0295_04,dynamic_on,True,2012-12-23,2014-11-06 23:54:46,True,False,False,False,False,False,True
+N0295_05,dynamic_on,True,2012-12-23,2014-08-15 09:43:04,True,True,True,True,True,False,False
+N0295_06,dynamic_on,True,2012-12-23,2014-08-15 09:43:04,True,True,True,True,True,False,False
+N0295_07,dynamic_on,True,2012-12-23,2014-11-06 23:54:46,True,False,False,False,False,False,True
+N0295_08,dynamic_on,True,2012-12-23,2014-08-15 09:43:04,True,True,True,True,True,False,False
+N0295_09,dynamic_on,True,2012-12-23,2014-08-15 09:43:04,True,True,True,True,True,False,False
+N0295_10,dynamic_on,True,2012-12-23,2014-11-06 23:54:46,True,False,False,False,False,False,True
+N0298_01,dynamic_on,True,2010-01-03,2011-10-26 19:59:53,True,True,True,True,True,False,False
+N0298_02,dynamic_on,True,2010-01-03,2011-10-26 19:59:53,True,True,True,True,True,False,False
+N0298_03,dynamic_on,True,2010-01-03,2011-10-26 19:59:53,True,True,True,True,True,False,False
+N0298_04,dynamic_on,True,2010-01-03,2010-07-18 03:41:49,True,True,True,True,True,False,False
+N0298_05,dynamic_on,True,2010-01-03,2010-07-18 03:41:49,True,True,True,True,True,False,False
+N0298_06,dynamic_on,True,2010-01-03,2010-07-18 03:41:49,True,True,True,True,True,False,False
+N0298_07,dynamic_on,True,2010-01-03,2010-07-18 03:41:49,True,True,True,True,True,False,False
+N0298_08,dynamic_on,False,2010-01-03,,True,False,False,False,False,False,False
+N0298_09,dynamic_on,True,2010-01-03,2011-10-26 19:59:53,True,True,True,True,True,False,False
+N0298_10,dynamic_on,False,2010-01-03,,True,False,False,False,False,False,False
+N0302_01,dynamic_on,True,2011-04-09,2012-03-11 12:03:08,True,True,True,True,True,False,False
+N0302_02,dynamic_on,False,2011-04-09,,True,False,False,False,False,False,False
+N0302_03,dynamic_on,True,2011-04-09,2011-12-28 21:03:50,True,True,True,True,True,False,False
+N0302_04,dynamic_on,True,2011-04-09,2011-12-28 21:03:50,True,True,True,True,True,False,False
+N0302_05,dynamic_on,True,2011-04-09,2011-12-28 21:03:50,True,True,True,True,True,False,False
+N0302_06,dynamic_on,True,2011-04-09,2012-03-11 12:03:08,True,True,True,True,True,False,False
+N0302_07,dynamic_on,True,2011-04-09,2012-03-11 12:03:08,True,True,True,True,True,False,False
+N0302_08,dynamic_on,True,2011-04-09,2012-03-11 12:03:08,True,True,True,True,True,False,False
+N0302_09,dynamic_on,True,2011-04-09,2011-12-28 21:03:50,True,True,True,True,True,False,False
+N0302_10,dynamic_on,False,2011-04-09,,True,False,False,False,False,False,False
+N0308_01,dynamic_on,False,2012-02-24,,True,False,False,False,False,False,False
+N0308_02,dynamic_on,True,2012-02-24,2013-06-06 12:48:54,True,True,True,True,True,False,False
+N0308_03,dynamic_on,False,2012-02-24,,True,False,False,False,False,False,False
+N0308_04,dynamic_on,True,2012-02-24,2013-06-06 12:48:54,True,True,True,True,True,False,False
+N0308_05,dynamic_on,True,2012-02-24,2013-10-27 12:27:58,True,True,True,True,True,False,False
+N0308_06,dynamic_on,True,2012-02-24,2013-10-27 12:27:58,True,True,True,True,True,False,False
+N0308_07,dynamic_on,True,2012-02-24,2013-06-06 12:48:54,True,True,True,True,True,False,False
+N0308_08,dynamic_on,True,2012-02-24,2013-06-06 12:48:54,True,True,True,True,True,False,False
+N0308_09,dynamic_on,True,2012-02-24,2013-10-27 12:27:58,True,True,True,True,True,False,False
+N0308_10,dynamic_on,True,2012-02-24,2013-10-27 12:27:58,True,True,True,True,True,False,False
+N0311_01,dynamic_on,True,2013-06-23,2014-06-15 01:19:42,True,True,True,True,True,False,False
+N0311_02,dynamic_on,True,2013-06-23,2014-06-15 01:19:42,True,True,True,True,True,False,False
+N0311_03,dynamic_on,True,2013-06-23,2014-12-07 00:54:23,True,True,True,True,True,False,False
+N0311_04,dynamic_on,True,2013-06-23,2014-12-07 00:54:23,True,True,True,True,True,False,False
+N0311_05,dynamic_on,False,2013-06-23,,True,False,False,False,False,False,False
+N0311_06,dynamic_on,True,2013-06-23,2014-06-15 01:19:42,True,True,True,True,True,False,False
+N0311_07,dynamic_on,True,2013-06-23,2014-12-07 00:54:23,True,True,True,True,True,False,False
+N0311_08,dynamic_on,True,2013-06-23,2014-06-15 01:19:42,True,True,True,True,True,False,False
+N0311_09,dynamic_on,False,2013-06-23,,True,False,False,False,False,False,False
+N0311_10,dynamic_on,True,2013-06-23,2014-12-07 00:54:23,True,True,True,True,True,False,False
+N0317_01,dynamic_on,True,2014-06-25,2016-04-24 01:53:31,True,True,True,True,True,False,False
+N0317_02,dynamic_on,True,2014-06-25,2015-06-29 10:22:05,True,True,True,True,True,False,False
+N0317_03,dynamic_on,False,2014-06-25,,True,False,False,False,False,False,False
+N0317_04,dynamic_on,True,2014-06-25,2015-06-29 10:22:05,True,True,True,True,True,False,False
+N0317_05,dynamic_on,True,2014-06-25,2015-06-29 10:22:05,True,True,True,True,True,False,False
+N0317_06,dynamic_on,True,2014-06-25,2015-06-29 10:22:05,True,True,True,True,True,False,False
+N0317_07,dynamic_on,True,2014-06-25,2016-04-24 01:53:31,True,True,True,True,True,False,False
+N0317_08,dynamic_on,False,2014-06-25,,True,False,False,False,False,False,False
+N0317_09,dynamic_on,True,2014-06-25,2016-04-24 01:53:31,True,True,True,True,True,False,False
+N0317_10,dynamic_on,True,2014-06-25,2016-04-24 01:53:31,True,True,True,True,True,False,False
+N0321_01,dynamic_on,True,2011-08-05,2013-01-28 14:43:31,True,True,True,True,True,False,False
+N0321_02,dynamic_on,False,2011-08-05,,True,False,False,False,False,False,False
+N0321_03,dynamic_on,False,2011-08-05,,True,False,False,False,False,False,False
+N0321_04,dynamic_on,True,2011-08-05,2012-09-17 02:04:34,True,True,True,True,True,False,False
+N0321_05,dynamic_on,True,2011-08-05,2012-09-17 02:04:34,True,True,True,True,True,False,False
+N0321_06,dynamic_on,True,2011-08-05,2012-09-17 02:04:34,True,True,True,True,True,False,False
+N0321_07,dynamic_on,True,2011-08-05,2012-09-17 02:04:34,True,True,True,True,True,False,False
+N0321_08,dynamic_on,True,2011-08-05,2013-01-28 14:43:31,True,True,True,True,True,False,False
+N0321_09,dynamic_on,True,2011-08-05,2013-01-28 14:43:31,True,True,True,True,True,False,False
+N0321_10,dynamic_on,True,2011-08-05,2013-01-28 14:43:31,True,True,True,True,True,False,False
+N0327_01,dynamic_on,True,2010-08-22,2012-06-16 14:37:16,True,True,True,True,True,False,False
+N0327_02,dynamic_on,True,2010-08-22,2011-09-27 19:20:58,True,True,True,True,True,False,False
+N0327_03,dynamic_on,True,2010-08-22,2011-09-27 19:20:58,True,True,True,True,True,False,False
+N0327_04,dynamic_on,True,2010-08-22,2012-06-16 14:37:16,True,True,True,True,True,False,False
+N0327_05,dynamic_on,True,2010-08-22,2011-09-27 19:20:58,True,True,True,True,True,False,False
+N0327_06,dynamic_on,True,2010-08-22,2012-06-16 14:37:16,True,True,True,True,True,False,False
+N0327_07,dynamic_on,True,2010-08-22,2012-06-16 14:37:16,True,True,True,True,True,False,False
+N0327_08,dynamic_on,True,2010-08-22,2011-09-27 19:20:58,True,True,True,True,True,False,False
+N0327_09,dynamic_on,False,2010-08-22,,True,False,False,False,False,False,False
+N0327_10,dynamic_on,False,2010-08-22,,True,False,False,False,False,False,False
+N0329_01,dynamic_on,True,2010-04-07,2011-02-26 13:30:08,True,True,True,True,True,False,False
+N0329_02,dynamic_on,True,2010-04-07,2011-02-26 13:30:08,True,True,True,True,True,False,False
+N0329_03,dynamic_on,False,2010-04-07,,True,False,False,False,False,False,False
+N0329_04,dynamic_on,True,2010-04-07,2011-01-23 18:57:11,True,True,True,True,True,False,False
+N0329_05,dynamic_on,True,2010-04-07,2011-02-26 13:30:08,True,True,True,True,True,False,False
+N0329_06,dynamic_on,True,2010-04-07,2011-01-23 18:57:11,True,True,True,True,True,False,False
+N0329_07,dynamic_on,True,2010-04-07,2011-01-23 18:57:11,True,True,True,True,True,False,False
+N0329_08,dynamic_on,False,2010-04-07,,True,False,False,False,False,False,False
+N0329_09,dynamic_on,True,2010-04-07,2011-01-23 18:57:11,True,True,True,True,True,False,False
+N0329_10,dynamic_on,True,2010-04-07,2011-02-26 13:30:08,True,True,True,True,True,False,False
+N0333_01,dynamic_on,True,2012-12-21,2014-06-10 22:19:29,True,True,True,True,True,False,False
+N0333_02,dynamic_on,True,2012-12-21,2014-06-10 22:19:29,True,True,True,True,True,False,False
+N0333_03,dynamic_on,True,2012-12-21,2013-10-23 00:38:41,True,True,True,True,True,False,False
+N0333_04,dynamic_on,True,2012-12-21,2014-06-10 22:19:29,True,True,True,True,True,False,False
+N0333_05,dynamic_on,True,2012-12-21,2014-06-10 22:19:29,True,True,True,True,True,False,False
+N0333_06,dynamic_on,False,2012-12-21,,True,False,False,False,False,False,False
+N0333_07,dynamic_on,False,2012-12-21,,True,False,False,False,False,False,False
+N0333_08,dynamic_on,True,2012-12-21,2013-10-23 00:38:41,True,True,True,True,True,False,False
+N0333_09,dynamic_on,True,2012-12-21,2013-10-23 00:38:41,True,True,True,True,True,False,False
+N0333_10,dynamic_on,True,2012-12-21,2013-10-23 00:38:41,True,True,True,True,True,False,False
+N0336_01,dynamic_on,True,2010-04-06,2012-03-05 04:51:51,True,False,False,False,False,False,True
+N0336_02,dynamic_on,True,2010-04-06,2012-03-05 04:51:51,True,False,False,False,False,False,True
+N0336_03,dynamic_on,False,2010-04-06,,True,False,False,False,False,False,False
+N0336_04,dynamic_on,True,2010-04-06,2012-03-05 04:51:51,True,False,False,False,False,False,True
+N0336_05,dynamic_on,True,2010-04-06,2010-10-19 03:23:42,True,True,True,True,True,False,False
+N0336_06,dynamic_on,True,2010-04-06,2012-03-05 04:51:51,True,False,False,False,False,False,True
+N0336_07,dynamic_on,True,2010-04-06,2010-10-19 03:23:42,True,True,True,True,True,False,False
+N0336_08,dynamic_on,True,2010-04-06,2010-10-19 03:23:42,True,True,True,True,True,False,False
+N0336_09,dynamic_on,True,2010-04-06,2010-10-19 03:23:42,True,True,True,True,True,False,False
+N0336_10,dynamic_on,False,2010-04-06,,True,False,False,False,False,False,False
+N0337_01,dynamic_on,True,2010-07-06,2011-12-30 23:09:51,True,True,True,True,True,False,False
+N0337_02,dynamic_on,False,2010-07-06,,True,False,False,False,False,False,False
+N0337_03,dynamic_on,True,2010-07-06,2011-12-08 13:13:09,True,True,True,True,True,False,False
+N0337_04,dynamic_on,True,2010-07-06,2011-12-30 23:09:51,True,True,True,True,True,False,False
+N0337_05,dynamic_on,True,2010-07-06,2011-12-08 13:13:09,True,True,True,True,True,False,False
+N0337_06,dynamic_on,True,2010-07-06,2011-12-08 13:13:09,True,True,True,True,True,False,False
+N0337_07,dynamic_on,True,2010-07-06,2011-12-30 23:09:51,True,True,True,True,True,False,False
+N0337_08,dynamic_on,True,2010-07-06,2011-12-08 13:13:09,True,True,True,True,True,False,False
+N0337_09,dynamic_on,True,2010-07-06,2011-12-30 23:09:51,True,True,True,True,True,False,False
+N0337_10,dynamic_on,False,2010-07-06,,True,False,False,False,False,False,False
+N0338_01,dynamic_on,True,2014-05-29,2015-05-23 08:21:52,True,True,True,True,True,False,False
+N0338_02,dynamic_on,True,2014-05-29,2015-03-07 23:52:36,True,True,True,True,True,False,False
+N0338_03,dynamic_on,True,2014-05-29,2015-03-07 23:52:36,True,True,True,True,True,False,False
+N0338_04,dynamic_on,False,2014-05-29,,True,False,False,False,False,False,False
+N0338_05,dynamic_on,True,2014-05-29,2015-05-23 08:21:52,True,True,True,True,True,False,False
+N0338_06,dynamic_on,True,2014-05-29,2015-05-23 08:21:52,True,True,True,True,True,False,False
+N0338_07,dynamic_on,True,2014-05-29,2015-03-07 23:52:36,True,True,True,True,True,False,False
+N0338_08,dynamic_on,False,2014-05-29,,True,False,False,False,False,False,False
+N0338_09,dynamic_on,True,2014-05-29,2015-05-23 08:21:52,True,True,True,True,True,False,False
+N0338_10,dynamic_on,True,2014-05-29,2015-03-07 23:52:36,True,True,True,True,True,False,False
+N0345_01,dynamic_on,True,2012-12-31,2014-02-23 02:00:36,True,True,True,True,True,False,False
+N0345_02,dynamic_on,False,2012-12-31,,True,False,False,False,False,False,False
+N0345_03,dynamic_on,False,2012-12-31,,True,False,False,False,False,False,False
+N0345_04,dynamic_on,True,2012-12-31,2014-02-23 02:00:36,True,True,True,True,True,False,False
+N0345_05,dynamic_on,True,2012-12-31,2014-02-23 02:00:36,True,True,True,True,True,False,False
+N0345_06,dynamic_on,True,2012-12-31,2014-06-06 13:19:42,True,True,True,True,True,False,False
+N0345_07,dynamic_on,True,2012-12-31,2014-06-06 13:19:42,True,True,True,True,True,False,False
+N0345_08,dynamic_on,True,2012-12-31,2014-06-06 13:19:42,True,True,True,True,True,False,False
+N0345_09,dynamic_on,True,2012-12-31,2014-02-23 02:00:36,True,True,True,True,True,False,False
+N0345_10,dynamic_on,True,2012-12-31,2014-06-06 13:19:42,True,True,True,True,True,False,False
+N0346_01,dynamic_on,True,2011-01-19,2012-08-26 10:15:29,True,True,True,True,True,False,False
+N0346_02,dynamic_on,True,2011-01-19,2011-09-19 21:58:10,True,True,True,True,True,False,False
+N0346_03,dynamic_on,False,2011-01-19,,True,False,False,False,False,False,False
+N0346_04,dynamic_on,True,2011-01-19,2011-09-19 21:58:10,True,True,True,True,True,False,False
+N0346_05,dynamic_on,True,2011-01-19,2011-09-19 21:58:10,True,True,True,True,True,False,False
+N0346_06,dynamic_on,True,2011-01-19,2012-08-26 10:15:29,True,True,True,True,True,False,False
+N0346_07,dynamic_on,False,2011-01-19,,True,False,False,False,False,False,False
+N0346_08,dynamic_on,True,2011-01-19,2012-08-26 10:15:29,True,True,True,True,True,False,False
+N0346_09,dynamic_on,True,2011-01-19,2011-09-19 21:58:10,True,True,True,True,True,False,False
+N0346_10,dynamic_on,True,2011-01-19,2012-08-26 10:15:29,True,True,True,True,True,False,False
+N0353_01,dynamic_on,True,2013-04-23,2014-08-30 22:59:05,True,True,True,True,True,False,False
+N0353_02,dynamic_on,False,2013-04-23,,True,False,False,False,False,False,False
+N0353_03,dynamic_on,True,2013-04-23,2014-08-30 22:59:05,True,True,True,True,True,False,False
+N0353_04,dynamic_on,True,2013-04-23,2014-08-30 22:59:05,True,True,True,True,True,False,False
+N0353_05,dynamic_on,True,2013-04-23,2014-05-26 08:03:35,True,True,True,True,True,False,False
+N0353_06,dynamic_on,False,2013-04-23,,True,False,False,False,False,False,False
+N0353_07,dynamic_on,True,2013-04-23,2014-05-26 08:03:35,True,True,True,True,True,False,False
+N0353_08,dynamic_on,True,2013-04-23,2014-05-26 08:03:35,True,True,True,True,True,False,False
+N0353_09,dynamic_on,True,2013-04-23,2014-05-26 08:03:35,True,True,True,True,True,False,False
+N0353_10,dynamic_on,True,2013-04-23,2014-08-30 22:59:05,True,True,True,True,True,False,False
+N0356_01,dynamic_on,True,2010-09-29,2012-05-08 20:43:09,True,True,True,True,True,False,False
+N0356_02,dynamic_on,True,2010-09-29,2011-11-07 02:58:02,True,True,True,True,True,False,False
+N0356_03,dynamic_on,True,2010-09-29,2011-11-07 02:58:02,True,True,True,True,True,False,False
+N0356_04,dynamic_on,True,2010-09-29,2011-11-07 02:58:02,True,True,True,True,True,False,False
+N0356_05,dynamic_on,True,2010-09-29,2012-05-08 20:43:09,True,True,True,True,True,False,False
+N0356_06,dynamic_on,False,2010-09-29,,True,False,False,False,False,False,False
+N0356_07,dynamic_on,True,2010-09-29,2011-11-07 02:58:02,True,True,True,True,True,False,False
+N0356_08,dynamic_on,True,2010-09-29,2012-05-08 20:43:09,True,True,True,True,True,False,False
+N0356_09,dynamic_on,False,2010-09-29,,True,False,False,False,False,False,False
+N0356_10,dynamic_on,True,2010-09-29,2012-05-08 20:43:09,True,True,True,True,True,False,False
+N0357_01,dynamic_on,True,2014-11-18,2016-10-23 12:13:20,True,False,False,False,False,False,True
+N0357_02,dynamic_on,True,2014-11-18,2016-05-16 09:26:54,True,True,True,True,True,False,False
+N0357_03,dynamic_on,False,2014-11-18,,True,False,False,False,False,False,False
+N0357_04,dynamic_on,True,2014-11-18,2016-10-23 12:13:20,True,False,False,False,False,False,True
+N0357_05,dynamic_on,True,2014-11-18,2016-05-16 09:26:54,True,True,True,True,True,False,False
+N0357_06,dynamic_on,True,2014-11-18,2016-05-16 09:26:54,True,True,True,True,True,False,False
+N0357_07,dynamic_on,False,2014-11-18,,True,False,False,False,False,False,False
+N0357_08,dynamic_on,True,2014-11-18,2016-05-16 09:26:54,True,True,True,True,True,False,False
+N0357_09,dynamic_on,True,2014-11-18,2016-10-23 12:13:20,True,False,False,False,False,False,True
+N0357_10,dynamic_on,True,2014-11-18,2016-10-23 12:13:20,True,False,False,False,False,False,True
+N0364_01,dynamic_on,True,2012-10-18,2013-10-25 18:34:56,True,True,True,True,True,False,False
+N0364_02,dynamic_on,False,2012-10-18,,True,False,False,False,False,False,False
+N0364_03,dynamic_on,True,2012-10-18,2014-09-04 12:45:52,True,False,False,False,False,False,True
+N0364_04,dynamic_on,False,2012-10-18,,True,False,False,False,False,False,False
+N0364_05,dynamic_on,True,2012-10-18,2014-09-04 12:45:52,True,False,False,False,False,False,True
+N0364_06,dynamic_on,True,2012-10-18,2014-09-04 12:45:52,True,False,False,False,False,False,True
+N0364_07,dynamic_on,True,2012-10-18,2014-09-04 12:45:52,True,False,False,False,False,False,True
+N0364_08,dynamic_on,True,2012-10-18,2013-10-25 18:34:56,True,True,True,True,True,False,False
+N0364_09,dynamic_on,True,2012-10-18,2013-10-25 18:34:56,True,True,True,True,True,False,False
+N0364_10,dynamic_on,True,2012-10-18,2013-10-25 18:34:56,True,True,True,True,True,False,False
+N0365_01,dynamic_on,True,2010-04-05,2010-10-31 02:13:06,True,True,True,True,True,False,False
+N0365_02,dynamic_on,True,2010-04-05,2011-06-10 04:58:09,True,True,True,True,True,False,False
+N0365_03,dynamic_on,True,2010-04-05,2010-10-31 02:13:06,True,True,True,True,True,False,False
+N0365_04,dynamic_on,True,2010-04-05,2011-06-10 04:58:09,True,True,True,True,True,False,False
+N0365_05,dynamic_on,False,2010-04-05,,True,False,False,False,False,False,False
+N0365_06,dynamic_on,True,2010-04-05,2011-06-10 04:58:09,True,True,True,True,True,False,False
+N0365_07,dynamic_on,False,2010-04-05,,True,False,False,False,False,False,False
+N0365_08,dynamic_on,True,2010-04-05,2010-10-31 02:13:06,True,True,True,True,True,False,False
+N0365_09,dynamic_on,True,2010-04-05,2011-06-10 04:58:09,True,True,True,True,True,False,False
+N0365_10,dynamic_on,True,2010-04-05,2010-10-31 02:13:06,True,True,True,True,True,False,False
+N0369_01,dynamic_on,True,2011-12-22,2013-01-14 09:11:55,True,True,True,True,True,False,False
+N0369_02,dynamic_on,True,2011-12-22,2013-05-15 08:35:40,True,True,True,True,True,False,False
+N0369_03,dynamic_on,True,2011-12-22,2013-05-15 08:35:40,True,True,True,True,True,False,False
+N0369_04,dynamic_on,True,2011-12-22,2013-05-15 08:35:40,True,True,True,True,True,False,False
+N0369_05,dynamic_on,False,2011-12-22,,True,False,False,False,False,False,False
+N0369_06,dynamic_on,True,2011-12-22,2013-01-14 09:11:55,True,True,True,True,True,False,False
+N0369_07,dynamic_on,True,2011-12-22,2013-01-14 09:11:55,True,True,True,True,True,False,False
+N0369_08,dynamic_on,True,2011-12-22,2013-01-14 09:11:55,True,True,True,True,True,False,False
+N0369_09,dynamic_on,False,2011-12-22,,True,False,False,False,False,False,False
+N0369_10,dynamic_on,True,2011-12-22,2013-05-15 08:35:40,True,True,True,True,True,False,False
+N0371_01,dynamic_on,True,2011-12-29,2013-12-25 04:06:36,True,False,False,False,False,False,True
+N0371_02,dynamic_on,True,2011-12-29,2013-12-25 04:06:36,True,False,False,False,False,False,True
+N0371_03,dynamic_on,True,2011-12-29,2012-08-31 21:41:13,True,True,True,True,True,False,False
+N0371_04,dynamic_on,True,2011-12-29,2012-08-31 21:41:13,True,True,True,True,True,False,False
+N0371_05,dynamic_on,False,2011-12-29,,True,False,False,False,False,False,False
+N0371_06,dynamic_on,True,2011-12-29,2012-08-31 21:41:13,True,True,True,True,True,False,False
+N0371_07,dynamic_on,True,2011-12-29,2013-12-25 04:06:36,True,False,False,False,False,False,True
+N0371_08,dynamic_on,True,2011-12-29,2012-08-31 21:41:13,True,True,True,True,True,False,False
+N0371_09,dynamic_on,True,2011-12-29,2013-12-25 04:06:36,True,False,False,False,False,False,True
+N0371_10,dynamic_on,False,2011-12-29,,True,False,False,False,False,False,False
+N0382_01,dynamic_on,True,2012-03-12,2013-05-27 00:15:07,True,True,True,True,True,False,False
+N0382_02,dynamic_on,True,2012-03-12,2013-03-04 02:46:51,True,True,True,True,True,False,False
+N0382_03,dynamic_on,True,2012-03-12,2013-03-04 02:46:51,True,True,True,True,True,False,False
+N0382_04,dynamic_on,True,2012-03-12,2013-05-27 00:15:07,True,True,True,True,True,False,False
+N0382_05,dynamic_on,False,2012-03-12,,True,False,False,False,False,False,False
+N0382_06,dynamic_on,True,2012-03-12,2013-05-27 00:15:07,True,True,True,True,True,False,False
+N0382_07,dynamic_on,True,2012-03-12,2013-03-04 02:46:51,True,True,True,True,True,False,False
+N0382_08,dynamic_on,True,2012-03-12,2013-05-27 00:15:07,True,True,True,True,True,False,False
+N0382_09,dynamic_on,False,2012-03-12,,True,False,False,False,False,False,False
+N0382_10,dynamic_on,True,2012-03-12,2013-03-04 02:46:51,True,True,True,True,True,False,False
+N0383_01,dynamic_on,True,2011-12-13,2012-07-16 18:22:01,True,True,True,True,True,False,False
+N0383_02,dynamic_on,True,2011-12-13,2012-07-16 18:22:01,True,True,True,True,True,False,False
+N0383_03,dynamic_on,True,2011-12-13,2012-07-16 18:22:01,True,True,True,True,True,False,False
+N0383_04,dynamic_on,True,2011-12-13,2012-07-16 18:22:01,True,True,True,True,True,False,False
+N0383_05,dynamic_on,False,2011-12-13,,True,False,False,False,False,False,False
+N0383_06,dynamic_on,True,2011-12-13,2013-02-16 01:23:02,True,True,True,True,True,False,False
+N0383_07,dynamic_on,True,2011-12-13,2013-02-16 01:23:02,True,True,True,True,True,False,False
+N0383_08,dynamic_on,True,2011-12-13,2013-02-16 01:23:02,True,True,True,True,True,False,False
+N0383_09,dynamic_on,True,2011-12-13,2013-02-16 01:23:02,True,True,True,True,True,False,False
+N0383_10,dynamic_on,False,2011-12-13,,True,False,False,False,False,False,False
+N0391_01,dynamic_on,True,2012-08-26,2014-05-10 15:03:44,True,True,True,True,True,False,False
+N0391_02,dynamic_on,True,2012-08-26,2013-11-13 11:29:35,True,True,True,True,True,False,False
+N0391_03,dynamic_on,True,2012-08-26,2014-05-10 15:03:44,True,True,True,True,True,False,False
+N0391_04,dynamic_on,False,2012-08-26,,True,False,False,False,False,False,False
+N0391_05,dynamic_on,True,2012-08-26,2013-11-13 11:29:35,True,True,True,True,True,False,False
+N0391_06,dynamic_on,True,2012-08-26,2013-11-13 11:29:35,True,True,True,True,True,False,False
+N0391_07,dynamic_on,True,2012-08-26,2014-05-10 15:03:44,True,True,True,True,True,False,False
+N0391_08,dynamic_on,True,2012-08-26,2014-05-10 15:03:44,True,True,True,True,True,False,False
+N0391_09,dynamic_on,True,2012-08-26,2013-11-13 11:29:35,True,True,True,True,True,False,False
+N0391_10,dynamic_on,False,2012-08-26,,True,False,False,False,False,False,False
+N0392_01,dynamic_on,True,2013-07-11,2014-07-19 19:12:33,True,True,True,True,True,False,False
+N0392_02,dynamic_on,True,2013-07-11,2014-07-19 19:12:33,True,True,True,True,True,False,False
+N0392_03,dynamic_on,True,2013-07-11,2014-07-19 19:12:33,True,True,True,True,True,False,False
+N0392_04,dynamic_on,True,2013-07-11,2014-09-19 22:58:30,True,True,True,True,True,False,False
+N0392_05,dynamic_on,True,2013-07-11,2014-09-19 22:58:30,True,True,True,True,True,False,False
+N0392_06,dynamic_on,False,2013-07-11,,True,False,False,False,False,False,False
+N0392_07,dynamic_on,True,2013-07-11,2014-07-19 19:12:33,True,True,True,True,True,False,False
+N0392_08,dynamic_on,True,2013-07-11,2014-09-19 22:58:30,True,True,True,True,True,False,False
+N0392_09,dynamic_on,True,2013-07-11,2014-09-19 22:58:30,True,True,True,True,True,False,False
+N0392_10,dynamic_on,False,2013-07-11,,True,False,False,False,False,False,False
+N0400_01,dynamic_on,True,2014-05-16,2014-12-05 20:27:17,True,True,True,True,True,False,False
+N0400_02,dynamic_on,False,2014-05-16,,True,False,False,False,False,False,False
+N0400_03,dynamic_on,True,2014-05-16,2014-12-05 20:27:17,True,True,True,True,True,False,False
+N0400_04,dynamic_on,True,2014-05-16,2015-06-11 19:26:28,True,True,True,True,True,False,False
+N0400_05,dynamic_on,True,2014-05-16,2015-06-11 19:26:28,True,True,True,True,True,False,False
+N0400_06,dynamic_on,True,2014-05-16,2015-06-11 19:26:28,True,True,True,True,True,False,False
+N0400_07,dynamic_on,True,2014-05-16,2014-12-05 20:27:17,True,True,True,True,True,False,False
+N0400_08,dynamic_on,True,2014-05-16,2014-12-05 20:27:17,True,True,True,True,True,False,False
+N0400_09,dynamic_on,False,2014-05-16,,True,False,False,False,False,False,False
+N0400_10,dynamic_on,True,2014-05-16,2015-06-11 19:26:28,True,True,True,True,True,False,False
+N0406_01,dynamic_on,True,2012-08-17,2014-03-03 04:31:36,True,True,True,True,True,False,False
+N0406_02,dynamic_on,True,2012-08-17,2013-06-30 21:25:12,True,True,True,True,True,False,False
+N0406_03,dynamic_on,True,2012-08-17,2014-03-03 04:31:36,True,True,True,True,True,False,False
+N0406_04,dynamic_on,True,2012-08-17,2013-06-30 21:25:12,True,True,True,True,True,False,False
+N0406_05,dynamic_on,True,2012-08-17,2014-03-03 04:31:36,True,True,True,True,True,False,False
+N0406_06,dynamic_on,True,2012-08-17,2013-06-30 21:25:12,True,True,True,True,True,False,False
+N0406_07,dynamic_on,False,2012-08-17,,True,False,False,False,False,False,False
+N0406_08,dynamic_on,False,2012-08-17,,True,False,False,False,False,False,False
+N0406_09,dynamic_on,True,2012-08-17,2014-03-03 04:31:36,True,True,True,True,True,False,False
+N0406_10,dynamic_on,True,2012-08-17,2013-06-30 21:25:12,True,True,True,True,True,False,False
+N0415_01,dynamic_on,True,2013-01-23,2014-07-27 23:51:31,True,True,True,True,True,False,False
+N0415_02,dynamic_on,True,2013-01-23,2014-12-30 04:07:25,True,False,False,False,False,False,True
+N0415_03,dynamic_on,False,2013-01-23,,True,False,False,False,False,False,False
+N0415_04,dynamic_on,False,2013-01-23,,True,False,False,False,False,False,False
+N0415_05,dynamic_on,True,2013-01-23,2014-07-27 23:51:31,True,True,True,True,True,False,False
+N0415_06,dynamic_on,True,2013-01-23,2014-12-30 04:07:25,True,False,False,False,False,False,True
+N0415_07,dynamic_on,True,2013-01-23,2014-12-30 04:07:25,True,False,False,False,False,False,True
+N0415_08,dynamic_on,True,2013-01-23,2014-07-27 23:51:31,True,True,True,True,True,False,False
+N0415_09,dynamic_on,True,2013-01-23,2014-07-27 23:51:31,True,True,True,True,True,False,False
+N0415_10,dynamic_on,True,2013-01-23,2014-12-30 04:07:25,True,False,False,False,False,False,True
+N0417_01,dynamic_on,False,2013-08-02,,True,False,False,False,False,False,False
+N0417_02,dynamic_on,True,2013-08-02,2015-03-30 16:53:35,True,True,True,True,True,False,False
+N0417_03,dynamic_on,True,2013-08-02,2015-03-30 16:53:35,True,True,True,True,True,False,False
+N0417_04,dynamic_on,True,2013-08-02,2014-03-23 04:44:42,True,True,True,True,True,False,False
+N0417_05,dynamic_on,True,2013-08-02,2015-03-30 16:53:35,True,True,True,True,True,False,False
+N0417_06,dynamic_on,True,2013-08-02,2014-03-23 04:44:42,True,True,True,True,True,False,False
+N0417_07,dynamic_on,True,2013-08-02,2014-03-23 04:44:42,True,True,True,True,True,False,False
+N0417_08,dynamic_on,True,2013-08-02,2014-03-23 04:44:42,True,True,True,True,True,False,False
+N0417_09,dynamic_on,True,2013-08-02,2015-03-30 16:53:35,True,True,True,True,True,False,False
+N0417_10,dynamic_on,False,2013-08-02,,True,False,False,False,False,False,False
+N0419_01,dynamic_on,True,2010-11-19,2011-06-09 15:41:46,True,True,True,True,True,False,False
+N0419_02,dynamic_on,True,2010-11-19,2012-11-16 20:59:15,True,False,False,False,False,False,True
+N0419_03,dynamic_on,True,2010-11-19,2011-06-09 15:41:46,True,True,True,True,True,False,False
+N0419_04,dynamic_on,True,2010-11-19,2012-11-16 20:59:15,True,False,False,False,False,False,True
+N0419_05,dynamic_on,True,2010-11-19,2012-11-16 20:59:15,True,False,False,False,False,False,True
+N0419_06,dynamic_on,True,2010-11-19,2012-11-16 20:59:15,True,False,False,False,False,False,True
+N0419_07,dynamic_on,True,2010-11-19,2011-06-09 15:41:46,True,True,True,True,True,False,False
+N0419_08,dynamic_on,False,2010-11-19,,True,False,False,False,False,False,False
+N0419_09,dynamic_on,True,2010-11-19,2011-06-09 15:41:46,True,True,True,True,True,False,False
+N0419_10,dynamic_on,False,2010-11-19,,True,False,False,False,False,False,False
+N0421_01,dynamic_on,True,2010-11-14,2011-06-18 13:51:53,True,True,True,True,True,False,False
+N0421_02,dynamic_on,False,2010-11-14,,True,False,False,False,False,False,False
+N0421_03,dynamic_on,True,2010-11-14,2011-06-18 13:51:53,True,True,True,True,True,False,False
+N0421_04,dynamic_on,True,2010-11-14,2011-06-18 13:51:53,True,True,True,True,True,False,False
+N0421_05,dynamic_on,True,2010-11-14,2012-10-13 09:24:02,True,False,False,False,False,False,True
+N0421_06,dynamic_on,True,2010-11-14,2012-10-13 09:24:02,True,False,False,False,False,False,True
+N0421_07,dynamic_on,True,2010-11-14,2011-06-18 13:51:53,True,True,True,True,True,False,False
+N0421_08,dynamic_on,False,2010-11-14,,True,False,False,False,False,False,False
+N0421_09,dynamic_on,True,2010-11-14,2012-10-13 09:24:02,True,False,False,False,False,False,True
+N0421_10,dynamic_on,True,2010-11-14,2012-10-13 09:24:02,True,False,False,False,False,False,True
+N0426_01,dynamic_on,True,2013-10-31,2015-07-03 07:10:58,True,True,True,True,True,False,False
+N0426_02,dynamic_on,False,2013-10-31,,True,False,False,False,False,False,False
+N0426_03,dynamic_on,True,2013-10-31,2015-07-03 07:10:58,True,True,True,True,True,False,False
+N0426_04,dynamic_on,True,2013-10-31,2014-11-07 18:34:59,True,True,True,True,True,False,False
+N0426_05,dynamic_on,True,2013-10-31,2014-11-07 18:34:59,True,True,True,True,True,False,False
+N0426_06,dynamic_on,True,2013-10-31,2015-07-03 07:10:58,True,True,True,True,True,False,False
+N0426_07,dynamic_on,True,2013-10-31,2014-11-07 18:34:59,True,True,True,True,True,False,False
+N0426_08,dynamic_on,True,2013-10-31,2014-11-07 18:34:59,True,True,True,True,True,False,False
+N0426_09,dynamic_on,False,2013-10-31,,True,False,False,False,False,False,False
+N0426_10,dynamic_on,True,2013-10-31,2015-07-03 07:10:58,True,True,True,True,True,False,False
+N0430_01,dynamic_on,False,2012-07-15,,True,False,False,False,False,False,False
+N0430_02,dynamic_on,True,2012-07-15,2014-04-18 14:12:12,True,True,True,True,True,False,False
+N0430_03,dynamic_on,True,2012-07-15,2014-04-18 14:12:12,True,True,True,True,True,False,False
+N0430_04,dynamic_on,True,2012-07-15,2014-04-18 14:12:12,True,True,True,True,True,False,False
+N0430_05,dynamic_on,True,2012-07-15,2013-03-14 22:18:32,True,True,True,True,True,False,False
+N0430_06,dynamic_on,False,2012-07-15,,True,False,False,False,False,False,False
+N0430_07,dynamic_on,True,2012-07-15,2013-03-14 22:18:32,True,True,True,True,True,False,False
+N0430_08,dynamic_on,True,2012-07-15,2014-04-18 14:12:12,True,True,True,True,True,False,False
+N0430_09,dynamic_on,True,2012-07-15,2013-03-14 22:18:32,True,True,True,True,True,False,False
+N0430_10,dynamic_on,True,2012-07-15,2013-03-14 22:18:32,True,True,True,True,True,False,False
+N0442_01,dynamic_on,True,2013-01-29,2013-09-22 02:23:29,True,True,True,True,True,False,False
+N0442_02,dynamic_on,True,2013-01-29,2014-02-13 00:22:32,True,True,True,True,True,False,False
+N0442_03,dynamic_on,True,2013-01-29,2013-09-22 02:23:29,True,True,True,True,True,False,False
+N0442_04,dynamic_on,True,2013-01-29,2014-02-13 00:22:32,True,True,True,True,True,False,False
+N0442_05,dynamic_on,False,2013-01-29,,True,False,False,False,False,False,False
+N0442_06,dynamic_on,False,2013-01-29,,True,False,False,False,False,False,False
+N0442_07,dynamic_on,True,2013-01-29,2014-02-13 00:22:32,True,True,True,True,True,False,False
+N0442_08,dynamic_on,True,2013-01-29,2014-02-13 00:22:32,True,True,True,True,True,False,False
+N0442_09,dynamic_on,True,2013-01-29,2013-09-22 02:23:29,True,True,True,True,True,False,False
+N0442_10,dynamic_on,True,2013-01-29,2013-09-22 02:23:29,True,True,True,True,True,False,False
+N0450_01,dynamic_on,False,2013-07-27,,True,False,False,False,False,False,False
+N0450_02,dynamic_on,True,2013-07-27,2015-06-21 05:31:23,True,False,False,False,False,False,True
+N0450_03,dynamic_on,True,2013-07-27,2015-06-21 05:31:23,True,False,False,False,False,False,True
+N0450_04,dynamic_on,True,2013-07-27,2014-09-01 16:08:26,True,True,True,True,True,False,False
+N0450_05,dynamic_on,True,2013-07-27,2014-09-01 16:08:26,True,True,True,True,True,False,False
+N0450_06,dynamic_on,True,2013-07-27,2015-06-21 05:31:23,True,False,False,False,False,False,True
+N0450_07,dynamic_on,False,2013-07-27,,True,False,False,False,False,False,False
+N0450_08,dynamic_on,True,2013-07-27,2014-09-01 16:08:26,True,True,True,True,True,False,False
+N0450_09,dynamic_on,True,2013-07-27,2014-09-01 16:08:26,True,True,True,True,True,False,False
+N0450_10,dynamic_on,True,2013-07-27,2015-06-21 05:31:23,True,False,False,False,False,False,True
+N0457_01,dynamic_on,True,2014-09-20,2015-10-27 21:40:20,True,True,True,True,True,False,False
+N0457_02,dynamic_on,True,2014-09-20,2016-07-20 11:26:15,True,False,False,False,False,False,True
+N0457_03,dynamic_on,True,2014-09-20,2015-10-27 21:40:20,True,True,True,True,True,False,False
+N0457_04,dynamic_on,True,2014-09-20,2016-07-20 11:26:15,True,False,False,False,False,False,True
+N0457_05,dynamic_on,True,2014-09-20,2015-10-27 21:40:20,True,True,True,True,True,False,False
+N0457_06,dynamic_on,True,2014-09-20,2016-07-20 11:26:15,True,False,False,False,False,False,True
+N0457_07,dynamic_on,True,2014-09-20,2016-07-20 11:26:15,True,False,False,False,False,False,True
+N0457_08,dynamic_on,False,2014-09-20,,True,False,False,False,False,False,False
+N0457_09,dynamic_on,True,2014-09-20,2015-10-27 21:40:20,True,True,True,True,True,False,False
+N0457_10,dynamic_on,False,2014-09-20,,True,False,False,False,False,False,False
+N0460_01,dynamic_on,True,2012-02-02,2012-11-08 01:22:11,True,True,True,True,True,False,False
+N0460_02,dynamic_on,True,2012-02-02,2012-11-08 01:22:11,True,True,True,True,True,False,False
+N0460_03,dynamic_on,False,2012-02-02,,True,False,False,False,False,False,False
+N0460_04,dynamic_on,False,2012-02-02,,True,False,False,False,False,False,False
+N0460_05,dynamic_on,True,2012-02-02,2013-12-06 08:46:23,True,False,False,False,False,False,True
+N0460_06,dynamic_on,True,2012-02-02,2012-11-08 01:22:11,True,True,True,True,True,False,False
+N0460_07,dynamic_on,True,2012-02-02,2012-11-08 01:22:11,True,True,True,True,True,False,False
+N0460_08,dynamic_on,True,2012-02-02,2013-12-06 08:46:23,True,False,False,False,False,False,True
+N0460_09,dynamic_on,True,2012-02-02,2013-12-06 08:46:23,True,False,False,False,False,False,True
+N0460_10,dynamic_on,True,2012-02-02,2013-12-06 08:46:23,True,False,False,False,False,False,True
+N0473_01,dynamic_on,True,2013-02-26,2014-10-22 16:35:29,True,True,True,True,True,False,False
+N0473_02,dynamic_on,True,2013-02-26,2014-05-03 13:15:43,True,True,True,True,True,False,False
+N0473_03,dynamic_on,True,2013-02-26,2014-05-03 13:15:43,True,True,True,True,True,False,False
+N0473_04,dynamic_on,True,2013-02-26,2014-10-22 16:35:29,True,True,True,True,True,False,False
+N0473_05,dynamic_on,False,2013-02-26,,True,False,False,False,False,False,False
+N0473_06,dynamic_on,True,2013-02-26,2014-05-03 13:15:43,True,True,True,True,True,False,False
+N0473_07,dynamic_on,False,2013-02-26,,True,False,False,False,False,False,False
+N0473_08,dynamic_on,True,2013-02-26,2014-10-22 16:35:29,True,True,True,True,True,False,False
+N0473_09,dynamic_on,True,2013-02-26,2014-05-03 13:15:43,True,True,True,True,True,False,False
+N0473_10,dynamic_on,True,2013-02-26,2014-10-22 16:35:29,True,True,True,True,True,False,False
+N0481_01,dynamic_on,True,2013-04-03,2014-10-06 22:19:27,True,True,True,True,True,False,False
+N0481_02,dynamic_on,True,2013-04-03,2014-10-06 22:19:27,True,True,True,True,True,False,False
+N0481_03,dynamic_on,True,2013-04-03,2014-06-04 16:30:26,True,True,True,True,True,False,False
+N0481_04,dynamic_on,True,2013-04-03,2014-10-06 22:19:27,True,True,True,True,True,False,False
+N0481_05,dynamic_on,True,2013-04-03,2014-06-04 16:30:26,True,True,True,True,True,False,False
+N0481_06,dynamic_on,True,2013-04-03,2014-06-04 16:30:26,True,True,True,True,True,False,False
+N0481_07,dynamic_on,False,2013-04-03,,True,False,False,False,False,False,False
+N0481_08,dynamic_on,False,2013-04-03,,True,False,False,False,False,False,False
+N0481_09,dynamic_on,True,2013-04-03,2014-10-06 22:19:27,True,True,True,True,True,False,False
+N0481_10,dynamic_on,True,2013-04-03,2014-06-04 16:30:26,True,True,True,True,True,False,False
+N0489_01,dynamic_on,True,2013-01-07,2014-02-16 20:44:24,True,True,True,True,True,False,False
+N0489_02,dynamic_on,True,2013-01-07,2014-02-16 20:44:24,True,True,True,True,True,False,False
+N0489_03,dynamic_on,True,2013-01-07,2014-07-03 08:01:46,True,True,True,True,True,False,False
+N0489_04,dynamic_on,True,2013-01-07,2014-07-03 08:01:46,True,True,True,True,True,False,False
+N0489_05,dynamic_on,False,2013-01-07,,True,False,False,False,False,False,False
+N0489_06,dynamic_on,True,2013-01-07,2014-07-03 08:01:46,True,True,True,True,True,False,False
+N0489_07,dynamic_on,True,2013-01-07,2014-07-03 08:01:46,True,True,True,True,True,False,False
+N0489_08,dynamic_on,True,2013-01-07,2014-02-16 20:44:24,True,True,True,True,True,False,False
+N0489_09,dynamic_on,False,2013-01-07,,True,False,False,False,False,False,False
+N0489_10,dynamic_on,True,2013-01-07,2014-02-16 20:44:24,True,True,True,True,True,False,False
+N0491_01,dynamic_on,True,2011-04-11,2013-01-19 07:04:26,True,True,True,True,True,False,False
+N0491_02,dynamic_on,True,2011-04-11,2013-01-19 07:04:26,True,True,True,True,True,False,False
+N0491_03,dynamic_on,True,2011-04-11,2011-10-22 14:58:34,True,True,True,True,True,False,False
+N0491_04,dynamic_on,False,2011-04-11,,True,False,False,False,False,False,False
+N0491_05,dynamic_on,True,2011-04-11,2011-10-22 14:58:34,True,True,True,True,True,False,False
+N0491_06,dynamic_on,False,2011-04-11,,True,False,False,False,False,False,False
+N0491_07,dynamic_on,True,2011-04-11,2013-01-19 07:04:26,True,True,True,True,True,False,False
+N0491_08,dynamic_on,True,2011-04-11,2011-10-22 14:58:34,True,True,True,True,True,False,False
+N0491_09,dynamic_on,True,2011-04-11,2013-01-19 07:04:26,True,True,True,True,True,False,False
+N0491_10,dynamic_on,True,2011-04-11,2011-10-22 14:58:34,True,True,True,True,True,False,False
+N0493_01,dynamic_on,True,2014-05-30,2015-01-30 05:25:56,True,True,True,True,True,False,False
+N0493_02,dynamic_on,True,2014-05-30,2016-02-12 01:58:46,True,True,True,True,True,False,False
+N0493_03,dynamic_on,True,2014-05-30,2016-02-12 01:58:46,True,True,True,True,True,False,False
+N0493_04,dynamic_on,True,2014-05-30,2015-01-30 05:25:56,True,True,True,True,True,False,False
+N0493_05,dynamic_on,False,2014-05-30,,True,False,False,False,False,False,False
+N0493_06,dynamic_on,True,2014-05-30,2016-02-12 01:58:46,True,True,True,True,True,False,False
+N0493_07,dynamic_on,True,2014-05-30,2015-01-30 05:25:56,True,True,True,True,True,False,False
+N0493_08,dynamic_on,True,2014-05-30,2015-01-30 05:25:56,True,True,True,True,True,False,False
+N0493_09,dynamic_on,False,2014-05-30,,True,False,False,False,False,False,False
+N0493_10,dynamic_on,True,2014-05-30,2016-02-12 01:58:46,True,True,True,True,True,False,False
+N0494_01,dynamic_on,False,2014-05-31,,True,False,False,False,False,False,False
+N0494_02,dynamic_on,True,2014-05-31,2015-11-19 12:54:42,True,True,True,True,True,False,False
+N0494_03,dynamic_on,True,2014-05-31,2015-04-04 13:08:35,True,True,True,True,True,False,False
+N0494_04,dynamic_on,True,2014-05-31,2015-11-19 12:54:42,True,True,True,True,True,False,False
+N0494_05,dynamic_on,True,2014-05-31,2015-04-04 13:08:35,True,True,True,True,True,False,False
+N0494_06,dynamic_on,True,2014-05-31,2015-04-04 13:08:35,True,True,True,True,True,False,False
+N0494_07,dynamic_on,True,2014-05-31,2015-11-19 12:54:42,True,True,True,True,True,False,False
+N0494_08,dynamic_on,True,2014-05-31,2015-11-19 12:54:42,True,True,True,True,True,False,False
+N0494_09,dynamic_on,False,2014-05-31,,True,False,False,False,False,False,False
+N0494_10,dynamic_on,True,2014-05-31,2015-04-04 13:08:35,True,True,True,True,True,False,False
+N0496_01,dynamic_on,True,2013-04-11,2014-02-20 17:44:30,True,True,True,True,True,False,False
+N0496_02,dynamic_on,True,2013-04-11,2014-04-21 11:08:12,True,True,True,True,True,False,False
+N0496_03,dynamic_on,True,2013-04-11,2014-04-21 11:08:12,True,True,True,True,True,False,False
+N0496_04,dynamic_on,True,2013-04-11,2014-02-20 17:44:30,True,True,True,True,True,False,False
+N0496_05,dynamic_on,False,2013-04-11,,True,False,False,False,False,False,False
+N0496_06,dynamic_on,True,2013-04-11,2014-02-20 17:44:30,True,True,True,True,True,False,False
+N0496_07,dynamic_on,True,2013-04-11,2014-04-21 11:08:12,True,True,True,True,True,False,False
+N0496_08,dynamic_on,True,2013-04-11,2014-02-20 17:44:30,True,True,True,True,True,False,False
+N0496_09,dynamic_on,True,2013-04-11,2014-04-21 11:08:12,True,True,True,True,True,False,False
+N0496_10,dynamic_on,False,2013-04-11,,True,False,False,False,False,False,False
+N0006_01,dynamic_off,True,2010-04-17,2011-08-13 00:42:19,False,False,False,False,False,False,True
+N0006_02,dynamic_off,True,2010-04-17,2011-05-01 03:59:20,False,False,False,False,False,False,True
+N0006_03,dynamic_off,False,2010-04-17,,False,False,False,False,False,False,False
+N0006_04,dynamic_off,True,2010-04-17,2011-05-01 03:59:20,False,False,False,False,False,False,True
+N0006_05,dynamic_off,True,2010-04-17,2011-08-13 00:42:19,False,False,False,False,False,False,True
+N0006_06,dynamic_off,True,2010-04-17,2011-08-13 00:42:19,False,False,False,False,False,False,True
+N0006_07,dynamic_off,True,2010-04-17,2011-05-01 03:59:20,False,False,False,False,False,False,True
+N0006_08,dynamic_off,True,2010-04-17,2011-08-13 00:42:19,False,False,False,False,False,False,True
+N0006_09,dynamic_off,False,2010-04-17,,False,False,False,False,False,False,False
+N0006_10,dynamic_off,True,2010-04-17,2011-05-01 03:59:20,False,False,False,False,False,False,True
+N0007_01,dynamic_off,True,2012-11-28,2014-07-17 12:40:39,False,False,False,False,False,False,True
+N0007_02,dynamic_off,True,2012-11-28,2014-07-17 12:40:39,False,False,False,False,False,False,True
+N0007_03,dynamic_off,True,2012-11-28,2014-03-22 10:12:58,False,False,False,False,False,False,True
+N0007_04,dynamic_off,False,2012-11-28,,False,False,False,False,False,False,False
+N0007_05,dynamic_off,False,2012-11-28,,False,False,False,False,False,False,False
+N0007_06,dynamic_off,True,2012-11-28,2014-03-22 10:12:58,False,False,False,False,False,False,True
+N0007_07,dynamic_off,True,2012-11-28,2014-07-17 12:40:39,False,False,False,False,False,False,True
+N0007_08,dynamic_off,True,2012-11-28,2014-07-17 12:40:39,False,False,False,False,False,False,True
+N0007_09,dynamic_off,True,2012-11-28,2014-03-22 10:12:58,False,False,False,False,False,False,True
+N0007_10,dynamic_off,True,2012-11-28,2014-03-22 10:12:58,False,False,False,False,False,False,True
+N0015_01,dynamic_off,True,2012-11-03,2013-07-26 00:25:48,False,False,False,False,False,False,True
+N0015_02,dynamic_off,True,2012-11-03,2014-07-12 08:05:08,False,False,False,False,False,False,True
+N0015_03,dynamic_off,True,2012-11-03,2013-07-26 00:25:48,False,False,False,False,False,False,True
+N0015_04,dynamic_off,True,2012-11-03,2014-07-12 08:05:08,False,False,False,False,False,False,True
+N0015_05,dynamic_off,False,2012-11-03,,False,False,False,False,False,False,False
+N0015_06,dynamic_off,True,2012-11-03,2014-07-12 08:05:08,False,False,False,False,False,False,True
+N0015_07,dynamic_off,True,2012-11-03,2013-07-26 00:25:48,False,False,False,False,False,False,True
+N0015_08,dynamic_off,False,2012-11-03,,False,False,False,False,False,False,False
+N0015_09,dynamic_off,True,2012-11-03,2013-07-26 00:25:48,False,False,False,False,False,False,True
+N0015_10,dynamic_off,True,2012-11-03,2014-07-12 08:05:08,False,False,False,False,False,False,True
+N0018_01,dynamic_off,True,2014-01-08,2016-01-02 01:00:53,False,False,False,False,False,False,True
+N0018_02,dynamic_off,True,2014-01-08,2014-08-14 05:47:11,False,False,False,False,False,False,True
+N0018_03,dynamic_off,False,2014-01-08,,False,False,False,False,False,False,False
+N0018_04,dynamic_off,True,2014-01-08,2014-08-14 05:47:11,False,False,False,False,False,False,True
+N0018_05,dynamic_off,False,2014-01-08,,False,False,False,False,False,False,False
+N0018_06,dynamic_off,True,2014-01-08,2016-01-02 01:00:53,False,False,False,False,False,False,True
+N0018_07,dynamic_off,True,2014-01-08,2016-01-02 01:00:53,False,False,False,False,False,False,True
+N0018_08,dynamic_off,True,2014-01-08,2016-01-02 01:00:53,False,False,False,False,False,False,True
+N0018_09,dynamic_off,True,2014-01-08,2014-08-14 05:47:11,False,False,False,False,False,False,True
+N0018_10,dynamic_off,True,2014-01-08,2014-08-14 05:47:11,False,False,False,False,False,False,True
+N0026_01,dynamic_off,True,2011-09-26,2013-08-10 19:25:58,False,False,False,False,False,False,True
+N0026_02,dynamic_off,True,2011-09-26,2013-05-21 19:26:54,False,False,False,False,False,False,True
+N0026_03,dynamic_off,False,2011-09-26,,False,False,False,False,False,False,False
+N0026_04,dynamic_off,True,2011-09-26,2013-08-10 19:25:58,False,False,False,False,False,False,True
+N0026_05,dynamic_off,False,2011-09-26,,False,False,False,False,False,False,False
+N0026_06,dynamic_off,True,2011-09-26,2013-05-21 19:26:54,False,False,False,False,False,False,True
+N0026_07,dynamic_off,True,2011-09-26,2013-05-21 19:26:54,False,False,False,False,False,False,True
+N0026_08,dynamic_off,True,2011-09-26,2013-08-10 19:25:58,False,False,False,False,False,False,True
+N0026_09,dynamic_off,True,2011-09-26,2013-08-10 19:25:58,False,False,False,False,False,False,True
+N0026_10,dynamic_off,True,2011-09-26,2013-05-21 19:26:54,False,False,False,False,False,False,True
+N0027_01,dynamic_off,True,2012-04-02,2012-11-01 00:40:33,False,False,False,False,False,False,True
+N0027_02,dynamic_off,True,2012-04-02,2013-01-30 14:07:00,False,False,False,False,False,False,True
+N0027_03,dynamic_off,True,2012-04-02,2013-01-30 14:07:00,False,False,False,False,False,False,True
+N0027_04,dynamic_off,False,2012-04-02,,False,False,False,False,False,False,False
+N0027_05,dynamic_off,False,2012-04-02,,False,False,False,False,False,False,False
+N0027_06,dynamic_off,True,2012-04-02,2012-11-01 00:40:33,False,False,False,False,False,False,True
+N0027_07,dynamic_off,True,2012-04-02,2012-11-01 00:40:33,False,False,False,False,False,False,True
+N0027_08,dynamic_off,True,2012-04-02,2013-01-30 14:07:00,False,False,False,False,False,False,True
+N0027_09,dynamic_off,True,2012-04-02,2013-01-30 14:07:00,False,False,False,False,False,False,True
+N0027_10,dynamic_off,True,2012-04-02,2012-11-01 00:40:33,False,False,False,False,False,False,True
+N0031_01,dynamic_off,True,2013-11-02,2015-02-09 20:42:51,False,False,False,False,False,False,True
+N0031_02,dynamic_off,True,2013-11-02,2015-02-09 20:42:51,False,False,False,False,False,False,True
+N0031_03,dynamic_off,True,2013-11-02,2014-08-05 19:24:21,False,False,False,False,False,False,True
+N0031_04,dynamic_off,True,2013-11-02,2015-02-09 20:42:51,False,False,False,False,False,False,True
+N0031_05,dynamic_off,True,2013-11-02,2014-08-05 19:24:21,False,False,False,False,False,False,True
+N0031_06,dynamic_off,False,2013-11-02,,False,False,False,False,False,False,False
+N0031_07,dynamic_off,True,2013-11-02,2014-08-05 19:24:21,False,False,False,False,False,False,True
+N0031_08,dynamic_off,True,2013-11-02,2015-02-09 20:42:51,False,False,False,False,False,False,True
+N0031_09,dynamic_off,True,2013-11-02,2014-08-05 19:24:21,False,False,False,False,False,False,True
+N0031_10,dynamic_off,False,2013-11-02,,False,False,False,False,False,False,False
+N0037_01,dynamic_off,True,2012-02-10,2013-06-03 20:35:08,False,False,False,False,False,False,True
+N0037_02,dynamic_off,False,2012-02-10,,False,False,False,False,False,False,False
+N0037_03,dynamic_off,False,2012-02-10,,False,False,False,False,False,False,False
+N0037_04,dynamic_off,True,2012-02-10,2013-06-03 20:35:08,False,False,False,False,False,False,True
+N0037_05,dynamic_off,True,2012-02-10,2013-04-25 13:59:05,False,False,False,False,False,False,True
+N0037_06,dynamic_off,True,2012-02-10,2013-04-25 13:59:05,False,False,False,False,False,False,True
+N0037_07,dynamic_off,True,2012-02-10,2013-04-25 13:59:05,False,False,False,False,False,False,True
+N0037_08,dynamic_off,True,2012-02-10,2013-06-03 20:35:08,False,False,False,False,False,False,True
+N0037_09,dynamic_off,True,2012-02-10,2013-04-25 13:59:05,False,False,False,False,False,False,True
+N0037_10,dynamic_off,True,2012-02-10,2013-06-03 20:35:08,False,False,False,False,False,False,True
+N0039_01,dynamic_off,True,2010-06-30,2011-01-13 04:24:15,False,False,False,False,False,False,True
+N0039_02,dynamic_off,True,2010-06-30,2011-01-13 04:24:15,False,False,False,False,False,False,True
+N0039_03,dynamic_off,True,2010-06-30,2011-01-13 04:24:15,False,False,False,False,False,False,True
+N0039_04,dynamic_off,True,2010-06-30,2011-05-10 09:20:59,False,False,False,False,False,False,True
+N0039_05,dynamic_off,False,2010-06-30,,False,False,False,False,False,False,False
+N0039_06,dynamic_off,True,2010-06-30,2011-05-10 09:20:59,False,False,False,False,False,False,True
+N0039_07,dynamic_off,False,2010-06-30,,False,False,False,False,False,False,False
+N0039_08,dynamic_off,True,2010-06-30,2011-05-10 09:20:59,False,False,False,False,False,False,True
+N0039_09,dynamic_off,True,2010-06-30,2011-01-13 04:24:15,False,False,False,False,False,False,True
+N0039_10,dynamic_off,True,2010-06-30,2011-05-10 09:20:59,False,False,False,False,False,False,True
+N0060_01,dynamic_off,True,2013-02-06,2014-07-02 06:53:36,False,False,False,False,False,False,True
+N0060_02,dynamic_off,False,2013-02-06,,False,False,False,False,False,False,False
+N0060_03,dynamic_off,True,2013-02-06,2014-11-17 01:27:09,False,False,False,False,False,False,True
+N0060_04,dynamic_off,True,2013-02-06,2014-07-02 06:53:36,False,False,False,False,False,False,True
+N0060_05,dynamic_off,True,2013-02-06,2014-07-02 06:53:36,False,False,False,False,False,False,True
+N0060_06,dynamic_off,True,2013-02-06,2014-11-17 01:27:09,False,False,False,False,False,False,True
+N0060_07,dynamic_off,False,2013-02-06,,False,False,False,False,False,False,False
+N0060_08,dynamic_off,True,2013-02-06,2014-07-02 06:53:36,False,False,False,False,False,False,True
+N0060_09,dynamic_off,True,2013-02-06,2014-11-17 01:27:09,False,False,False,False,False,False,True
+N0060_10,dynamic_off,True,2013-02-06,2014-11-17 01:27:09,False,False,False,False,False,False,True
+N0066_01,dynamic_off,True,2011-04-05,2012-04-15 04:46:14,False,False,False,False,False,False,True
+N0066_02,dynamic_off,False,2011-04-05,,False,False,False,False,False,False,False
+N0066_03,dynamic_off,True,2011-04-05,2012-04-15 04:46:14,False,False,False,False,False,False,True
+N0066_04,dynamic_off,True,2011-04-05,2012-04-15 04:46:14,False,False,False,False,False,False,True
+N0066_05,dynamic_off,True,2011-04-05,2012-09-05 07:47:52,False,False,False,False,False,False,True
+N0066_06,dynamic_off,True,2011-04-05,2012-09-05 07:47:52,False,False,False,False,False,False,True
+N0066_07,dynamic_off,True,2011-04-05,2012-04-15 04:46:14,False,False,False,False,False,False,True
+N0066_08,dynamic_off,True,2011-04-05,2012-09-05 07:47:52,False,False,False,False,False,False,True
+N0066_09,dynamic_off,True,2011-04-05,2012-09-05 07:47:52,False,False,False,False,False,False,True
+N0066_10,dynamic_off,False,2011-04-05,,False,False,False,False,False,False,False
+N0067_01,dynamic_off,True,2013-09-24,2014-10-28 10:04:36,False,False,False,False,False,False,True
+N0067_02,dynamic_off,True,2013-09-24,2015-06-21 11:53:41,False,False,False,False,False,False,True
+N0067_03,dynamic_off,True,2013-09-24,2014-10-28 10:04:36,False,False,False,False,False,False,True
+N0067_04,dynamic_off,True,2013-09-24,2015-06-21 11:53:41,False,False,False,False,False,False,True
+N0067_05,dynamic_off,True,2013-09-24,2015-06-21 11:53:41,False,False,False,False,False,False,True
+N0067_06,dynamic_off,True,2013-09-24,2014-10-28 10:04:36,False,False,False,False,False,False,True
+N0067_07,dynamic_off,False,2013-09-24,,False,False,False,False,False,False,False
+N0067_08,dynamic_off,True,2013-09-24,2015-06-21 11:53:41,False,False,False,False,False,False,True
+N0067_09,dynamic_off,True,2013-09-24,2014-10-28 10:04:36,False,False,False,False,False,False,True
+N0067_10,dynamic_off,False,2013-09-24,,False,False,False,False,False,False,False
+N0070_01,dynamic_off,True,2013-10-28,2015-02-07 21:08:09,False,False,False,False,False,False,True
+N0070_02,dynamic_off,True,2013-10-28,2015-02-07 21:08:09,False,False,False,False,False,False,True
+N0070_03,dynamic_off,True,2013-10-28,2015-02-07 21:08:09,False,False,False,False,False,False,True
+N0070_04,dynamic_off,True,2013-10-28,2014-05-16 13:01:25,False,False,False,False,False,False,True
+N0070_05,dynamic_off,False,2013-10-28,,False,False,False,False,False,False,False
+N0070_06,dynamic_off,True,2013-10-28,2015-02-07 21:08:09,False,False,False,False,False,False,True
+N0070_07,dynamic_off,True,2013-10-28,2014-05-16 13:01:25,False,False,False,False,False,False,True
+N0070_08,dynamic_off,True,2013-10-28,2014-05-16 13:01:25,False,False,False,False,False,False,True
+N0070_09,dynamic_off,False,2013-10-28,,False,False,False,False,False,False,False
+N0070_10,dynamic_off,True,2013-10-28,2014-05-16 13:01:25,False,False,False,False,False,False,True
+N0080_01,dynamic_off,True,2011-02-25,2012-02-07 16:45:14,False,False,False,False,False,False,True
+N0080_02,dynamic_off,True,2011-02-25,2011-09-02 19:18:34,False,False,False,False,False,False,True
+N0080_03,dynamic_off,False,2011-02-25,,False,False,False,False,False,False,False
+N0080_04,dynamic_off,True,2011-02-25,2011-09-02 19:18:34,False,False,False,False,False,False,True
+N0080_05,dynamic_off,False,2011-02-25,,False,False,False,False,False,False,False
+N0080_06,dynamic_off,True,2011-02-25,2011-09-02 19:18:34,False,False,False,False,False,False,True
+N0080_07,dynamic_off,True,2011-02-25,2012-02-07 16:45:14,False,False,False,False,False,False,True
+N0080_08,dynamic_off,True,2011-02-25,2012-02-07 16:45:14,False,False,False,False,False,False,True
+N0080_09,dynamic_off,True,2011-02-25,2012-02-07 16:45:14,False,False,False,False,False,False,True
+N0080_10,dynamic_off,True,2011-02-25,2011-09-02 19:18:34,False,False,False,False,False,False,True
+N0096_01,dynamic_off,True,2011-08-21,2013-02-16 15:57:21,False,False,False,False,False,False,True
+N0096_02,dynamic_off,True,2011-08-21,2012-08-08 03:10:25,False,False,False,False,False,False,True
+N0096_03,dynamic_off,False,2011-08-21,,False,False,False,False,False,False,False
+N0096_04,dynamic_off,False,2011-08-21,,False,False,False,False,False,False,False
+N0096_05,dynamic_off,True,2011-08-21,2013-02-16 15:57:21,False,False,False,False,False,False,True
+N0096_06,dynamic_off,True,2011-08-21,2013-02-16 15:57:21,False,False,False,False,False,False,True
+N0096_07,dynamic_off,True,2011-08-21,2012-08-08 03:10:25,False,False,False,False,False,False,True
+N0096_08,dynamic_off,True,2011-08-21,2013-02-16 15:57:21,False,False,False,False,False,False,True
+N0096_09,dynamic_off,True,2011-08-21,2012-08-08 03:10:25,False,False,False,False,False,False,True
+N0096_10,dynamic_off,True,2011-08-21,2012-08-08 03:10:25,False,False,False,False,False,False,True
+N0097_01,dynamic_off,True,2013-02-19,2014-11-14 14:59:18,False,False,False,False,False,False,True
+N0097_02,dynamic_off,True,2013-02-19,2014-12-31 19:14:38,False,False,False,False,False,False,True
+N0097_03,dynamic_off,True,2013-02-19,2014-12-31 19:14:38,False,False,False,False,False,False,True
+N0097_04,dynamic_off,True,2013-02-19,2014-11-14 14:59:18,False,False,False,False,False,False,True
+N0097_05,dynamic_off,True,2013-02-19,2014-12-31 19:14:38,False,False,False,False,False,False,True
+N0097_06,dynamic_off,False,2013-02-19,,False,False,False,False,False,False,False
+N0097_07,dynamic_off,False,2013-02-19,,False,False,False,False,False,False,False
+N0097_08,dynamic_off,True,2013-02-19,2014-11-14 14:59:18,False,False,False,False,False,False,True
+N0097_09,dynamic_off,True,2013-02-19,2014-12-31 19:14:38,False,False,False,False,False,False,True
+N0097_10,dynamic_off,True,2013-02-19,2014-11-14 14:59:18,False,False,False,False,False,False,True
+N0102_01,dynamic_off,True,2013-11-28,2014-06-04 14:37:02,False,False,False,False,False,False,True
+N0102_02,dynamic_off,False,2013-11-28,,False,False,False,False,False,False,False
+N0102_03,dynamic_off,True,2013-11-28,2014-06-04 14:37:02,False,False,False,False,False,False,True
+N0102_04,dynamic_off,True,2013-11-28,2014-08-07 09:28:05,False,False,False,False,False,False,True
+N0102_05,dynamic_off,False,2013-11-28,,False,False,False,False,False,False,False
+N0102_06,dynamic_off,True,2013-11-28,2014-08-07 09:28:05,False,False,False,False,False,False,True
+N0102_07,dynamic_off,True,2013-11-28,2014-06-04 14:37:02,False,False,False,False,False,False,True
+N0102_08,dynamic_off,True,2013-11-28,2014-08-07 09:28:05,False,False,False,False,False,False,True
+N0102_09,dynamic_off,True,2013-11-28,2014-08-07 09:28:05,False,False,False,False,False,False,True
+N0102_10,dynamic_off,True,2013-11-28,2014-06-04 14:37:02,False,False,False,False,False,False,True
+N0111_01,dynamic_off,True,2014-11-18,2015-11-12 14:08:12,False,False,False,False,False,False,True
+N0111_02,dynamic_off,True,2014-11-18,2015-11-12 14:08:12,False,False,False,False,False,False,True
+N0111_03,dynamic_off,True,2014-11-18,2015-11-12 14:08:12,False,False,False,False,False,False,True
+N0111_04,dynamic_off,True,2014-11-18,2015-05-23 01:53:42,False,False,False,False,False,False,True
+N0111_05,dynamic_off,True,2014-11-18,2015-05-23 01:53:42,False,False,False,False,False,False,True
+N0111_06,dynamic_off,True,2014-11-18,2015-05-23 01:53:42,False,False,False,False,False,False,True
+N0111_07,dynamic_off,False,2014-11-18,,False,False,False,False,False,False,False
+N0111_08,dynamic_off,False,2014-11-18,,False,False,False,False,False,False,False
+N0111_09,dynamic_off,True,2014-11-18,2015-05-23 01:53:42,False,False,False,False,False,False,True
+N0111_10,dynamic_off,True,2014-11-18,2015-11-12 14:08:12,False,False,False,False,False,False,True
+N0127_01,dynamic_off,False,2013-05-02,,False,False,False,False,False,False,False
+N0127_02,dynamic_off,True,2013-05-02,2013-11-17 10:44:49,False,False,False,False,False,False,True
+N0127_03,dynamic_off,True,2013-05-02,2015-01-27 10:09:04,False,False,False,False,False,False,True
+N0127_04,dynamic_off,True,2013-05-02,2015-01-27 10:09:04,False,False,False,False,False,False,True
+N0127_05,dynamic_off,True,2013-05-02,2013-11-17 10:44:49,False,False,False,False,False,False,True
+N0127_06,dynamic_off,True,2013-05-02,2013-11-17 10:44:49,False,False,False,False,False,False,True
+N0127_07,dynamic_off,True,2013-05-02,2013-11-17 10:44:49,False,False,False,False,False,False,True
+N0127_08,dynamic_off,True,2013-05-02,2015-01-27 10:09:04,False,False,False,False,False,False,True
+N0127_09,dynamic_off,True,2013-05-02,2015-01-27 10:09:04,False,False,False,False,False,False,True
+N0127_10,dynamic_off,False,2013-05-02,,False,False,False,False,False,False,False
+N0132_01,dynamic_off,True,2010-09-26,2012-01-14 13:36:42,False,False,False,False,False,False,True
+N0132_02,dynamic_off,False,2010-09-26,,False,False,False,False,False,False,False
+N0132_03,dynamic_off,True,2010-09-26,2011-08-17 06:44:08,False,False,False,False,False,False,True
+N0132_04,dynamic_off,True,2010-09-26,2012-01-14 13:36:42,False,False,False,False,False,False,True
+N0132_05,dynamic_off,True,2010-09-26,2012-01-14 13:36:42,False,False,False,False,False,False,True
+N0132_06,dynamic_off,True,2010-09-26,2011-08-17 06:44:08,False,False,False,False,False,False,True
+N0132_07,dynamic_off,False,2010-09-26,,False,False,False,False,False,False,False
+N0132_08,dynamic_off,True,2010-09-26,2011-08-17 06:44:08,False,False,False,False,False,False,True
+N0132_09,dynamic_off,True,2010-09-26,2012-01-14 13:36:42,False,False,False,False,False,False,True
+N0132_10,dynamic_off,True,2010-09-26,2011-08-17 06:44:08,False,False,False,False,False,False,True
+N0134_01,dynamic_off,False,2014-12-17,,False,False,False,False,False,False,False
+N0134_02,dynamic_off,True,2014-12-17,2015-08-14 02:11:07,False,False,False,False,False,False,True
+N0134_03,dynamic_off,True,2014-12-17,2016-05-15 00:50:09,False,False,False,False,False,False,True
+N0134_04,dynamic_off,False,2014-12-17,,False,False,False,False,False,False,False
+N0134_05,dynamic_off,True,2014-12-17,2015-08-14 02:11:07,False,False,False,False,False,False,True
+N0134_06,dynamic_off,True,2014-12-17,2016-05-15 00:50:09,False,False,False,False,False,False,True
+N0134_07,dynamic_off,True,2014-12-17,2016-05-15 00:50:09,False,False,False,False,False,False,True
+N0134_08,dynamic_off,True,2014-12-17,2016-05-15 00:50:09,False,False,False,False,False,False,True
+N0134_09,dynamic_off,True,2014-12-17,2015-08-14 02:11:07,False,False,False,False,False,False,True
+N0134_10,dynamic_off,True,2014-12-17,2015-08-14 02:11:07,False,False,False,False,False,False,True
+N0139_01,dynamic_off,True,2011-06-02,2013-04-03 13:24:33,False,False,False,False,False,False,True
+N0139_02,dynamic_off,True,2011-06-02,2013-04-03 13:24:33,False,False,False,False,False,False,True
+N0139_03,dynamic_off,True,2011-06-02,2013-01-09 23:42:45,False,False,False,False,False,False,True
+N0139_04,dynamic_off,True,2011-06-02,2013-01-09 23:42:45,False,False,False,False,False,False,True
+N0139_05,dynamic_off,True,2011-06-02,2013-04-03 13:24:33,False,False,False,False,False,False,True
+N0139_06,dynamic_off,True,2011-06-02,2013-01-09 23:42:45,False,False,False,False,False,False,True
+N0139_07,dynamic_off,True,2011-06-02,2013-01-09 23:42:45,False,False,False,False,False,False,True
+N0139_08,dynamic_off,False,2011-06-02,,False,False,False,False,False,False,False
+N0139_09,dynamic_off,False,2011-06-02,,False,False,False,False,False,False,False
+N0139_10,dynamic_off,True,2011-06-02,2013-04-03 13:24:33,False,False,False,False,False,False,True
+N0141_01,dynamic_off,False,2014-12-02,,False,False,False,False,False,False,False
+N0141_02,dynamic_off,False,2014-12-02,,False,False,False,False,False,False,False
+N0141_03,dynamic_off,True,2014-12-02,2015-08-10 08:48:11,False,False,False,False,False,False,True
+N0141_04,dynamic_off,True,2014-12-02,2015-08-10 08:48:11,False,False,False,False,False,False,True
+N0141_05,dynamic_off,True,2014-12-02,2016-10-01 02:18:03,False,False,False,False,False,False,True
+N0141_06,dynamic_off,True,2014-12-02,2016-10-01 02:18:03,False,False,False,False,False,False,True
+N0141_07,dynamic_off,True,2014-12-02,2016-10-01 02:18:03,False,False,False,False,False,False,True
+N0141_08,dynamic_off,True,2014-12-02,2015-08-10 08:48:11,False,False,False,False,False,False,True
+N0141_09,dynamic_off,True,2014-12-02,2015-08-10 08:48:11,False,False,False,False,False,False,True
+N0141_10,dynamic_off,True,2014-12-02,2016-10-01 02:18:03,False,False,False,False,False,False,True
+N0142_01,dynamic_off,True,2011-07-30,2012-03-17 17:26:36,False,False,False,False,False,False,True
+N0142_02,dynamic_off,True,2011-07-30,2012-08-13 18:22:32,False,False,False,False,False,False,True
+N0142_03,dynamic_off,True,2011-07-30,2012-08-13 18:22:32,False,False,False,False,False,False,True
+N0142_04,dynamic_off,True,2011-07-30,2012-03-17 17:26:36,False,False,False,False,False,False,True
+N0142_05,dynamic_off,False,2011-07-30,,False,False,False,False,False,False,False
+N0142_06,dynamic_off,False,2011-07-30,,False,False,False,False,False,False,False
+N0142_07,dynamic_off,True,2011-07-30,2012-03-17 17:26:36,False,False,False,False,False,False,True
+N0142_08,dynamic_off,True,2011-07-30,2012-08-13 18:22:32,False,False,False,False,False,False,True
+N0142_09,dynamic_off,True,2011-07-30,2012-03-17 17:26:36,False,False,False,False,False,False,True
+N0142_10,dynamic_off,True,2011-07-30,2012-08-13 18:22:32,False,False,False,False,False,False,True
+N0144_01,dynamic_off,True,2011-12-17,2013-04-03 11:13:50,False,False,False,False,False,False,True
+N0144_02,dynamic_off,True,2011-12-17,2013-05-11 11:41:53,False,False,False,False,False,False,True
+N0144_03,dynamic_off,True,2011-12-17,2013-04-03 11:13:50,False,False,False,False,False,False,True
+N0144_04,dynamic_off,True,2011-12-17,2013-05-11 11:41:53,False,False,False,False,False,False,True
+N0144_05,dynamic_off,False,2011-12-17,,False,False,False,False,False,False,False
+N0144_06,dynamic_off,True,2011-12-17,2013-05-11 11:41:53,False,False,False,False,False,False,True
+N0144_07,dynamic_off,True,2011-12-17,2013-04-03 11:13:50,False,False,False,False,False,False,True
+N0144_08,dynamic_off,False,2011-12-17,,False,False,False,False,False,False,False
+N0144_09,dynamic_off,True,2011-12-17,2013-05-11 11:41:53,False,False,False,False,False,False,True
+N0144_10,dynamic_off,True,2011-12-17,2013-04-03 11:13:50,False,False,False,False,False,False,True
+N0149_01,dynamic_off,True,2011-10-06,2012-07-12 01:06:15,False,False,False,False,False,False,True
+N0149_02,dynamic_off,True,2011-10-06,2012-07-12 01:06:15,False,False,False,False,False,False,True
+N0149_03,dynamic_off,True,2011-10-06,2012-10-14 11:57:17,False,False,False,False,False,False,True
+N0149_04,dynamic_off,False,2011-10-06,,False,False,False,False,False,False,False
+N0149_05,dynamic_off,True,2011-10-06,2012-10-14 11:57:17,False,False,False,False,False,False,True
+N0149_06,dynamic_off,True,2011-10-06,2012-10-14 11:57:17,False,False,False,False,False,False,True
+N0149_07,dynamic_off,False,2011-10-06,,False,False,False,False,False,False,False
+N0149_08,dynamic_off,True,2011-10-06,2012-10-14 11:57:17,False,False,False,False,False,False,True
+N0149_09,dynamic_off,True,2011-10-06,2012-07-12 01:06:15,False,False,False,False,False,False,True
+N0149_10,dynamic_off,True,2011-10-06,2012-07-12 01:06:15,False,False,False,False,False,False,True
+N0151_01,dynamic_off,True,2012-07-15,2014-02-13 20:18:49,False,False,False,False,False,False,True
+N0151_02,dynamic_off,True,2012-07-15,2014-02-13 20:18:49,False,False,False,False,False,False,True
+N0151_03,dynamic_off,True,2012-07-15,2013-11-07 23:42:31,False,False,False,False,False,False,True
+N0151_04,dynamic_off,True,2012-07-15,2013-11-07 23:42:31,False,False,False,False,False,False,True
+N0151_05,dynamic_off,True,2012-07-15,2014-02-13 20:18:49,False,False,False,False,False,False,True
+N0151_06,dynamic_off,True,2012-07-15,2013-11-07 23:42:31,False,False,False,False,False,False,True
+N0151_07,dynamic_off,False,2012-07-15,,False,False,False,False,False,False,False
+N0151_08,dynamic_off,True,2012-07-15,2014-02-13 20:18:49,False,False,False,False,False,False,True
+N0151_09,dynamic_off,False,2012-07-15,,False,False,False,False,False,False,False
+N0151_10,dynamic_off,True,2012-07-15,2013-11-07 23:42:31,False,False,False,False,False,False,True
+N0152_01,dynamic_off,True,2011-07-14,2013-04-25 11:22:05,False,False,False,False,False,False,True
+N0152_02,dynamic_off,True,2011-07-14,2012-07-01 11:47:43,False,False,False,False,False,False,True
+N0152_03,dynamic_off,True,2011-07-14,2012-07-01 11:47:43,False,False,False,False,False,False,True
+N0152_04,dynamic_off,False,2011-07-14,,False,False,False,False,False,False,False
+N0152_05,dynamic_off,True,2011-07-14,2013-04-25 11:22:05,False,False,False,False,False,False,True
+N0152_06,dynamic_off,True,2011-07-14,2013-04-25 11:22:05,False,False,False,False,False,False,True
+N0152_07,dynamic_off,True,2011-07-14,2012-07-01 11:47:43,False,False,False,False,False,False,True
+N0152_08,dynamic_off,True,2011-07-14,2012-07-01 11:47:43,False,False,False,False,False,False,True
+N0152_09,dynamic_off,False,2011-07-14,,False,False,False,False,False,False,False
+N0152_10,dynamic_off,True,2011-07-14,2013-04-25 11:22:05,False,False,False,False,False,False,True
+N0154_01,dynamic_off,True,2010-01-14,2011-11-09 05:12:47,False,False,False,False,False,False,True
+N0154_02,dynamic_off,True,2010-01-14,2011-11-09 05:12:47,False,False,False,False,False,False,True
+N0154_03,dynamic_off,False,2010-01-14,,False,False,False,False,False,False,False
+N0154_04,dynamic_off,True,2010-01-14,2011-07-24 16:40:05,False,False,False,False,False,False,True
+N0154_05,dynamic_off,True,2010-01-14,2011-07-24 16:40:05,False,False,False,False,False,False,True
+N0154_06,dynamic_off,True,2010-01-14,2011-07-24 16:40:05,False,False,False,False,False,False,True
+N0154_07,dynamic_off,True,2010-01-14,2011-11-09 05:12:47,False,False,False,False,False,False,True
+N0154_08,dynamic_off,True,2010-01-14,2011-07-24 16:40:05,False,False,False,False,False,False,True
+N0154_09,dynamic_off,False,2010-01-14,,False,False,False,False,False,False,False
+N0154_10,dynamic_off,True,2010-01-14,2011-11-09 05:12:47,False,False,False,False,False,False,True
+N0158_01,dynamic_off,True,2013-10-03,2015-03-09 17:21:57,False,False,False,False,False,False,True
+N0158_02,dynamic_off,True,2013-10-03,2015-03-09 17:21:57,False,False,False,False,False,False,True
+N0158_03,dynamic_off,False,2013-10-03,,False,False,False,False,False,False,False
+N0158_04,dynamic_off,True,2013-10-03,2015-07-29 09:13:59,False,False,False,False,False,False,True
+N0158_05,dynamic_off,True,2013-10-03,2015-07-29 09:13:59,False,False,False,False,False,False,True
+N0158_06,dynamic_off,True,2013-10-03,2015-03-09 17:21:57,False,False,False,False,False,False,True
+N0158_07,dynamic_off,True,2013-10-03,2015-07-29 09:13:59,False,False,False,False,False,False,True
+N0158_08,dynamic_off,True,2013-10-03,2015-03-09 17:21:57,False,False,False,False,False,False,True
+N0158_09,dynamic_off,True,2013-10-03,2015-07-29 09:13:59,False,False,False,False,False,False,True
+N0158_10,dynamic_off,False,2013-10-03,,False,False,False,False,False,False,False
+N0162_01,dynamic_off,True,2011-10-09,2013-10-05 19:26:49,False,False,False,False,False,False,True
+N0162_02,dynamic_off,True,2011-10-09,2013-10-05 19:26:49,False,False,False,False,False,False,True
+N0162_03,dynamic_off,True,2011-10-09,2013-05-30 23:29:14,False,False,False,False,False,False,True
+N0162_04,dynamic_off,True,2011-10-09,2013-10-05 19:26:49,False,False,False,False,False,False,True
+N0162_05,dynamic_off,False,2011-10-09,,False,False,False,False,False,False,False
+N0162_06,dynamic_off,True,2011-10-09,2013-05-30 23:29:14,False,False,False,False,False,False,True
+N0162_07,dynamic_off,True,2011-10-09,2013-05-30 23:29:14,False,False,False,False,False,False,True
+N0162_08,dynamic_off,True,2011-10-09,2013-10-05 19:26:49,False,False,False,False,False,False,True
+N0162_09,dynamic_off,True,2011-10-09,2013-05-30 23:29:14,False,False,False,False,False,False,True
+N0162_10,dynamic_off,False,2011-10-09,,False,False,False,False,False,False,False
+N0166_01,dynamic_off,True,2011-11-25,2013-10-05 13:22:44,False,False,False,False,False,False,True
+N0166_02,dynamic_off,False,2011-11-25,,False,False,False,False,False,False,False
+N0166_03,dynamic_off,True,2011-11-25,2012-06-25 06:50:52,False,False,False,False,False,False,True
+N0166_04,dynamic_off,False,2011-11-25,,False,False,False,False,False,False,False
+N0166_05,dynamic_off,True,2011-11-25,2012-06-25 06:50:52,False,False,False,False,False,False,True
+N0166_06,dynamic_off,True,2011-11-25,2012-06-25 06:50:52,False,False,False,False,False,False,True
+N0166_07,dynamic_off,True,2011-11-25,2013-10-05 13:22:44,False,False,False,False,False,False,True
+N0166_08,dynamic_off,True,2011-11-25,2013-10-05 13:22:44,False,False,False,False,False,False,True
+N0166_09,dynamic_off,True,2011-11-25,2012-06-25 06:50:52,False,False,False,False,False,False,True
+N0166_10,dynamic_off,True,2011-11-25,2013-10-05 13:22:44,False,False,False,False,False,False,True
+N0183_01,dynamic_off,True,2014-11-11,2015-11-17 00:33:46,False,False,False,False,False,False,True
+N0183_02,dynamic_off,True,2014-11-11,2015-11-17 00:33:46,False,False,False,False,False,False,True
+N0183_03,dynamic_off,True,2014-11-11,2016-01-18 17:47:10,False,False,False,False,False,False,True
+N0183_04,dynamic_off,True,2014-11-11,2016-01-18 17:47:10,False,False,False,False,False,False,True
+N0183_05,dynamic_off,False,2014-11-11,,False,False,False,False,False,False,False
+N0183_06,dynamic_off,True,2014-11-11,2016-01-18 17:47:10,False,False,False,False,False,False,True
+N0183_07,dynamic_off,True,2014-11-11,2016-01-18 17:47:10,False,False,False,False,False,False,True
+N0183_08,dynamic_off,False,2014-11-11,,False,False,False,False,False,False,False
+N0183_09,dynamic_off,True,2014-11-11,2015-11-17 00:33:46,False,False,False,False,False,False,True
+N0183_10,dynamic_off,True,2014-11-11,2015-11-17 00:33:46,False,False,False,False,False,False,True
+N0190_01,dynamic_off,True,2012-04-09,2013-12-23 13:11:10,False,False,False,False,False,False,True
+N0190_02,dynamic_off,True,2012-04-09,2014-03-26 00:28:23,False,False,False,False,False,False,True
+N0190_03,dynamic_off,True,2012-04-09,2013-12-23 13:11:10,False,False,False,False,False,False,True
+N0190_04,dynamic_off,True,2012-04-09,2014-03-26 00:28:23,False,False,False,False,False,False,True
+N0190_05,dynamic_off,True,2012-04-09,2013-12-23 13:11:10,False,False,False,False,False,False,True
+N0190_06,dynamic_off,True,2012-04-09,2014-03-26 00:28:23,False,False,False,False,False,False,True
+N0190_07,dynamic_off,True,2012-04-09,2013-12-23 13:11:10,False,False,False,False,False,False,True
+N0190_08,dynamic_off,False,2012-04-09,,False,False,False,False,False,False,False
+N0190_09,dynamic_off,False,2012-04-09,,False,False,False,False,False,False,False
+N0190_10,dynamic_off,True,2012-04-09,2014-03-26 00:28:23,False,False,False,False,False,False,True
+N0192_01,dynamic_off,True,2010-01-01,2010-10-16 22:27:01,False,False,False,False,False,False,True
+N0192_02,dynamic_off,True,2010-01-01,2010-07-05 12:49:35,False,False,False,False,False,False,True
+N0192_03,dynamic_off,True,2010-01-01,2010-07-05 12:49:35,False,False,False,False,False,False,True
+N0192_04,dynamic_off,True,2010-01-01,2010-10-16 22:27:01,False,False,False,False,False,False,True
+N0192_05,dynamic_off,True,2010-01-01,2010-07-05 12:49:35,False,False,False,False,False,False,True
+N0192_06,dynamic_off,True,2010-01-01,2010-10-16 22:27:01,False,False,False,False,False,False,True
+N0192_07,dynamic_off,True,2010-01-01,2010-10-16 22:27:01,False,False,False,False,False,False,True
+N0192_08,dynamic_off,True,2010-01-01,2010-07-05 12:49:35,False,False,False,False,False,False,True
+N0192_09,dynamic_off,False,2010-01-01,,False,False,False,False,False,False,False
+N0192_10,dynamic_off,False,2010-01-01,,False,False,False,False,False,False,False
+N0194_01,dynamic_off,True,2010-04-24,2010-12-19 18:00:36,False,False,False,False,False,False,True
+N0194_02,dynamic_off,True,2010-04-24,2011-07-26 01:56:12,False,False,False,False,False,False,True
+N0194_03,dynamic_off,True,2010-04-24,2011-07-26 01:56:12,False,False,False,False,False,False,True
+N0194_04,dynamic_off,True,2010-04-24,2010-12-19 18:00:36,False,False,False,False,False,False,True
+N0194_05,dynamic_off,True,2010-04-24,2011-07-26 01:56:12,False,False,False,False,False,False,True
+N0194_06,dynamic_off,False,2010-04-24,,False,False,False,False,False,False,False
+N0194_07,dynamic_off,True,2010-04-24,2010-12-19 18:00:36,False,False,False,False,False,False,True
+N0194_08,dynamic_off,True,2010-04-24,2010-12-19 18:00:36,False,False,False,False,False,False,True
+N0194_09,dynamic_off,False,2010-04-24,,False,False,False,False,False,False,False
+N0194_10,dynamic_off,True,2010-04-24,2011-07-26 01:56:12,False,False,False,False,False,False,True
+N0195_01,dynamic_off,True,2014-01-01,2014-07-01 16:01:56,False,False,False,False,False,False,True
+N0195_02,dynamic_off,True,2014-01-01,2014-07-01 16:01:56,False,False,False,False,False,False,True
+N0195_03,dynamic_off,False,2014-01-01,,False,False,False,False,False,False,False
+N0195_04,dynamic_off,True,2014-01-01,2015-04-08 03:43:38,False,False,False,False,False,False,True
+N0195_05,dynamic_off,True,2014-01-01,2015-04-08 03:43:38,False,False,False,False,False,False,True
+N0195_06,dynamic_off,True,2014-01-01,2014-07-01 16:01:56,False,False,False,False,False,False,True
+N0195_07,dynamic_off,True,2014-01-01,2015-04-08 03:43:38,False,False,False,False,False,False,True
+N0195_08,dynamic_off,True,2014-01-01,2014-07-01 16:01:56,False,False,False,False,False,False,True
+N0195_09,dynamic_off,True,2014-01-01,2015-04-08 03:43:38,False,False,False,False,False,False,True
+N0195_10,dynamic_off,False,2014-01-01,,False,False,False,False,False,False,False
+N0199_01,dynamic_off,True,2013-07-26,2014-06-24 13:50:37,False,False,False,False,False,False,True
+N0199_02,dynamic_off,True,2013-07-26,2014-06-24 13:50:37,False,False,False,False,False,False,True
+N0199_03,dynamic_off,True,2013-07-26,2014-06-24 13:50:37,False,False,False,False,False,False,True
+N0199_04,dynamic_off,True,2013-07-26,2014-12-23 04:27:32,False,False,False,False,False,False,True
+N0199_05,dynamic_off,False,2013-07-26,,False,False,False,False,False,False,False
+N0199_06,dynamic_off,True,2013-07-26,2014-12-23 04:27:32,False,False,False,False,False,False,True
+N0199_07,dynamic_off,True,2013-07-26,2014-06-24 13:50:37,False,False,False,False,False,False,True
+N0199_08,dynamic_off,False,2013-07-26,,False,False,False,False,False,False,False
+N0199_09,dynamic_off,True,2013-07-26,2014-12-23 04:27:32,False,False,False,False,False,False,True
+N0199_10,dynamic_off,True,2013-07-26,2014-12-23 04:27:32,False,False,False,False,False,False,True
+N0214_01,dynamic_off,True,2014-09-12,2016-04-08 16:02:15,False,False,False,False,False,False,True
+N0214_02,dynamic_off,True,2014-09-12,2016-04-08 16:02:15,False,False,False,False,False,False,True
+N0214_03,dynamic_off,False,2014-09-12,,False,False,False,False,False,False,False
+N0214_04,dynamic_off,False,2014-09-12,,False,False,False,False,False,False,False
+N0214_05,dynamic_off,True,2014-09-12,2016-05-19 15:47:48,False,False,False,False,False,False,True
+N0214_06,dynamic_off,True,2014-09-12,2016-05-19 15:47:48,False,False,False,False,False,False,True
+N0214_07,dynamic_off,True,2014-09-12,2016-04-08 16:02:15,False,False,False,False,False,False,True
+N0214_08,dynamic_off,True,2014-09-12,2016-05-19 15:47:48,False,False,False,False,False,False,True
+N0214_09,dynamic_off,True,2014-09-12,2016-05-19 15:47:48,False,False,False,False,False,False,True
+N0214_10,dynamic_off,True,2014-09-12,2016-04-08 16:02:15,False,False,False,False,False,False,True
+N0215_01,dynamic_off,True,2013-12-01,2014-11-05 20:24:18,False,False,False,False,False,False,True
+N0215_02,dynamic_off,False,2013-12-01,,False,False,False,False,False,False,False
+N0215_03,dynamic_off,False,2013-12-01,,False,False,False,False,False,False,False
+N0215_04,dynamic_off,True,2013-12-01,2015-01-01 09:47:29,False,False,False,False,False,False,True
+N0215_05,dynamic_off,True,2013-12-01,2014-11-05 20:24:18,False,False,False,False,False,False,True
+N0215_06,dynamic_off,True,2013-12-01,2015-01-01 09:47:29,False,False,False,False,False,False,True
+N0215_07,dynamic_off,True,2013-12-01,2015-01-01 09:47:29,False,False,False,False,False,False,True
+N0215_08,dynamic_off,True,2013-12-01,2014-11-05 20:24:18,False,False,False,False,False,False,True
+N0215_09,dynamic_off,True,2013-12-01,2014-11-05 20:24:18,False,False,False,False,False,False,True
+N0215_10,dynamic_off,True,2013-12-01,2015-01-01 09:47:29,False,False,False,False,False,False,True
+N0230_01,dynamic_off,True,2010-04-07,2011-02-15 23:43:59,False,False,False,False,False,False,True
+N0230_02,dynamic_off,False,2010-04-07,,False,False,False,False,False,False,False
+N0230_03,dynamic_off,True,2010-04-07,2010-12-21 20:03:26,False,False,False,False,False,False,True
+N0230_04,dynamic_off,True,2010-04-07,2010-12-21 20:03:26,False,False,False,False,False,False,True
+N0230_05,dynamic_off,True,2010-04-07,2011-02-15 23:43:59,False,False,False,False,False,False,True
+N0230_06,dynamic_off,True,2010-04-07,2011-02-15 23:43:59,False,False,False,False,False,False,True
+N0230_07,dynamic_off,True,2010-04-07,2010-12-21 20:03:26,False,False,False,False,False,False,True
+N0230_08,dynamic_off,True,2010-04-07,2011-02-15 23:43:59,False,False,False,False,False,False,True
+N0230_09,dynamic_off,False,2010-04-07,,False,False,False,False,False,False,False
+N0230_10,dynamic_off,True,2010-04-07,2010-12-21 20:03:26,False,False,False,False,False,False,True
+N0239_01,dynamic_off,True,2011-02-06,2012-07-11 18:45:03,False,False,False,False,False,False,True
+N0239_02,dynamic_off,True,2011-02-06,2012-04-21 19:09:18,False,False,False,False,False,False,True
+N0239_03,dynamic_off,False,2011-02-06,,False,False,False,False,False,False,False
+N0239_04,dynamic_off,True,2011-02-06,2012-07-11 18:45:03,False,False,False,False,False,False,True
+N0239_05,dynamic_off,False,2011-02-06,,False,False,False,False,False,False,False
+N0239_06,dynamic_off,True,2011-02-06,2012-07-11 18:45:03,False,False,False,False,False,False,True
+N0239_07,dynamic_off,True,2011-02-06,2012-04-21 19:09:18,False,False,False,False,False,False,True
+N0239_08,dynamic_off,True,2011-02-06,2012-04-21 19:09:18,False,False,False,False,False,False,True
+N0239_09,dynamic_off,True,2011-02-06,2012-07-11 18:45:03,False,False,False,False,False,False,True
+N0239_10,dynamic_off,True,2011-02-06,2012-04-21 19:09:18,False,False,False,False,False,False,True
+N0241_01,dynamic_off,True,2012-08-18,2013-03-22 20:59:15,False,False,False,False,False,False,True
+N0241_02,dynamic_off,True,2012-08-18,2014-07-31 06:01:30,False,False,False,False,False,False,True
+N0241_03,dynamic_off,True,2012-08-18,2013-03-22 20:59:15,False,False,False,False,False,False,True
+N0241_04,dynamic_off,True,2012-08-18,2014-07-31 06:01:30,False,False,False,False,False,False,True
+N0241_05,dynamic_off,True,2012-08-18,2013-03-22 20:59:15,False,False,False,False,False,False,True
+N0241_06,dynamic_off,True,2012-08-18,2014-07-31 06:01:30,False,False,False,False,False,False,True
+N0241_07,dynamic_off,True,2012-08-18,2013-03-22 20:59:15,False,False,False,False,False,False,True
+N0241_08,dynamic_off,False,2012-08-18,,False,False,False,False,False,False,False
+N0241_09,dynamic_off,True,2012-08-18,2014-07-31 06:01:30,False,False,False,False,False,False,True
+N0241_10,dynamic_off,False,2012-08-18,,False,False,False,False,False,False,False
+N0255_01,dynamic_off,True,2014-04-14,2016-02-25 00:06:31,False,False,False,False,False,False,True
+N0255_02,dynamic_off,True,2014-04-14,2016-02-25 00:06:31,False,False,False,False,False,False,True
+N0255_03,dynamic_off,True,2014-04-14,2014-12-14 19:49:59,False,False,False,False,False,False,True
+N0255_04,dynamic_off,True,2014-04-14,2014-12-14 19:49:59,False,False,False,False,False,False,True
+N0255_05,dynamic_off,True,2014-04-14,2014-12-14 19:49:59,False,False,False,False,False,False,True
+N0255_06,dynamic_off,True,2014-04-14,2016-02-25 00:06:31,False,False,False,False,False,False,True
+N0255_07,dynamic_off,False,2014-04-14,,False,False,False,False,False,False,False
+N0255_08,dynamic_off,False,2014-04-14,,False,False,False,False,False,False,False
+N0255_09,dynamic_off,True,2014-04-14,2016-02-25 00:06:31,False,False,False,False,False,False,True
+N0255_10,dynamic_off,True,2014-04-14,2014-12-14 19:49:59,False,False,False,False,False,False,True
+N0257_01,dynamic_off,False,2014-08-13,,False,False,False,False,False,False,False
+N0257_02,dynamic_off,True,2014-08-13,2015-05-09 09:31:14,False,False,False,False,False,False,True
+N0257_03,dynamic_off,False,2014-08-13,,False,False,False,False,False,False,False
+N0257_04,dynamic_off,True,2014-08-13,2015-05-09 09:31:14,False,False,False,False,False,False,True
+N0257_05,dynamic_off,True,2014-08-13,2015-10-14 13:00:32,False,False,False,False,False,False,True
+N0257_06,dynamic_off,True,2014-08-13,2015-05-09 09:31:14,False,False,False,False,False,False,True
+N0257_07,dynamic_off,True,2014-08-13,2015-10-14 13:00:32,False,False,False,False,False,False,True
+N0257_08,dynamic_off,True,2014-08-13,2015-10-14 13:00:32,False,False,False,False,False,False,True
+N0257_09,dynamic_off,True,2014-08-13,2015-10-14 13:00:32,False,False,False,False,False,False,True
+N0257_10,dynamic_off,True,2014-08-13,2015-05-09 09:31:14,False,False,False,False,False,False,True
+N0260_01,dynamic_off,True,2010-11-12,2012-07-29 00:55:30,False,False,False,False,False,False,True
+N0260_02,dynamic_off,True,2010-11-12,2011-08-12 03:02:13,False,False,False,False,False,False,True
+N0260_03,dynamic_off,True,2010-11-12,2012-07-29 00:55:30,False,False,False,False,False,False,True
+N0260_04,dynamic_off,True,2010-11-12,2012-07-29 00:55:30,False,False,False,False,False,False,True
+N0260_05,dynamic_off,True,2010-11-12,2012-07-29 00:55:30,False,False,False,False,False,False,True
+N0260_06,dynamic_off,False,2010-11-12,,False,False,False,False,False,False,False
+N0260_07,dynamic_off,True,2010-11-12,2011-08-12 03:02:13,False,False,False,False,False,False,True
+N0260_08,dynamic_off,True,2010-11-12,2011-08-12 03:02:13,False,False,False,False,False,False,True
+N0260_09,dynamic_off,False,2010-11-12,,False,False,False,False,False,False,False
+N0260_10,dynamic_off,True,2010-11-12,2011-08-12 03:02:13,False,False,False,False,False,False,True
+N0266_01,dynamic_off,True,2014-06-08,2015-07-05 01:18:57,False,False,False,False,False,False,True
+N0266_02,dynamic_off,True,2014-06-08,2015-07-05 01:18:57,False,False,False,False,False,False,True
+N0266_03,dynamic_off,False,2014-06-08,,False,False,False,False,False,False,False
+N0266_04,dynamic_off,True,2014-06-08,2015-08-23 08:35:12,False,False,False,False,False,False,True
+N0266_05,dynamic_off,True,2014-06-08,2015-08-23 08:35:12,False,False,False,False,False,False,True
+N0266_06,dynamic_off,True,2014-06-08,2015-08-23 08:35:12,False,False,False,False,False,False,True
+N0266_07,dynamic_off,True,2014-06-08,2015-08-23 08:35:12,False,False,False,False,False,False,True
+N0266_08,dynamic_off,True,2014-06-08,2015-07-05 01:18:57,False,False,False,False,False,False,True
+N0266_09,dynamic_off,False,2014-06-08,,False,False,False,False,False,False,False
+N0266_10,dynamic_off,True,2014-06-08,2015-07-05 01:18:57,False,False,False,False,False,False,True
+N0273_01,dynamic_off,True,2011-07-26,2012-05-22 09:50:39,False,False,False,False,False,False,True
+N0273_02,dynamic_off,True,2011-07-26,2012-09-15 00:11:54,False,False,False,False,False,False,True
+N0273_03,dynamic_off,True,2011-07-26,2012-09-15 00:11:54,False,False,False,False,False,False,True
+N0273_04,dynamic_off,True,2011-07-26,2012-05-22 09:50:39,False,False,False,False,False,False,True
+N0273_05,dynamic_off,True,2011-07-26,2012-05-22 09:50:39,False,False,False,False,False,False,True
+N0273_06,dynamic_off,False,2011-07-26,,False,False,False,False,False,False,False
+N0273_07,dynamic_off,False,2011-07-26,,False,False,False,False,False,False,False
+N0273_08,dynamic_off,True,2011-07-26,2012-09-15 00:11:54,False,False,False,False,False,False,True
+N0273_09,dynamic_off,True,2011-07-26,2012-05-22 09:50:39,False,False,False,False,False,False,True
+N0273_10,dynamic_off,True,2011-07-26,2012-09-15 00:11:54,False,False,False,False,False,False,True
+N0274_01,dynamic_off,True,2011-08-12,2012-02-21 04:22:38,False,False,False,False,False,False,True
+N0274_02,dynamic_off,True,2011-08-12,2013-04-22 06:44:14,False,False,False,False,False,False,True
+N0274_03,dynamic_off,False,2011-08-12,,False,False,False,False,False,False,False
+N0274_04,dynamic_off,True,2011-08-12,2012-02-21 04:22:38,False,False,False,False,False,False,True
+N0274_05,dynamic_off,True,2011-08-12,2012-02-21 04:22:38,False,False,False,False,False,False,True
+N0274_06,dynamic_off,False,2011-08-12,,False,False,False,False,False,False,False
+N0274_07,dynamic_off,True,2011-08-12,2012-02-21 04:22:38,False,False,False,False,False,False,True
+N0274_08,dynamic_off,True,2011-08-12,2013-04-22 06:44:14,False,False,False,False,False,False,True
+N0274_09,dynamic_off,True,2011-08-12,2013-04-22 06:44:14,False,False,False,False,False,False,True
+N0274_10,dynamic_off,True,2011-08-12,2013-04-22 06:44:14,False,False,False,False,False,False,True
+N0279_01,dynamic_off,True,2014-02-13,2014-09-30 17:43:27,False,False,False,False,False,False,True
+N0279_02,dynamic_off,True,2014-02-13,2014-11-15 00:09:20,False,False,False,False,False,False,True
+N0279_03,dynamic_off,True,2014-02-13,2014-09-30 17:43:27,False,False,False,False,False,False,True
+N0279_04,dynamic_off,False,2014-02-13,,False,False,False,False,False,False,False
+N0279_05,dynamic_off,True,2014-02-13,2014-09-30 17:43:27,False,False,False,False,False,False,True
+N0279_06,dynamic_off,False,2014-02-13,,False,False,False,False,False,False,False
+N0279_07,dynamic_off,True,2014-02-13,2014-11-15 00:09:20,False,False,False,False,False,False,True
+N0279_08,dynamic_off,True,2014-02-13,2014-11-15 00:09:20,False,False,False,False,False,False,True
+N0279_09,dynamic_off,True,2014-02-13,2014-11-15 00:09:20,False,False,False,False,False,False,True
+N0279_10,dynamic_off,True,2014-02-13,2014-09-30 17:43:27,False,False,False,False,False,False,True
+N0282_01,dynamic_off,False,2010-02-06,,False,False,False,False,False,False,False
+N0282_02,dynamic_off,True,2010-02-06,2011-10-01 03:19:12,False,False,False,False,False,False,True
+N0282_03,dynamic_off,True,2010-02-06,2011-09-11 08:49:58,False,False,False,False,False,False,True
+N0282_04,dynamic_off,True,2010-02-06,2011-09-11 08:49:58,False,False,False,False,False,False,True
+N0282_05,dynamic_off,True,2010-02-06,2011-09-11 08:49:58,False,False,False,False,False,False,True
+N0282_06,dynamic_off,False,2010-02-06,,False,False,False,False,False,False,False
+N0282_07,dynamic_off,True,2010-02-06,2011-09-11 08:49:58,False,False,False,False,False,False,True
+N0282_08,dynamic_off,True,2010-02-06,2011-10-01 03:19:12,False,False,False,False,False,False,True
+N0282_09,dynamic_off,True,2010-02-06,2011-10-01 03:19:12,False,False,False,False,False,False,True
+N0282_10,dynamic_off,True,2010-02-06,2011-10-01 03:19:12,False,False,False,False,False,False,True
+N0285_01,dynamic_off,False,2010-05-25,,False,False,False,False,False,False,False
+N0285_02,dynamic_off,True,2010-05-25,2011-06-08 07:24:13,False,False,False,False,False,False,True
+N0285_03,dynamic_off,True,2010-05-25,2011-06-08 07:24:13,False,False,False,False,False,False,True
+N0285_04,dynamic_off,True,2010-05-25,2011-06-08 07:24:13,False,False,False,False,False,False,True
+N0285_05,dynamic_off,False,2010-05-25,,False,False,False,False,False,False,False
+N0285_06,dynamic_off,True,2010-05-25,2010-12-17 03:50:45,False,False,False,False,False,False,True
+N0285_07,dynamic_off,True,2010-05-25,2010-12-17 03:50:45,False,False,False,False,False,False,True
+N0285_08,dynamic_off,True,2010-05-25,2010-12-17 03:50:45,False,False,False,False,False,False,True
+N0285_09,dynamic_off,True,2010-05-25,2010-12-17 03:50:45,False,False,False,False,False,False,True
+N0285_10,dynamic_off,True,2010-05-25,2011-06-08 07:24:13,False,False,False,False,False,False,True
+N0286_01,dynamic_off,True,2010-11-15,2011-09-10 07:54:56,False,False,False,False,False,False,True
+N0286_02,dynamic_off,True,2010-11-15,2011-09-10 07:54:56,False,False,False,False,False,False,True
+N0286_03,dynamic_off,True,2010-11-15,2011-09-10 07:54:56,False,False,False,False,False,False,True
+N0286_04,dynamic_off,False,2010-11-15,,False,False,False,False,False,False,False
+N0286_05,dynamic_off,True,2010-11-15,2012-08-20 20:47:26,False,False,False,False,False,False,True
+N0286_06,dynamic_off,True,2010-11-15,2012-08-20 20:47:26,False,False,False,False,False,False,True
+N0286_07,dynamic_off,False,2010-11-15,,False,False,False,False,False,False,False
+N0286_08,dynamic_off,True,2010-11-15,2011-09-10 07:54:56,False,False,False,False,False,False,True
+N0286_09,dynamic_off,True,2010-11-15,2012-08-20 20:47:26,False,False,False,False,False,False,True
+N0286_10,dynamic_off,True,2010-11-15,2012-08-20 20:47:26,False,False,False,False,False,False,True
+N0288_01,dynamic_off,True,2014-07-22,2015-12-30 07:08:27,False,False,False,False,False,False,True
+N0288_02,dynamic_off,False,2014-07-22,,False,False,False,False,False,False,False
+N0288_03,dynamic_off,True,2014-07-22,2015-08-19 07:47:47,False,False,False,False,False,False,True
+N0288_04,dynamic_off,True,2014-07-22,2015-08-19 07:47:47,False,False,False,False,False,False,True
+N0288_05,dynamic_off,False,2014-07-22,,False,False,False,False,False,False,False
+N0288_06,dynamic_off,True,2014-07-22,2015-12-30 07:08:27,False,False,False,False,False,False,True
+N0288_07,dynamic_off,True,2014-07-22,2015-08-19 07:47:47,False,False,False,False,False,False,True
+N0288_08,dynamic_off,True,2014-07-22,2015-12-30 07:08:27,False,False,False,False,False,False,True
+N0288_09,dynamic_off,True,2014-07-22,2015-08-19 07:47:47,False,False,False,False,False,False,True
+N0288_10,dynamic_off,True,2014-07-22,2015-12-30 07:08:27,False,False,False,False,False,False,True
+N0294_01,dynamic_off,False,2011-06-26,,False,False,False,False,False,False,False
+N0294_02,dynamic_off,True,2011-06-26,2012-05-31 15:31:15,False,False,False,False,False,False,True
+N0294_03,dynamic_off,True,2011-06-26,2012-05-31 15:31:15,False,False,False,False,False,False,True
+N0294_04,dynamic_off,True,2011-06-26,2012-05-31 15:31:15,False,False,False,False,False,False,True
+N0294_05,dynamic_off,True,2011-06-26,2012-10-25 10:02:56,False,False,False,False,False,False,True
+N0294_06,dynamic_off,True,2011-06-26,2012-10-25 10:02:56,False,False,False,False,False,False,True
+N0294_07,dynamic_off,True,2011-06-26,2012-10-25 10:02:56,False,False,False,False,False,False,True
+N0294_08,dynamic_off,False,2011-06-26,,False,False,False,False,False,False,False
+N0294_09,dynamic_off,True,2011-06-26,2012-10-25 10:02:56,False,False,False,False,False,False,True
+N0294_10,dynamic_off,True,2011-06-26,2012-05-31 15:31:15,False,False,False,False,False,False,True
+N0295_01,dynamic_off,False,2012-12-23,,False,False,False,False,False,False,False
+N0295_02,dynamic_off,False,2012-12-23,,False,False,False,False,False,False,False
+N0295_03,dynamic_off,True,2012-12-23,2014-11-06 23:54:46,False,False,False,False,False,False,True
+N0295_04,dynamic_off,True,2012-12-23,2014-11-06 23:54:46,False,False,False,False,False,False,True
+N0295_05,dynamic_off,True,2012-12-23,2014-08-15 09:43:04,False,False,False,False,False,False,True
+N0295_06,dynamic_off,True,2012-12-23,2014-08-15 09:43:04,False,False,False,False,False,False,True
+N0295_07,dynamic_off,True,2012-12-23,2014-11-06 23:54:46,False,False,False,False,False,False,True
+N0295_08,dynamic_off,True,2012-12-23,2014-08-15 09:43:04,False,False,False,False,False,False,True
+N0295_09,dynamic_off,True,2012-12-23,2014-08-15 09:43:04,False,False,False,False,False,False,True
+N0295_10,dynamic_off,True,2012-12-23,2014-11-06 23:54:46,False,False,False,False,False,False,True
+N0298_01,dynamic_off,True,2010-01-03,2011-10-26 19:59:53,False,False,False,False,False,False,True
+N0298_02,dynamic_off,True,2010-01-03,2011-10-26 19:59:53,False,False,False,False,False,False,True
+N0298_03,dynamic_off,True,2010-01-03,2011-10-26 19:59:53,False,False,False,False,False,False,True
+N0298_04,dynamic_off,True,2010-01-03,2010-07-18 03:41:49,False,False,False,False,False,False,True
+N0298_05,dynamic_off,True,2010-01-03,2010-07-18 03:41:49,False,False,False,False,False,False,True
+N0298_06,dynamic_off,True,2010-01-03,2010-07-18 03:41:49,False,False,False,False,False,False,True
+N0298_07,dynamic_off,True,2010-01-03,2010-07-18 03:41:49,False,False,False,False,False,False,True
+N0298_08,dynamic_off,False,2010-01-03,,False,False,False,False,False,False,False
+N0298_09,dynamic_off,True,2010-01-03,2011-10-26 19:59:53,False,False,False,False,False,False,True
+N0298_10,dynamic_off,False,2010-01-03,,False,False,False,False,False,False,False
+N0302_01,dynamic_off,True,2011-04-09,2012-03-11 12:03:08,False,False,False,False,False,False,True
+N0302_02,dynamic_off,False,2011-04-09,,False,False,False,False,False,False,False
+N0302_03,dynamic_off,True,2011-04-09,2011-12-28 21:03:50,False,False,False,False,False,False,True
+N0302_04,dynamic_off,True,2011-04-09,2011-12-28 21:03:50,False,False,False,False,False,False,True
+N0302_05,dynamic_off,True,2011-04-09,2011-12-28 21:03:50,False,False,False,False,False,False,True
+N0302_06,dynamic_off,True,2011-04-09,2012-03-11 12:03:08,False,False,False,False,False,False,True
+N0302_07,dynamic_off,True,2011-04-09,2012-03-11 12:03:08,False,False,False,False,False,False,True
+N0302_08,dynamic_off,True,2011-04-09,2012-03-11 12:03:08,False,False,False,False,False,False,True
+N0302_09,dynamic_off,True,2011-04-09,2011-12-28 21:03:50,False,False,False,False,False,False,True
+N0302_10,dynamic_off,False,2011-04-09,,False,False,False,False,False,False,False
+N0308_01,dynamic_off,False,2012-02-24,,False,False,False,False,False,False,False
+N0308_02,dynamic_off,True,2012-02-24,2013-06-06 12:48:54,False,False,False,False,False,False,True
+N0308_03,dynamic_off,False,2012-02-24,,False,False,False,False,False,False,False
+N0308_04,dynamic_off,True,2012-02-24,2013-06-06 12:48:54,False,False,False,False,False,False,True
+N0308_05,dynamic_off,True,2012-02-24,2013-10-27 12:27:58,False,False,False,False,False,False,True
+N0308_06,dynamic_off,True,2012-02-24,2013-10-27 12:27:58,False,False,False,False,False,False,True
+N0308_07,dynamic_off,True,2012-02-24,2013-06-06 12:48:54,False,False,False,False,False,False,True
+N0308_08,dynamic_off,True,2012-02-24,2013-06-06 12:48:54,False,False,False,False,False,False,True
+N0308_09,dynamic_off,True,2012-02-24,2013-10-27 12:27:58,False,False,False,False,False,False,True
+N0308_10,dynamic_off,True,2012-02-24,2013-10-27 12:27:58,False,False,False,False,False,False,True
+N0311_01,dynamic_off,True,2013-06-23,2014-06-15 01:19:42,False,False,False,False,False,False,True
+N0311_02,dynamic_off,True,2013-06-23,2014-06-15 01:19:42,False,False,False,False,False,False,True
+N0311_03,dynamic_off,True,2013-06-23,2014-12-07 00:54:23,False,False,False,False,False,False,True
+N0311_04,dynamic_off,True,2013-06-23,2014-12-07 00:54:23,False,False,False,False,False,False,True
+N0311_05,dynamic_off,False,2013-06-23,,False,False,False,False,False,False,False
+N0311_06,dynamic_off,True,2013-06-23,2014-06-15 01:19:42,False,False,False,False,False,False,True
+N0311_07,dynamic_off,True,2013-06-23,2014-12-07 00:54:23,False,False,False,False,False,False,True
+N0311_08,dynamic_off,True,2013-06-23,2014-06-15 01:19:42,False,False,False,False,False,False,True
+N0311_09,dynamic_off,False,2013-06-23,,False,False,False,False,False,False,False
+N0311_10,dynamic_off,True,2013-06-23,2014-12-07 00:54:23,False,False,False,False,False,False,True
+N0317_01,dynamic_off,True,2014-06-25,2016-04-24 01:53:31,False,False,False,False,False,False,True
+N0317_02,dynamic_off,True,2014-06-25,2015-06-29 10:22:05,False,False,False,False,False,False,True
+N0317_03,dynamic_off,False,2014-06-25,,False,False,False,False,False,False,False
+N0317_04,dynamic_off,True,2014-06-25,2015-06-29 10:22:05,False,False,False,False,False,False,True
+N0317_05,dynamic_off,True,2014-06-25,2015-06-29 10:22:05,False,False,False,False,False,False,True
+N0317_06,dynamic_off,True,2014-06-25,2015-06-29 10:22:05,False,False,False,False,False,False,True
+N0317_07,dynamic_off,True,2014-06-25,2016-04-24 01:53:31,False,False,False,False,False,False,True
+N0317_08,dynamic_off,False,2014-06-25,,False,False,False,False,False,False,False
+N0317_09,dynamic_off,True,2014-06-25,2016-04-24 01:53:31,False,False,False,False,False,False,True
+N0317_10,dynamic_off,True,2014-06-25,2016-04-24 01:53:31,False,False,False,False,False,False,True
+N0321_01,dynamic_off,True,2011-08-05,2013-01-28 14:43:31,False,False,False,False,False,False,True
+N0321_02,dynamic_off,False,2011-08-05,,False,False,False,False,False,False,False
+N0321_03,dynamic_off,False,2011-08-05,,False,False,False,False,False,False,False
+N0321_04,dynamic_off,True,2011-08-05,2012-09-17 02:04:34,False,False,False,False,False,False,True
+N0321_05,dynamic_off,True,2011-08-05,2012-09-17 02:04:34,False,False,False,False,False,False,True
+N0321_06,dynamic_off,True,2011-08-05,2012-09-17 02:04:34,False,False,False,False,False,False,True
+N0321_07,dynamic_off,True,2011-08-05,2012-09-17 02:04:34,False,False,False,False,False,False,True
+N0321_08,dynamic_off,True,2011-08-05,2013-01-28 14:43:31,False,False,False,False,False,False,True
+N0321_09,dynamic_off,True,2011-08-05,2013-01-28 14:43:31,False,False,False,False,False,False,True
+N0321_10,dynamic_off,True,2011-08-05,2013-01-28 14:43:31,False,False,False,False,False,False,True
+N0327_01,dynamic_off,True,2010-08-22,2012-06-16 14:37:16,False,False,False,False,False,False,True
+N0327_02,dynamic_off,True,2010-08-22,2011-09-27 19:20:58,False,False,False,False,False,False,True
+N0327_03,dynamic_off,True,2010-08-22,2011-09-27 19:20:58,False,False,False,False,False,False,True
+N0327_04,dynamic_off,True,2010-08-22,2012-06-16 14:37:16,False,False,False,False,False,False,True
+N0327_05,dynamic_off,True,2010-08-22,2011-09-27 19:20:58,False,False,False,False,False,False,True
+N0327_06,dynamic_off,True,2010-08-22,2012-06-16 14:37:16,False,False,False,False,False,False,True
+N0327_07,dynamic_off,True,2010-08-22,2012-06-16 14:37:16,False,False,False,False,False,False,True
+N0327_08,dynamic_off,True,2010-08-22,2011-09-27 19:20:58,False,False,False,False,False,False,True
+N0327_09,dynamic_off,False,2010-08-22,,False,False,False,False,False,False,False
+N0327_10,dynamic_off,False,2010-08-22,,False,False,False,False,False,False,False
+N0329_01,dynamic_off,True,2010-04-07,2011-02-26 13:30:08,False,False,False,False,False,False,True
+N0329_02,dynamic_off,True,2010-04-07,2011-02-26 13:30:08,False,False,False,False,False,False,True
+N0329_03,dynamic_off,False,2010-04-07,,False,False,False,False,False,False,False
+N0329_04,dynamic_off,True,2010-04-07,2011-01-23 18:57:11,False,False,False,False,False,False,True
+N0329_05,dynamic_off,True,2010-04-07,2011-02-26 13:30:08,False,False,False,False,False,False,True
+N0329_06,dynamic_off,True,2010-04-07,2011-01-23 18:57:11,False,False,False,False,False,False,True
+N0329_07,dynamic_off,True,2010-04-07,2011-01-23 18:57:11,False,False,False,False,False,False,True
+N0329_08,dynamic_off,False,2010-04-07,,False,False,False,False,False,False,False
+N0329_09,dynamic_off,True,2010-04-07,2011-01-23 18:57:11,False,False,False,False,False,False,True
+N0329_10,dynamic_off,True,2010-04-07,2011-02-26 13:30:08,False,False,False,False,False,False,True
+N0333_01,dynamic_off,True,2012-12-21,2014-06-10 22:19:29,False,False,False,False,False,False,True
+N0333_02,dynamic_off,True,2012-12-21,2014-06-10 22:19:29,False,False,False,False,False,False,True
+N0333_03,dynamic_off,True,2012-12-21,2013-10-23 00:38:41,False,False,False,False,False,False,True
+N0333_04,dynamic_off,True,2012-12-21,2014-06-10 22:19:29,False,False,False,False,False,False,True
+N0333_05,dynamic_off,True,2012-12-21,2014-06-10 22:19:29,False,False,False,False,False,False,True
+N0333_06,dynamic_off,False,2012-12-21,,False,False,False,False,False,False,False
+N0333_07,dynamic_off,False,2012-12-21,,False,False,False,False,False,False,False
+N0333_08,dynamic_off,True,2012-12-21,2013-10-23 00:38:41,False,False,False,False,False,False,True
+N0333_09,dynamic_off,True,2012-12-21,2013-10-23 00:38:41,False,False,False,False,False,False,True
+N0333_10,dynamic_off,True,2012-12-21,2013-10-23 00:38:41,False,False,False,False,False,False,True
+N0336_01,dynamic_off,True,2010-04-06,2012-03-05 04:51:51,False,False,False,False,False,False,True
+N0336_02,dynamic_off,True,2010-04-06,2012-03-05 04:51:51,False,False,False,False,False,False,True
+N0336_03,dynamic_off,False,2010-04-06,,False,False,False,False,False,False,False
+N0336_04,dynamic_off,True,2010-04-06,2012-03-05 04:51:51,False,False,False,False,False,False,True
+N0336_05,dynamic_off,True,2010-04-06,2010-10-19 03:23:42,False,False,False,False,False,False,True
+N0336_06,dynamic_off,True,2010-04-06,2012-03-05 04:51:51,False,False,False,False,False,False,True
+N0336_07,dynamic_off,True,2010-04-06,2010-10-19 03:23:42,False,False,False,False,False,False,True
+N0336_08,dynamic_off,True,2010-04-06,2010-10-19 03:23:42,False,False,False,False,False,False,True
+N0336_09,dynamic_off,True,2010-04-06,2010-10-19 03:23:42,False,False,False,False,False,False,True
+N0336_10,dynamic_off,False,2010-04-06,,False,False,False,False,False,False,False
+N0337_01,dynamic_off,True,2010-07-06,2011-12-30 23:09:51,False,False,False,False,False,False,True
+N0337_02,dynamic_off,False,2010-07-06,,False,False,False,False,False,False,False
+N0337_03,dynamic_off,True,2010-07-06,2011-12-08 13:13:09,False,False,False,False,False,False,True
+N0337_04,dynamic_off,True,2010-07-06,2011-12-30 23:09:51,False,False,False,False,False,False,True
+N0337_05,dynamic_off,True,2010-07-06,2011-12-08 13:13:09,False,False,False,False,False,False,True
+N0337_06,dynamic_off,True,2010-07-06,2011-12-08 13:13:09,False,False,False,False,False,False,True
+N0337_07,dynamic_off,True,2010-07-06,2011-12-30 23:09:51,False,False,False,False,False,False,True
+N0337_08,dynamic_off,True,2010-07-06,2011-12-08 13:13:09,False,False,False,False,False,False,True
+N0337_09,dynamic_off,True,2010-07-06,2011-12-30 23:09:51,False,False,False,False,False,False,True
+N0337_10,dynamic_off,False,2010-07-06,,False,False,False,False,False,False,False
+N0338_01,dynamic_off,True,2014-05-29,2015-05-23 08:21:52,False,False,False,False,False,False,True
+N0338_02,dynamic_off,True,2014-05-29,2015-03-07 23:52:36,False,False,False,False,False,False,True
+N0338_03,dynamic_off,True,2014-05-29,2015-03-07 23:52:36,False,False,False,False,False,False,True
+N0338_04,dynamic_off,False,2014-05-29,,False,False,False,False,False,False,False
+N0338_05,dynamic_off,True,2014-05-29,2015-05-23 08:21:52,False,False,False,False,False,False,True
+N0338_06,dynamic_off,True,2014-05-29,2015-05-23 08:21:52,False,False,False,False,False,False,True
+N0338_07,dynamic_off,True,2014-05-29,2015-03-07 23:52:36,False,False,False,False,False,False,True
+N0338_08,dynamic_off,False,2014-05-29,,False,False,False,False,False,False,False
+N0338_09,dynamic_off,True,2014-05-29,2015-05-23 08:21:52,False,False,False,False,False,False,True
+N0338_10,dynamic_off,True,2014-05-29,2015-03-07 23:52:36,False,False,False,False,False,False,True
+N0345_01,dynamic_off,True,2012-12-31,2014-02-23 02:00:36,False,False,False,False,False,False,True
+N0345_02,dynamic_off,False,2012-12-31,,False,False,False,False,False,False,False
+N0345_03,dynamic_off,False,2012-12-31,,False,False,False,False,False,False,False
+N0345_04,dynamic_off,True,2012-12-31,2014-02-23 02:00:36,False,False,False,False,False,False,True
+N0345_05,dynamic_off,True,2012-12-31,2014-02-23 02:00:36,False,False,False,False,False,False,True
+N0345_06,dynamic_off,True,2012-12-31,2014-06-06 13:19:42,False,False,False,False,False,False,True
+N0345_07,dynamic_off,True,2012-12-31,2014-06-06 13:19:42,False,False,False,False,False,False,True
+N0345_08,dynamic_off,True,2012-12-31,2014-06-06 13:19:42,False,False,False,False,False,False,True
+N0345_09,dynamic_off,True,2012-12-31,2014-02-23 02:00:36,False,False,False,False,False,False,True
+N0345_10,dynamic_off,True,2012-12-31,2014-06-06 13:19:42,False,False,False,False,False,False,True
+N0346_01,dynamic_off,True,2011-01-19,2012-08-26 10:15:29,False,False,False,False,False,False,True
+N0346_02,dynamic_off,True,2011-01-19,2011-09-19 21:58:10,False,False,False,False,False,False,True
+N0346_03,dynamic_off,False,2011-01-19,,False,False,False,False,False,False,False
+N0346_04,dynamic_off,True,2011-01-19,2011-09-19 21:58:10,False,False,False,False,False,False,True
+N0346_05,dynamic_off,True,2011-01-19,2011-09-19 21:58:10,False,False,False,False,False,False,True
+N0346_06,dynamic_off,True,2011-01-19,2012-08-26 10:15:29,False,False,False,False,False,False,True
+N0346_07,dynamic_off,False,2011-01-19,,False,False,False,False,False,False,False
+N0346_08,dynamic_off,True,2011-01-19,2012-08-26 10:15:29,False,False,False,False,False,False,True
+N0346_09,dynamic_off,True,2011-01-19,2011-09-19 21:58:10,False,False,False,False,False,False,True
+N0346_10,dynamic_off,True,2011-01-19,2012-08-26 10:15:29,False,False,False,False,False,False,True
+N0353_01,dynamic_off,True,2013-04-23,2014-08-30 22:59:05,False,False,False,False,False,False,True
+N0353_02,dynamic_off,False,2013-04-23,,False,False,False,False,False,False,False
+N0353_03,dynamic_off,True,2013-04-23,2014-08-30 22:59:05,False,False,False,False,False,False,True
+N0353_04,dynamic_off,True,2013-04-23,2014-08-30 22:59:05,False,False,False,False,False,False,True
+N0353_05,dynamic_off,True,2013-04-23,2014-05-26 08:03:35,False,False,False,False,False,False,True
+N0353_06,dynamic_off,False,2013-04-23,,False,False,False,False,False,False,False
+N0353_07,dynamic_off,True,2013-04-23,2014-05-26 08:03:35,False,False,False,False,False,False,True
+N0353_08,dynamic_off,True,2013-04-23,2014-05-26 08:03:35,False,False,False,False,False,False,True
+N0353_09,dynamic_off,True,2013-04-23,2014-05-26 08:03:35,False,False,False,False,False,False,True
+N0353_10,dynamic_off,True,2013-04-23,2014-08-30 22:59:05,False,False,False,False,False,False,True
+N0356_01,dynamic_off,True,2010-09-29,2012-05-08 20:43:09,False,False,False,False,False,False,True
+N0356_02,dynamic_off,True,2010-09-29,2011-11-07 02:58:02,False,False,False,False,False,False,True
+N0356_03,dynamic_off,True,2010-09-29,2011-11-07 02:58:02,False,False,False,False,False,False,True
+N0356_04,dynamic_off,True,2010-09-29,2011-11-07 02:58:02,False,False,False,False,False,False,True
+N0356_05,dynamic_off,True,2010-09-29,2012-05-08 20:43:09,False,False,False,False,False,False,True
+N0356_06,dynamic_off,False,2010-09-29,,False,False,False,False,False,False,False
+N0356_07,dynamic_off,True,2010-09-29,2011-11-07 02:58:02,False,False,False,False,False,False,True
+N0356_08,dynamic_off,True,2010-09-29,2012-05-08 20:43:09,False,False,False,False,False,False,True
+N0356_09,dynamic_off,False,2010-09-29,,False,False,False,False,False,False,False
+N0356_10,dynamic_off,True,2010-09-29,2012-05-08 20:43:09,False,False,False,False,False,False,True
+N0357_01,dynamic_off,True,2014-11-18,2016-10-23 12:13:20,False,False,False,False,False,False,True
+N0357_02,dynamic_off,True,2014-11-18,2016-05-16 09:26:54,False,False,False,False,False,False,True
+N0357_03,dynamic_off,False,2014-11-18,,False,False,False,False,False,False,False
+N0357_04,dynamic_off,True,2014-11-18,2016-10-23 12:13:20,False,False,False,False,False,False,True
+N0357_05,dynamic_off,True,2014-11-18,2016-05-16 09:26:54,False,False,False,False,False,False,True
+N0357_06,dynamic_off,True,2014-11-18,2016-05-16 09:26:54,False,False,False,False,False,False,True
+N0357_07,dynamic_off,False,2014-11-18,,False,False,False,False,False,False,False
+N0357_08,dynamic_off,True,2014-11-18,2016-05-16 09:26:54,False,False,False,False,False,False,True
+N0357_09,dynamic_off,True,2014-11-18,2016-10-23 12:13:20,False,False,False,False,False,False,True
+N0357_10,dynamic_off,True,2014-11-18,2016-10-23 12:13:20,False,False,False,False,False,False,True
+N0364_01,dynamic_off,True,2012-10-18,2013-10-25 18:34:56,False,False,False,False,False,False,True
+N0364_02,dynamic_off,False,2012-10-18,,False,False,False,False,False,False,False
+N0364_03,dynamic_off,True,2012-10-18,2014-09-04 12:45:52,False,False,False,False,False,False,True
+N0364_04,dynamic_off,False,2012-10-18,,False,False,False,False,False,False,False
+N0364_05,dynamic_off,True,2012-10-18,2014-09-04 12:45:52,False,False,False,False,False,False,True
+N0364_06,dynamic_off,True,2012-10-18,2014-09-04 12:45:52,False,False,False,False,False,False,True
+N0364_07,dynamic_off,True,2012-10-18,2014-09-04 12:45:52,False,False,False,False,False,False,True
+N0364_08,dynamic_off,True,2012-10-18,2013-10-25 18:34:56,False,False,False,False,False,False,True
+N0364_09,dynamic_off,True,2012-10-18,2013-10-25 18:34:56,False,False,False,False,False,False,True
+N0364_10,dynamic_off,True,2012-10-18,2013-10-25 18:34:56,False,False,False,False,False,False,True
+N0365_01,dynamic_off,True,2010-04-05,2010-10-31 02:13:06,False,False,False,False,False,False,True
+N0365_02,dynamic_off,True,2010-04-05,2011-06-10 04:58:09,False,False,False,False,False,False,True
+N0365_03,dynamic_off,True,2010-04-05,2010-10-31 02:13:06,False,False,False,False,False,False,True
+N0365_04,dynamic_off,True,2010-04-05,2011-06-10 04:58:09,False,False,False,False,False,False,True
+N0365_05,dynamic_off,False,2010-04-05,,False,False,False,False,False,False,False
+N0365_06,dynamic_off,True,2010-04-05,2011-06-10 04:58:09,False,False,False,False,False,False,True
+N0365_07,dynamic_off,False,2010-04-05,,False,False,False,False,False,False,False
+N0365_08,dynamic_off,True,2010-04-05,2010-10-31 02:13:06,False,False,False,False,False,False,True
+N0365_09,dynamic_off,True,2010-04-05,2011-06-10 04:58:09,False,False,False,False,False,False,True
+N0365_10,dynamic_off,True,2010-04-05,2010-10-31 02:13:06,False,False,False,False,False,False,True
+N0369_01,dynamic_off,True,2011-12-22,2013-01-14 09:11:55,False,False,False,False,False,False,True
+N0369_02,dynamic_off,True,2011-12-22,2013-05-15 08:35:40,False,False,False,False,False,False,True
+N0369_03,dynamic_off,True,2011-12-22,2013-05-15 08:35:40,False,False,False,False,False,False,True
+N0369_04,dynamic_off,True,2011-12-22,2013-05-15 08:35:40,False,False,False,False,False,False,True
+N0369_05,dynamic_off,False,2011-12-22,,False,False,False,False,False,False,False
+N0369_06,dynamic_off,True,2011-12-22,2013-01-14 09:11:55,False,False,False,False,False,False,True
+N0369_07,dynamic_off,True,2011-12-22,2013-01-14 09:11:55,False,False,False,False,False,False,True
+N0369_08,dynamic_off,True,2011-12-22,2013-01-14 09:11:55,False,False,False,False,False,False,True
+N0369_09,dynamic_off,False,2011-12-22,,False,False,False,False,False,False,False
+N0369_10,dynamic_off,True,2011-12-22,2013-05-15 08:35:40,False,False,False,False,False,False,True
+N0371_01,dynamic_off,True,2011-12-29,2013-12-25 04:06:36,False,False,False,False,False,False,True
+N0371_02,dynamic_off,True,2011-12-29,2013-12-25 04:06:36,False,False,False,False,False,False,True
+N0371_03,dynamic_off,True,2011-12-29,2012-08-31 21:41:13,False,False,False,False,False,False,True
+N0371_04,dynamic_off,True,2011-12-29,2012-08-31 21:41:13,False,False,False,False,False,False,True
+N0371_05,dynamic_off,False,2011-12-29,,False,False,False,False,False,False,False
+N0371_06,dynamic_off,True,2011-12-29,2012-08-31 21:41:13,False,False,False,False,False,False,True
+N0371_07,dynamic_off,True,2011-12-29,2013-12-25 04:06:36,False,False,False,False,False,False,True
+N0371_08,dynamic_off,True,2011-12-29,2012-08-31 21:41:13,False,False,False,False,False,False,True
+N0371_09,dynamic_off,True,2011-12-29,2013-12-25 04:06:36,False,False,False,False,False,False,True
+N0371_10,dynamic_off,False,2011-12-29,,False,False,False,False,False,False,False
+N0382_01,dynamic_off,True,2012-03-12,2013-05-27 00:15:07,False,False,False,False,False,False,True
+N0382_02,dynamic_off,True,2012-03-12,2013-03-04 02:46:51,False,False,False,False,False,False,True
+N0382_03,dynamic_off,True,2012-03-12,2013-03-04 02:46:51,False,False,False,False,False,False,True
+N0382_04,dynamic_off,True,2012-03-12,2013-05-27 00:15:07,False,False,False,False,False,False,True
+N0382_05,dynamic_off,False,2012-03-12,,False,False,False,False,False,False,False
+N0382_06,dynamic_off,True,2012-03-12,2013-05-27 00:15:07,False,False,False,False,False,False,True
+N0382_07,dynamic_off,True,2012-03-12,2013-03-04 02:46:51,False,False,False,False,False,False,True
+N0382_08,dynamic_off,True,2012-03-12,2013-05-27 00:15:07,False,False,False,False,False,False,True
+N0382_09,dynamic_off,False,2012-03-12,,False,False,False,False,False,False,False
+N0382_10,dynamic_off,True,2012-03-12,2013-03-04 02:46:51,False,False,False,False,False,False,True
+N0383_01,dynamic_off,True,2011-12-13,2012-07-16 18:22:01,False,False,False,False,False,False,True
+N0383_02,dynamic_off,True,2011-12-13,2012-07-16 18:22:01,False,False,False,False,False,False,True
+N0383_03,dynamic_off,True,2011-12-13,2012-07-16 18:22:01,False,False,False,False,False,False,True
+N0383_04,dynamic_off,True,2011-12-13,2012-07-16 18:22:01,False,False,False,False,False,False,True
+N0383_05,dynamic_off,False,2011-12-13,,False,False,False,False,False,False,False
+N0383_06,dynamic_off,True,2011-12-13,2013-02-16 01:23:02,False,False,False,False,False,False,True
+N0383_07,dynamic_off,True,2011-12-13,2013-02-16 01:23:02,False,False,False,False,False,False,True
+N0383_08,dynamic_off,True,2011-12-13,2013-02-16 01:23:02,False,False,False,False,False,False,True
+N0383_09,dynamic_off,True,2011-12-13,2013-02-16 01:23:02,False,False,False,False,False,False,True
+N0383_10,dynamic_off,False,2011-12-13,,False,False,False,False,False,False,False
+N0391_01,dynamic_off,True,2012-08-26,2014-05-10 15:03:44,False,False,False,False,False,False,True
+N0391_02,dynamic_off,True,2012-08-26,2013-11-13 11:29:35,False,False,False,False,False,False,True
+N0391_03,dynamic_off,True,2012-08-26,2014-05-10 15:03:44,False,False,False,False,False,False,True
+N0391_04,dynamic_off,False,2012-08-26,,False,False,False,False,False,False,False
+N0391_05,dynamic_off,True,2012-08-26,2013-11-13 11:29:35,False,False,False,False,False,False,True
+N0391_06,dynamic_off,True,2012-08-26,2013-11-13 11:29:35,False,False,False,False,False,False,True
+N0391_07,dynamic_off,True,2012-08-26,2014-05-10 15:03:44,False,False,False,False,False,False,True
+N0391_08,dynamic_off,True,2012-08-26,2014-05-10 15:03:44,False,False,False,False,False,False,True
+N0391_09,dynamic_off,True,2012-08-26,2013-11-13 11:29:35,False,False,False,False,False,False,True
+N0391_10,dynamic_off,False,2012-08-26,,False,False,False,False,False,False,False
+N0392_01,dynamic_off,True,2013-07-11,2014-07-19 19:12:33,False,False,False,False,False,False,True
+N0392_02,dynamic_off,True,2013-07-11,2014-07-19 19:12:33,False,False,False,False,False,False,True
+N0392_03,dynamic_off,True,2013-07-11,2014-07-19 19:12:33,False,False,False,False,False,False,True
+N0392_04,dynamic_off,True,2013-07-11,2014-09-19 22:58:30,False,False,False,False,False,False,True
+N0392_05,dynamic_off,True,2013-07-11,2014-09-19 22:58:30,False,False,False,False,False,False,True
+N0392_06,dynamic_off,False,2013-07-11,,False,False,False,False,False,False,False
+N0392_07,dynamic_off,True,2013-07-11,2014-07-19 19:12:33,False,False,False,False,False,False,True
+N0392_08,dynamic_off,True,2013-07-11,2014-09-19 22:58:30,False,False,False,False,False,False,True
+N0392_09,dynamic_off,True,2013-07-11,2014-09-19 22:58:30,False,False,False,False,False,False,True
+N0392_10,dynamic_off,False,2013-07-11,,False,False,False,False,False,False,False
+N0400_01,dynamic_off,True,2014-05-16,2014-12-05 20:27:17,False,False,False,False,False,False,True
+N0400_02,dynamic_off,False,2014-05-16,,False,False,False,False,False,False,False
+N0400_03,dynamic_off,True,2014-05-16,2014-12-05 20:27:17,False,False,False,False,False,False,True
+N0400_04,dynamic_off,True,2014-05-16,2015-06-11 19:26:28,False,False,False,False,False,False,True
+N0400_05,dynamic_off,True,2014-05-16,2015-06-11 19:26:28,False,False,False,False,False,False,True
+N0400_06,dynamic_off,True,2014-05-16,2015-06-11 19:26:28,False,False,False,False,False,False,True
+N0400_07,dynamic_off,True,2014-05-16,2014-12-05 20:27:17,False,False,False,False,False,False,True
+N0400_08,dynamic_off,True,2014-05-16,2014-12-05 20:27:17,False,False,False,False,False,False,True
+N0400_09,dynamic_off,False,2014-05-16,,False,False,False,False,False,False,False
+N0400_10,dynamic_off,True,2014-05-16,2015-06-11 19:26:28,False,False,False,False,False,False,True
+N0406_01,dynamic_off,True,2012-08-17,2014-03-03 04:31:36,False,False,False,False,False,False,True
+N0406_02,dynamic_off,True,2012-08-17,2013-06-30 21:25:12,False,False,False,False,False,False,True
+N0406_03,dynamic_off,True,2012-08-17,2014-03-03 04:31:36,False,False,False,False,False,False,True
+N0406_04,dynamic_off,True,2012-08-17,2013-06-30 21:25:12,False,False,False,False,False,False,True
+N0406_05,dynamic_off,True,2012-08-17,2014-03-03 04:31:36,False,False,False,False,False,False,True
+N0406_06,dynamic_off,True,2012-08-17,2013-06-30 21:25:12,False,False,False,False,False,False,True
+N0406_07,dynamic_off,False,2012-08-17,,False,False,False,False,False,False,False
+N0406_08,dynamic_off,False,2012-08-17,,False,False,False,False,False,False,False
+N0406_09,dynamic_off,True,2012-08-17,2014-03-03 04:31:36,False,False,False,False,False,False,True
+N0406_10,dynamic_off,True,2012-08-17,2013-06-30 21:25:12,False,False,False,False,False,False,True
+N0415_01,dynamic_off,True,2013-01-23,2014-07-27 23:51:31,False,False,False,False,False,False,True
+N0415_02,dynamic_off,True,2013-01-23,2014-12-30 04:07:25,False,False,False,False,False,False,True
+N0415_03,dynamic_off,False,2013-01-23,,False,False,False,False,False,False,False
+N0415_04,dynamic_off,False,2013-01-23,,False,False,False,False,False,False,False
+N0415_05,dynamic_off,True,2013-01-23,2014-07-27 23:51:31,False,False,False,False,False,False,True
+N0415_06,dynamic_off,True,2013-01-23,2014-12-30 04:07:25,False,False,False,False,False,False,True
+N0415_07,dynamic_off,True,2013-01-23,2014-12-30 04:07:25,False,False,False,False,False,False,True
+N0415_08,dynamic_off,True,2013-01-23,2014-07-27 23:51:31,False,False,False,False,False,False,True
+N0415_09,dynamic_off,True,2013-01-23,2014-07-27 23:51:31,False,False,False,False,False,False,True
+N0415_10,dynamic_off,True,2013-01-23,2014-12-30 04:07:25,False,False,False,False,False,False,True
+N0417_01,dynamic_off,False,2013-08-02,,False,False,False,False,False,False,False
+N0417_02,dynamic_off,True,2013-08-02,2015-03-30 16:53:35,False,False,False,False,False,False,True
+N0417_03,dynamic_off,True,2013-08-02,2015-03-30 16:53:35,False,False,False,False,False,False,True
+N0417_04,dynamic_off,True,2013-08-02,2014-03-23 04:44:42,False,False,False,False,False,False,True
+N0417_05,dynamic_off,True,2013-08-02,2015-03-30 16:53:35,False,False,False,False,False,False,True
+N0417_06,dynamic_off,True,2013-08-02,2014-03-23 04:44:42,False,False,False,False,False,False,True
+N0417_07,dynamic_off,True,2013-08-02,2014-03-23 04:44:42,False,False,False,False,False,False,True
+N0417_08,dynamic_off,True,2013-08-02,2014-03-23 04:44:42,False,False,False,False,False,False,True
+N0417_09,dynamic_off,True,2013-08-02,2015-03-30 16:53:35,False,False,False,False,False,False,True
+N0417_10,dynamic_off,False,2013-08-02,,False,False,False,False,False,False,False
+N0419_01,dynamic_off,True,2010-11-19,2011-06-09 15:41:46,False,False,False,False,False,False,True
+N0419_02,dynamic_off,True,2010-11-19,2012-11-16 20:59:15,False,False,False,False,False,False,True
+N0419_03,dynamic_off,True,2010-11-19,2011-06-09 15:41:46,False,False,False,False,False,False,True
+N0419_04,dynamic_off,True,2010-11-19,2012-11-16 20:59:15,False,False,False,False,False,False,True
+N0419_05,dynamic_off,True,2010-11-19,2012-11-16 20:59:15,False,False,False,False,False,False,True
+N0419_06,dynamic_off,True,2010-11-19,2012-11-16 20:59:15,False,False,False,False,False,False,True
+N0419_07,dynamic_off,True,2010-11-19,2011-06-09 15:41:46,False,False,False,False,False,False,True
+N0419_08,dynamic_off,False,2010-11-19,,False,False,False,False,False,False,False
+N0419_09,dynamic_off,True,2010-11-19,2011-06-09 15:41:46,False,False,False,False,False,False,True
+N0419_10,dynamic_off,False,2010-11-19,,False,False,False,False,False,False,False
+N0421_01,dynamic_off,True,2010-11-14,2011-06-18 13:51:53,False,False,False,False,False,False,True
+N0421_02,dynamic_off,False,2010-11-14,,False,False,False,False,False,False,False
+N0421_03,dynamic_off,True,2010-11-14,2011-06-18 13:51:53,False,False,False,False,False,False,True
+N0421_04,dynamic_off,True,2010-11-14,2011-06-18 13:51:53,False,False,False,False,False,False,True
+N0421_05,dynamic_off,True,2010-11-14,2012-10-13 09:24:02,False,False,False,False,False,False,True
+N0421_06,dynamic_off,True,2010-11-14,2012-10-13 09:24:02,False,False,False,False,False,False,True
+N0421_07,dynamic_off,True,2010-11-14,2011-06-18 13:51:53,False,False,False,False,False,False,True
+N0421_08,dynamic_off,False,2010-11-14,,False,False,False,False,False,False,False
+N0421_09,dynamic_off,True,2010-11-14,2012-10-13 09:24:02,False,False,False,False,False,False,True
+N0421_10,dynamic_off,True,2010-11-14,2012-10-13 09:24:02,False,False,False,False,False,False,True
+N0426_01,dynamic_off,True,2013-10-31,2015-07-03 07:10:58,False,False,False,False,False,False,True
+N0426_02,dynamic_off,False,2013-10-31,,False,False,False,False,False,False,False
+N0426_03,dynamic_off,True,2013-10-31,2015-07-03 07:10:58,False,False,False,False,False,False,True
+N0426_04,dynamic_off,True,2013-10-31,2014-11-07 18:34:59,False,False,False,False,False,False,True
+N0426_05,dynamic_off,True,2013-10-31,2014-11-07 18:34:59,False,False,False,False,False,False,True
+N0426_06,dynamic_off,True,2013-10-31,2015-07-03 07:10:58,False,False,False,False,False,False,True
+N0426_07,dynamic_off,True,2013-10-31,2014-11-07 18:34:59,False,False,False,False,False,False,True
+N0426_08,dynamic_off,True,2013-10-31,2014-11-07 18:34:59,False,False,False,False,False,False,True
+N0426_09,dynamic_off,False,2013-10-31,,False,False,False,False,False,False,False
+N0426_10,dynamic_off,True,2013-10-31,2015-07-03 07:10:58,False,False,False,False,False,False,True
+N0430_01,dynamic_off,False,2012-07-15,,False,False,False,False,False,False,False
+N0430_02,dynamic_off,True,2012-07-15,2014-04-18 14:12:12,False,False,False,False,False,False,True
+N0430_03,dynamic_off,True,2012-07-15,2014-04-18 14:12:12,False,False,False,False,False,False,True
+N0430_04,dynamic_off,True,2012-07-15,2014-04-18 14:12:12,False,False,False,False,False,False,True
+N0430_05,dynamic_off,True,2012-07-15,2013-03-14 22:18:32,False,False,False,False,False,False,True
+N0430_06,dynamic_off,False,2012-07-15,,False,False,False,False,False,False,False
+N0430_07,dynamic_off,True,2012-07-15,2013-03-14 22:18:32,False,False,False,False,False,False,True
+N0430_08,dynamic_off,True,2012-07-15,2014-04-18 14:12:12,False,False,False,False,False,False,True
+N0430_09,dynamic_off,True,2012-07-15,2013-03-14 22:18:32,False,False,False,False,False,False,True
+N0430_10,dynamic_off,True,2012-07-15,2013-03-14 22:18:32,False,False,False,False,False,False,True
+N0442_01,dynamic_off,True,2013-01-29,2013-09-22 02:23:29,False,False,False,False,False,False,True
+N0442_02,dynamic_off,True,2013-01-29,2014-02-13 00:22:32,False,False,False,False,False,False,True
+N0442_03,dynamic_off,True,2013-01-29,2013-09-22 02:23:29,False,False,False,False,False,False,True
+N0442_04,dynamic_off,True,2013-01-29,2014-02-13 00:22:32,False,False,False,False,False,False,True
+N0442_05,dynamic_off,False,2013-01-29,,False,False,False,False,False,False,False
+N0442_06,dynamic_off,False,2013-01-29,,False,False,False,False,False,False,False
+N0442_07,dynamic_off,True,2013-01-29,2014-02-13 00:22:32,False,False,False,False,False,False,True
+N0442_08,dynamic_off,True,2013-01-29,2014-02-13 00:22:32,False,False,False,False,False,False,True
+N0442_09,dynamic_off,True,2013-01-29,2013-09-22 02:23:29,False,False,False,False,False,False,True
+N0442_10,dynamic_off,True,2013-01-29,2013-09-22 02:23:29,False,False,False,False,False,False,True
+N0450_01,dynamic_off,False,2013-07-27,,False,False,False,False,False,False,False
+N0450_02,dynamic_off,True,2013-07-27,2015-06-21 05:31:23,False,False,False,False,False,False,True
+N0450_03,dynamic_off,True,2013-07-27,2015-06-21 05:31:23,False,False,False,False,False,False,True
+N0450_04,dynamic_off,True,2013-07-27,2014-09-01 16:08:26,False,False,False,False,False,False,True
+N0450_05,dynamic_off,True,2013-07-27,2014-09-01 16:08:26,False,False,False,False,False,False,True
+N0450_06,dynamic_off,True,2013-07-27,2015-06-21 05:31:23,False,False,False,False,False,False,True
+N0450_07,dynamic_off,False,2013-07-27,,False,False,False,False,False,False,False
+N0450_08,dynamic_off,True,2013-07-27,2014-09-01 16:08:26,False,False,False,False,False,False,True
+N0450_09,dynamic_off,True,2013-07-27,2014-09-01 16:08:26,False,False,False,False,False,False,True
+N0450_10,dynamic_off,True,2013-07-27,2015-06-21 05:31:23,False,False,False,False,False,False,True
+N0457_01,dynamic_off,True,2014-09-20,2015-10-27 21:40:20,False,False,False,False,False,False,True
+N0457_02,dynamic_off,True,2014-09-20,2016-07-20 11:26:15,False,False,False,False,False,False,True
+N0457_03,dynamic_off,True,2014-09-20,2015-10-27 21:40:20,False,False,False,False,False,False,True
+N0457_04,dynamic_off,True,2014-09-20,2016-07-20 11:26:15,False,False,False,False,False,False,True
+N0457_05,dynamic_off,True,2014-09-20,2015-10-27 21:40:20,False,False,False,False,False,False,True
+N0457_06,dynamic_off,True,2014-09-20,2016-07-20 11:26:15,False,False,False,False,False,False,True
+N0457_07,dynamic_off,True,2014-09-20,2016-07-20 11:26:15,False,False,False,False,False,False,True
+N0457_08,dynamic_off,False,2014-09-20,,False,False,False,False,False,False,False
+N0457_09,dynamic_off,True,2014-09-20,2015-10-27 21:40:20,False,False,False,False,False,False,True
+N0457_10,dynamic_off,False,2014-09-20,,False,False,False,False,False,False,False
+N0460_01,dynamic_off,True,2012-02-02,2012-11-08 01:22:11,False,False,False,False,False,False,True
+N0460_02,dynamic_off,True,2012-02-02,2012-11-08 01:22:11,False,False,False,False,False,False,True
+N0460_03,dynamic_off,False,2012-02-02,,False,False,False,False,False,False,False
+N0460_04,dynamic_off,False,2012-02-02,,False,False,False,False,False,False,False
+N0460_05,dynamic_off,True,2012-02-02,2013-12-06 08:46:23,False,False,False,False,False,False,True
+N0460_06,dynamic_off,True,2012-02-02,2012-11-08 01:22:11,False,False,False,False,False,False,True
+N0460_07,dynamic_off,True,2012-02-02,2012-11-08 01:22:11,False,False,False,False,False,False,True
+N0460_08,dynamic_off,True,2012-02-02,2013-12-06 08:46:23,False,False,False,False,False,False,True
+N0460_09,dynamic_off,True,2012-02-02,2013-12-06 08:46:23,False,False,False,False,False,False,True
+N0460_10,dynamic_off,True,2012-02-02,2013-12-06 08:46:23,False,False,False,False,False,False,True
+N0473_01,dynamic_off,True,2013-02-26,2014-10-22 16:35:29,False,False,False,False,False,False,True
+N0473_02,dynamic_off,True,2013-02-26,2014-05-03 13:15:43,False,False,False,False,False,False,True
+N0473_03,dynamic_off,True,2013-02-26,2014-05-03 13:15:43,False,False,False,False,False,False,True
+N0473_04,dynamic_off,True,2013-02-26,2014-10-22 16:35:29,False,False,False,False,False,False,True
+N0473_05,dynamic_off,False,2013-02-26,,False,False,False,False,False,False,False
+N0473_06,dynamic_off,True,2013-02-26,2014-05-03 13:15:43,False,False,False,False,False,False,True
+N0473_07,dynamic_off,False,2013-02-26,,False,False,False,False,False,False,False
+N0473_08,dynamic_off,True,2013-02-26,2014-10-22 16:35:29,False,False,False,False,False,False,True
+N0473_09,dynamic_off,True,2013-02-26,2014-05-03 13:15:43,False,False,False,False,False,False,True
+N0473_10,dynamic_off,True,2013-02-26,2014-10-22 16:35:29,False,False,False,False,False,False,True
+N0481_01,dynamic_off,True,2013-04-03,2014-10-06 22:19:27,False,False,False,False,False,False,True
+N0481_02,dynamic_off,True,2013-04-03,2014-10-06 22:19:27,False,False,False,False,False,False,True
+N0481_03,dynamic_off,True,2013-04-03,2014-06-04 16:30:26,False,False,False,False,False,False,True
+N0481_04,dynamic_off,True,2013-04-03,2014-10-06 22:19:27,False,False,False,False,False,False,True
+N0481_05,dynamic_off,True,2013-04-03,2014-06-04 16:30:26,False,False,False,False,False,False,True
+N0481_06,dynamic_off,True,2013-04-03,2014-06-04 16:30:26,False,False,False,False,False,False,True
+N0481_07,dynamic_off,False,2013-04-03,,False,False,False,False,False,False,False
+N0481_08,dynamic_off,False,2013-04-03,,False,False,False,False,False,False,False
+N0481_09,dynamic_off,True,2013-04-03,2014-10-06 22:19:27,False,False,False,False,False,False,True
+N0481_10,dynamic_off,True,2013-04-03,2014-06-04 16:30:26,False,False,False,False,False,False,True
+N0489_01,dynamic_off,True,2013-01-07,2014-02-16 20:44:24,False,False,False,False,False,False,True
+N0489_02,dynamic_off,True,2013-01-07,2014-02-16 20:44:24,False,False,False,False,False,False,True
+N0489_03,dynamic_off,True,2013-01-07,2014-07-03 08:01:46,False,False,False,False,False,False,True
+N0489_04,dynamic_off,True,2013-01-07,2014-07-03 08:01:46,False,False,False,False,False,False,True
+N0489_05,dynamic_off,False,2013-01-07,,False,False,False,False,False,False,False
+N0489_06,dynamic_off,True,2013-01-07,2014-07-03 08:01:46,False,False,False,False,False,False,True
+N0489_07,dynamic_off,True,2013-01-07,2014-07-03 08:01:46,False,False,False,False,False,False,True
+N0489_08,dynamic_off,True,2013-01-07,2014-02-16 20:44:24,False,False,False,False,False,False,True
+N0489_09,dynamic_off,False,2013-01-07,,False,False,False,False,False,False,False
+N0489_10,dynamic_off,True,2013-01-07,2014-02-16 20:44:24,False,False,False,False,False,False,True
+N0491_01,dynamic_off,True,2011-04-11,2013-01-19 07:04:26,False,False,False,False,False,False,True
+N0491_02,dynamic_off,True,2011-04-11,2013-01-19 07:04:26,False,False,False,False,False,False,True
+N0491_03,dynamic_off,True,2011-04-11,2011-10-22 14:58:34,False,False,False,False,False,False,True
+N0491_04,dynamic_off,False,2011-04-11,,False,False,False,False,False,False,False
+N0491_05,dynamic_off,True,2011-04-11,2011-10-22 14:58:34,False,False,False,False,False,False,True
+N0491_06,dynamic_off,False,2011-04-11,,False,False,False,False,False,False,False
+N0491_07,dynamic_off,True,2011-04-11,2013-01-19 07:04:26,False,False,False,False,False,False,True
+N0491_08,dynamic_off,True,2011-04-11,2011-10-22 14:58:34,False,False,False,False,False,False,True
+N0491_09,dynamic_off,True,2011-04-11,2013-01-19 07:04:26,False,False,False,False,False,False,True
+N0491_10,dynamic_off,True,2011-04-11,2011-10-22 14:58:34,False,False,False,False,False,False,True
+N0493_01,dynamic_off,True,2014-05-30,2015-01-30 05:25:56,False,False,False,False,False,False,True
+N0493_02,dynamic_off,True,2014-05-30,2016-02-12 01:58:46,False,False,False,False,False,False,True
+N0493_03,dynamic_off,True,2014-05-30,2016-02-12 01:58:46,False,False,False,False,False,False,True
+N0493_04,dynamic_off,True,2014-05-30,2015-01-30 05:25:56,False,False,False,False,False,False,True
+N0493_05,dynamic_off,False,2014-05-30,,False,False,False,False,False,False,False
+N0493_06,dynamic_off,True,2014-05-30,2016-02-12 01:58:46,False,False,False,False,False,False,True
+N0493_07,dynamic_off,True,2014-05-30,2015-01-30 05:25:56,False,False,False,False,False,False,True
+N0493_08,dynamic_off,True,2014-05-30,2015-01-30 05:25:56,False,False,False,False,False,False,True
+N0493_09,dynamic_off,False,2014-05-30,,False,False,False,False,False,False,False
+N0493_10,dynamic_off,True,2014-05-30,2016-02-12 01:58:46,False,False,False,False,False,False,True
+N0494_01,dynamic_off,False,2014-05-31,,False,False,False,False,False,False,False
+N0494_02,dynamic_off,True,2014-05-31,2015-11-19 12:54:42,False,False,False,False,False,False,True
+N0494_03,dynamic_off,True,2014-05-31,2015-04-04 13:08:35,False,False,False,False,False,False,True
+N0494_04,dynamic_off,True,2014-05-31,2015-11-19 12:54:42,False,False,False,False,False,False,True
+N0494_05,dynamic_off,True,2014-05-31,2015-04-04 13:08:35,False,False,False,False,False,False,True
+N0494_06,dynamic_off,True,2014-05-31,2015-04-04 13:08:35,False,False,False,False,False,False,True
+N0494_07,dynamic_off,True,2014-05-31,2015-11-19 12:54:42,False,False,False,False,False,False,True
+N0494_08,dynamic_off,True,2014-05-31,2015-11-19 12:54:42,False,False,False,False,False,False,True
+N0494_09,dynamic_off,False,2014-05-31,,False,False,False,False,False,False,False
+N0494_10,dynamic_off,True,2014-05-31,2015-04-04 13:08:35,False,False,False,False,False,False,True
+N0496_01,dynamic_off,True,2013-04-11,2014-02-20 17:44:30,False,False,False,False,False,False,True
+N0496_02,dynamic_off,True,2013-04-11,2014-04-21 11:08:12,False,False,False,False,False,False,True
+N0496_03,dynamic_off,True,2013-04-11,2014-04-21 11:08:12,False,False,False,False,False,False,True
+N0496_04,dynamic_off,True,2013-04-11,2014-02-20 17:44:30,False,False,False,False,False,False,True
+N0496_05,dynamic_off,False,2013-04-11,,False,False,False,False,False,False,False
+N0496_06,dynamic_off,True,2013-04-11,2014-02-20 17:44:30,False,False,False,False,False,False,True
+N0496_07,dynamic_off,True,2013-04-11,2014-04-21 11:08:12,False,False,False,False,False,False,True
+N0496_08,dynamic_off,True,2013-04-11,2014-02-20 17:44:30,False,False,False,False,False,False,True
+N0496_09,dynamic_off,True,2013-04-11,2014-04-21 11:08:12,False,False,False,False,False,False,True
+N0496_10,dynamic_off,False,2013-04-11,,False,False,False,False,False,False,False

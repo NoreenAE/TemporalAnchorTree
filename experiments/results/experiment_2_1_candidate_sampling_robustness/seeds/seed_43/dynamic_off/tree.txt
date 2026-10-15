@@ -1,0 +1,15 @@
+{'node_id': 0, 'depth': 0, 'patients': 4000, 'type': 'split', 'feature': 'FishIntroduction', 'aggregation': 'sum', 'window': (None, None), 'threshold': 1.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 1, 'right': 8, 'source_node_id': 0, 'is_distractor_split': False}
+  {'node_id': 1, 'depth': 1, 'patients': 3200, 'type': 'split', 'feature': 'Vomiting', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 18), 'threshold': 3.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 2, 'right': 5, 'source_node_id': 1, 'is_distractor_split': False}
+    {'node_id': 2, 'depth': 2, 'patients': 2256, 'type': 'split', 'feature': 'FishIntroduction', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 16), 'threshold': 1.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 3, 'right': 4, 'source_node_id': 3, 'is_distractor_split': False}
+      {'node_id': 3, 'depth': 3, 'patients': 1286, 'type': 'leaf', 'score': 0.5007776049766719}
+      {'node_id': 4, 'depth': 3, 'patients': 970, 'type': 'leaf', 'score': 0.45979381443298967}
+    {'node_id': 5, 'depth': 2, 'patients': 944, 'type': 'split', 'feature': 'FishIntroduction', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 9), 'threshold': 1.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 6, 'right': 7, 'source_node_id': 4, 'is_distractor_split': False}
+      {'node_id': 6, 'depth': 3, 'patients': 146, 'type': 'leaf', 'score': 0.3972602739726027}
+      {'node_id': 7, 'depth': 3, 'patients': 798, 'type': 'leaf', 'score': 0.47117794486215536}
+  {'node_id': 8, 'depth': 1, 'patients': 800, 'type': 'split', 'feature': 'SleepDisturbance', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 6), 'threshold': 1.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 9, 'right': 12, 'source_node_id': 2, 'is_distractor_split': True}
+    {'node_id': 9, 'depth': 2, 'patients': 117, 'type': 'split', 'feature': 'Vomiting', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 6), 'threshold': 4.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 10, 'right': 11, 'source_node_id': 5, 'is_distractor_split': False}
+      {'node_id': 10, 'depth': 3, 'patients': 50, 'type': 'leaf', 'score': 0.02}
+      {'node_id': 11, 'depth': 3, 'patients': 67, 'type': 'leaf', 'score': 0.0}
+    {'node_id': 12, 'depth': 2, 'patients': 683, 'type': 'split', 'feature': 'Vomiting', 'aggregation': 'sum', 'window': ('Birth Date Anchor', 9), 'threshold': 2.0, 'missing_direction': 'right', 'available_anchors': ['Birth Date Anchor'], 'left': 13, 'right': 14, 'source_node_id': 6, 'is_distractor_split': False}
+      {'node_id': 13, 'depth': 3, 'patients': 351, 'type': 'leaf', 'score': 0.04843304843304843}
+      {'node_id': 14, 'depth': 3, 'patients': 332, 'type': 'leaf', 'score': 0.10240963855421686}

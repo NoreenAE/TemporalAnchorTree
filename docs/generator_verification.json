@@ -1,0 +1,55 @@
+{
+  "temporal_benchmark_5000.pkl": {
+    "exact_frames": true,
+    "exact_pickle_bytes": false
+  },
+  "temporal_benchmark_fa_labels_5000.pkl": {
+    "exact_frames": true,
+    "exact_pickle_bytes": false
+  },
+  "temporal_benchmark_gi_labels_5000.pkl": {
+    "exact_frames": true,
+    "exact_pickle_bytes": false
+  },
+  "temporal_benchmark_ground_truth_5000.pkl": {
+    "exact_frames": true,
+    "exact_pickle_bytes": false
+  },
+  "temporal_benchmark_gi_ground_truth_5000.pkl": {
+    "exact_frames": true,
+    "exact_pickle_bytes": false
+  },
+  "distractor_association_audit.csv": {
+    "identical_nonfloat_fields_and_missingness": true,
+    "maximum_absolute_float_difference": {
+      "offset": 0.0,
+      "label_r": 8.673617379884035e-17,
+      "probability_r": 6.661338147750939e-16,
+      "smd": 3.1155633628543455e-15,
+      "auc": 6.975791354968397e-05,
+      "auc_distance": 6.975791354968397e-05,
+      "group_eta": 2.366162821232365e-15
+    }
+  },
+  "before_after_audit.csv": {
+    "identical_nonfloat_fields_and_missingness": true,
+    "maximum_absolute_float_difference": {
+      "before_offset": 0.0,
+      "before_absolute_value": 2.220446049250313e-16,
+      "before_limit_ratio": 8.881784197001252e-16,
+      "after_offset": 0.0,
+      "after_absolute_value": 2.220446049250313e-16,
+      "after_limit_ratio": 1.7763568394002505e-15
+    }
+  },
+  "screens": {
+    "distractor_acceptance_passed": false,
+    "distractor_flagged_summaries": 12,
+    "late_feeding_flagged_summaries": 0
+  },
+  "experiment2": {
+    "observations_and_patient_metadata": "Exact DataFrame equality against final saved cohort, including labels and partitions.",
+    "default_generator_csv_bytes": "Identical before/after dependency cleanup; saved cohort loaded with the same schema."
+  },
+  "audit_interpretation": "All data frames match exactly. Pickle byte representations differ. Audit AUC differences are confined to mean/sum of continuous LengthCm/WeightKg and are tie-sensitive; maximum difference is 0.000069757914. Other effects differ by floating-point precision. All flagged rows/acceptance decisions match; historical audit tables were preserved."
+}

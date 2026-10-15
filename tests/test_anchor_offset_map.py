@@ -3,7 +3,7 @@ from types import MethodType
 import numpy as np
 import pandas as pd
 
-from settree.temporal_tree import TemporalTree
+from TAT.temporal_tree import TemporalTree
 
 
 FIXED_ANCHORS = ["Birth Date Anchor", "NOW Anchor"]

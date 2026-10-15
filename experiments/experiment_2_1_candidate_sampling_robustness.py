@@ -1,11 +1,13 @@
-"""Experiment 2.1: five paired candidate-sampling seeds on Noisy Matched V2.
+"""Experiment 2.1: four paired candidate-sampling seeds on Noisy Matched V2.
 
 From the repository root, using the research Python environment::
 
-    python -m experiments.experiment_2_1_candidate_sampling_robustness run
-    python -m experiments.experiment_2_1_candidate_sampling_robustness summarize
+    python -m experiments.experiment_2_1_candidate_sampling_robustness run \
+        --output experiments/results/experiment_2_1_new_attempt
+    python -m experiments.experiment_2_1_candidate_sampling_robustness summarize \
+        --output experiments/results/experiment_2_1_new_attempt
 
-Only ``run`` trains models, for seeds 43--47 only. Repeating that command
+Only ``run`` trains models, for seeds 43--46 only. Repeating that command
 verifies and skips completed runs. An incomplete attempt stops execution;
 ``run --retry-incomplete`` archives it before retrying that model. A completed
 attempt awaiting publication is recovered without training. Failed completion
@@ -14,8 +16,10 @@ is released automatically when a process exits, including after interruption.
 
 The successful seed-42 checkpoint is read-only. All new artifacts live under
 experiments/results/experiment_2_1_candidate_sampling_robustness by default.
-``summarize`` never fits, predicts, or unpickles models. It requires all ten
-verified runs, rebuilds summary/, and preserves older summaries in history/.
+``summarize`` never fits, predicts, or unpickles models. It requires every run
+in the saved protocol, rebuilds summary/, and preserves older summaries in
+history/. The original five-seed archive remains readable without modification;
+new four-seed training requires a separate output directory.
 Mean/SD describe seed variability on a fixed cohort, not patient uncertainty.
 """
 from __future__ import annotations
@@ -51,6 +55,7 @@ from experiments import experiment_2_noisy_v2 as baseline
 from experiments.experiment_2_fish_introduction_dynamic_anchors import (
     make_model, run_model, write_json,
 )
+from experiments.experiment_utils import artifact_path
 
 BASELINE = ROOT / "experiments/results/experiment_2_noisy_matched_v2"
 DATA = ROOT / "data/fish_intro_noisy_matched_v2"
@@ -61,7 +66,13 @@ RUN_ARTIFACTS = (
     "tree.json", "tree.txt", "anchor_trace.json", "diagnostics.json", "model.pkl",
 )
 CHECKPOINT_SEED = 42
-PLANNED_SEEDS = (43, 44, 45, 46, 47)
+PLANNED_SEEDS = (43, 44, 45, 46)
+ARCHIVED_SEEDS = (43, 44, 45, 46, 47)
+# Fingerprint of the unchanged five-seed protocol before seed 47 was excluded
+# from future fits. Only this exact historical protocol gets compatibility.
+ARCHIVED_PROTOCOL_SHA256 = (
+    "d0d44c2e834136667b253da8dadd21cec876d4de1120ceb8eda40246508957fe"
+)
 RUNS = ("dynamic_on", "dynamic_off")
 POPULATIONS = ("test_overall", "test_documented")
 ATOL = 1e-12
@@ -108,7 +119,7 @@ def verify_inputs(source: Path, data_dir: Path) -> dict:
     """Require byte-identical baseline inputs and preserve the saved partition."""
     hashes = {}
     for name in baseline.DATASET_FILES:
-        actual, saved = data_dir / name, source / name
+        actual, saved = data_dir / name, artifact_path(source, name)
         if not actual.is_file() or not saved.is_file():
             raise ValueError(f"Missing baseline input: {name}")
         if sha256(actual) != sha256(saved):
@@ -268,16 +279,18 @@ def temporal_structure(folder: Path, predictions: pd.DataFrame) -> dict:
     )
 
 
-def summarize_seeds(pairs: Mapping[int, Path]) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Prepare the approved five-seed tables from complete saved pairs only.
+def summarize_seeds(
+    pairs: Mapping[int, Path], *, seeds: tuple[int, ...] = PLANNED_SEEDS,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Prepare current or explicitly selected archived tables from saved pairs.
 
     This function never fits models. Seed 42 is excluded from the new-seed
     summary. The same cohort is required across seeds as well as within pairs.
     """
-    if set(pairs) != set(PLANNED_SEEDS):
-        raise ValueError("Require exactly the prespecified seeds 43--47")
+    if seeds not in (PLANNED_SEEDS, ARCHIVED_SEEDS) or set(pairs) != set(seeds):
+        raise ValueError(f"Require exactly the prespecified seeds {seeds}")
     rows, structures, reference = [], [], None
-    for seed in PLANNED_SEEDS:
+    for seed in seeds:
         predictions = {run: load_predictions(pairs[seed] / run) for run in RUNS}
         metadata = predictions["dynamic_on"].drop(
             columns=["score", *PREDICTION_FLAGS]).sort_index()
@@ -311,20 +324,24 @@ def summarize_seeds(pairs: Mapping[int, Path]) -> tuple[pd.DataFrame, pd.DataFra
     return table, pd.DataFrame(summary), pd.DataFrame(structures)
 
 
-def plot_paired_auc(table: pd.DataFrame, destination: Path) -> None:
+def plot_paired_auc(
+    table: pd.DataFrame, destination: Path, *,
+    seeds: tuple[int, ...] = PLANNED_SEEDS,
+) -> None:
     """Plot centered seed dots and sample-SD summaries on a labeled truncated axis."""
     if destination.exists():
         raise FileExistsError(destination)
     figure, axes = plt.subplots(1, 2, figsize=(12, 6.5), sharey=True)
-    colors = plt.get_cmap("tab10")(np.arange(len(PLANNED_SEEDS)))
+    colors = plt.get_cmap("tab10")(np.arange(len(seeds)))
     ticks = np.arange(45, 101, 5) / 100
     try:
         for axis, population, title in zip(
             axes, POPULATIONS, ("(A) Full test population", "(B) Documented fish introduction")
         ):
             group = table.loc[table.population.eq(population)].sort_values("seed")
-            if tuple(group.seed) != PLANNED_SEEDS:
-                raise ValueError("Plot requires all five prespecified seed pairs")
+            if (seeds not in (PLANNED_SEEDS, ARCHIVED_SEEDS)
+                    or tuple(group.seed) != seeds):
+                raise ValueError("Plot requires all prespecified seed pairs")
             values = group[["auc_off", "auc_on"]].to_numpy()
             for seed, pair, color in zip(group.seed, values, colors):
                 label = f"Seed {seed} (OFF: {pair[0]:.4f}, ON: {pair[1]:.4f})"
@@ -345,7 +362,7 @@ def plot_paired_auc(table: pd.DataFrame, destination: Path) -> None:
         figure.subplots_adjust(left=.07, right=.98, top=.86, bottom=.36, wspace=.22)
         figure.text(.5, .025,
                     "Y-axes are truncated to 0.45–1.00 in both panels. "
-                    "Black diamonds show mean ± sample SD across five seeds.",
+                    f"Black diamonds show mean ± sample SD across {len(seeds)} seeds.",
                     ha="center", fontsize=9)
         figure.savefig(destination, dpi=300, bbox_inches="tight")
     finally:
@@ -403,7 +420,7 @@ def run_checkpoint(output: Path, source: Path = BASELINE, data_dir: Path = DATA)
     parameters.pop("aggregation_funcs")
     sources = set(saved["sha256"]) | {
         str(Path(__file__).resolve().relative_to(ROOT)),
-        "experiments/controlled_dynamic_anchors_100.py",
+        "experiments/experiment_utils.py",
     }
     provenance = dict(
         baseline_directory=str(source.resolve()), data_directory=str(data_dir.resolve()),
@@ -504,6 +521,25 @@ def protocol() -> dict:
 def protocol_hash(value: dict) -> str:
     """Fingerprint the full immutable experiment protocol."""
     return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def validate_saved_protocol(frozen: dict) -> tuple[int, ...]:
+    """Check current settings or the exact original five-seed archive.
+
+    Historical compatibility allows only the seed-list change and this runner's
+    source change. Data, model implementation, settings and versions must still
+    match the current checkpoint checks. Training never uses this exception.
+    """
+    expected = protocol()
+    if frozen == expected:
+        return PLANNED_SEEDS
+    if protocol_hash(frozen) == ARCHIVED_PROTOCOL_SHA256:
+        this_source = str(Path(__file__).resolve().relative_to(ROOT))
+        expected["seeds"] = list(ARCHIVED_SEEDS)
+        expected["source_sha256"][this_source] = frozen["source_sha256"][this_source]
+        if frozen == expected:
+            return ARCHIVED_SEEDS
+    raise ValueError("Protocol, inputs, software or source changed")
 
 
 def protect_output(output: Path) -> Path:
@@ -627,18 +663,19 @@ def fit_pending(folder: Path, seed: int, run: str, frozen: dict,
 
 
 def write_summary(output: Path, frozen: dict) -> Path:
-    """Publish thesis tables/figure from ten verified runs; preserve older summaries."""
-    pairs = {seed: output / "seeds" / f"seed_{seed}" for seed in PLANNED_SEEDS}
+    """Publish tables for the saved protocol; preserve older summaries."""
+    seeds = tuple(frozen["seeds"])
+    pairs = {seed: output / "seeds" / f"seed_{seed}" for seed in seeds}
     for seed, pair in pairs.items():
         for run in RUNS:
             completed_run(pair / run, seed, run, frozen)
-    table, summary, temporal = summarize_seeds(pairs)
+    table, summary, temporal = summarize_seeds(pairs, seeds=seeds)
     destination = output / f".summary_{uuid4().hex}"
     destination.mkdir()
     table.to_csv(destination / "auc_per_seed.csv", index=False)
     summary.to_csv(destination / "auc_summary.csv", index=False)
     compact = []
-    for seed in PLANNED_SEEDS:
+    for seed in seeds:
         row = dict(seed=str(seed))
         for population, prefix in zip(POPULATIONS, ("full", "documented")):
             values = table.loc[(table.seed == seed) & (table.population == population)].iloc[0]
@@ -670,9 +707,9 @@ def write_summary(output: Path, frozen: dict) -> Path:
         stability.append(row)
     pd.DataFrame(stability).to_csv(destination / "temporal_stability_summary.csv", index=False)
     for extension in ("png", "pdf"):
-        plot_paired_auc(table, destination / f"paired_roc_auc.{extension}")
+        plot_paired_auc(table, destination / f"paired_roc_auc.{extension}", seeds=seeds)
     write_json(destination / "summary_manifest.json", dict(
-        protocol_sha256=protocol_hash(frozen), seeds=list(PLANNED_SEEDS),
+        protocol_sha256=protocol_hash(frozen), seeds=list(seeds),
         sd_definition=frozen["sd_definition"],
         coverage_definition="Unique documented test patients; available anchor required; "
                             "an evaluated window may contain zero events",
@@ -691,7 +728,7 @@ def write_summary(output: Path, frozen: dict) -> Path:
 
 
 def run_sweep(output: Path = OUTPUT, retry_incomplete: bool = False) -> Path:
-    """Execute the five manual seed pairs, or resume them, then aggregate."""
+    """Execute the four manual seed pairs, or resume them, then aggregate."""
     output = protect_output(Path(output))
     frozen = protocol()
     if output.exists() and not (output / "protocol.json").is_file():
@@ -703,7 +740,8 @@ def run_sweep(output: Path = OUTPUT, retry_incomplete: bool = False) -> Path:
         if path.exists():
             if read_json(path) != frozen:
                 raise ValueError(
-                    "Protocol, inputs, software or source changed; refusing mixed runs")
+                    "Protocol, inputs, software or source changed; refusing mixed runs. "
+                    "Use a new --output directory for the four-seed protocol.")
         else:
             atomic_json(path, frozen)
         pending = []
@@ -731,8 +769,7 @@ def summarize_only(output: Path = OUTPUT) -> Path:
     """Regenerate derived summaries without running or loading any model."""
     output = protect_output(Path(output))
     frozen = read_json(output / "protocol.json")
-    if frozen != protocol():
-        raise ValueError("Protocol, inputs, software or source changed")
+    validate_saved_protocol(frozen)
     with output_lock(output):
         return write_summary(output, frozen)
 
@@ -741,7 +778,7 @@ def main() -> None:
     """Expose manual training/resumption and strictly saved-artifact aggregation."""
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    run = commands.add_parser("run", help="Run/resume seeds 43--47; never seed 42")
+    run = commands.add_parser("run", help="Run/resume seeds 43--46; never seeds 42 or 47")
     run.add_argument("--output", type=Path, default=OUTPUT)
     run.add_argument("--retry-incomplete", action="store_true",
                      help="Archive incomplete attempts and restart only those models")

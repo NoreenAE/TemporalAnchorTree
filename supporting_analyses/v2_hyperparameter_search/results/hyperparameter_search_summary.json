@@ -1,0 +1,1313 @@
+{
+  "best_balanced_fa_gi_candidate": "C02",
+  "best_fa_candidate": "C01",
+  "best_gi_candidate": "C02",
+  "input_sha256_before_and_after": {
+    "after": {
+      "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+      "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+      "x": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199"
+    },
+    "before": {
+      "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+      "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+      "x": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199"
+    },
+    "unchanged": true
+  },
+  "most_stable_candidate": "C01",
+  "number_of_configurations_tested": 8,
+  "number_of_final_test_model_pairs": 3,
+  "number_of_validation_model_pairs": 16,
+  "performance_temporal_tradeoff": {
+    "C01": {
+      "fa_predictive_score": 0.14789334775965485,
+      "fa_temporal_recovery": 0.4231534391534391,
+      "gi_predictive_score": 0.17910474011618632,
+      "gi_temporal_recovery": 0.7462751322751323
+    },
+    "C02": {
+      "fa_predictive_score": 0.14503798084819525,
+      "fa_temporal_recovery": 0.4247444196798497,
+      "gi_predictive_score": 0.17708673428655286,
+      "gi_temporal_recovery": 0.7735115782812984
+    },
+    "C05": {
+      "fa_predictive_score": 0.11352723481199792,
+      "fa_temporal_recovery": 0.4908736584920881,
+      "gi_predictive_score": 0.1762925967063445,
+      "gi_temporal_recovery": 0.759521579260702
+    },
+    "C06": {
+      "fa_predictive_score": 0.11352723481199792,
+      "fa_temporal_recovery": 0.4908736584920881,
+      "gi_predictive_score": 0.1762925967063445,
+      "gi_temporal_recovery": 0.759521579260702
+    }
+  },
+  "ranking_method": {
+    "auc_skill": "clip(2 * (ROC_AUC - 0.5), 0, 1)",
+    "average_precision_skill": "clip((Average Precision - evaluation prevalence) / (1 - evaluation prevalence), 0, 1)",
+    "combined_score": "Unweighted mean of FA AUC skill, FA AP skill, FA temporal recovery, GI AUC skill, GI AP skill, and GI temporal recovery.",
+    "finalist_rank": "Descending mean combined validation score minus one sample SD across sampling seeds; mean combined score and candidate_id break ties.",
+    "pareto_reporting": "A finalist is Pareto-optimal when no other finalist is at least as good on all six mean normalized components and strictly better on at least one. Pareto status is reported but does not replace the predeclared stability-adjusted ranking.",
+    "temporal_recovery": "Mean per-split overlap fraction with the outcome's known temporal region on the correct anchor. For a used interval W and true interval T, relevance = length(W intersection T) / length(W). Wrong anchors, Full Timeline, and zero-width windows receive 0."
+  },
+  "search_strategy": {
+    "candidate_configurations": [
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C01",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 3,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 10,
+        "min_samples_split": 20,
+        "rationale": "Broad-space baseline with moderate sample regularization and no gain threshold.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C02",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 3,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Isolates stronger sample regularization from the baseline while leaving the gain threshold disabled.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C03",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 3,
+        "min_impurity_decrease": 0.0005,
+        "min_samples_leaf": 10,
+        "min_samples_split": 20,
+        "rationale": "Isolates the smallest gain threshold from C01 at the same depth and sample constraints.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C04",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 4,
+        "min_impurity_decrease": 0.0005,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Adds one level of capacity with stronger sample regularization and a small gain threshold to suppress broad-space distractors.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C05",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 4,
+        "min_impurity_decrease": 0.001,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Strengthens only the gain requirement relative to C04 at depth four.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C06",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 4,
+        "min_impurity_decrease": 0.002,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Tests the strongest planned gain threshold at depth four without crossing a full grid.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C07",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 5,
+        "min_impurity_decrease": 0.001,
+        "min_samples_leaf": 30,
+        "min_samples_split": 60,
+        "rationale": "Tests depth five only with stronger split, leaf, and gain regularization appropriate to the broad search space.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C08",
+        "candidate_sampling_rate": 0.6,
+        "max_depth": 4,
+        "min_impurity_decrease": 0.001,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Tests whether denser candidate sampling improves broad-space recovery using the balanced depth-four regularization setting from C05.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      }
+    ],
+    "dataset_version": "V2",
+    "estimated_runtime": {
+      "basis": "Saved V2 A=0.4 broad-window runs required about 54 minutes per FA/GI pair at depth three on 3,500 training patients. Screening uses 2,625 training patients, but depth-four/five trees, A=0.6, multi-seed confirmation, and final full-training refits add substantial overhead.",
+      "estimated_wall_clock_hours_range": [
+        18,
+        30
+      ],
+      "maximum_individual_tree_fits": 38,
+      "maximum_model_pairs": 19
+    },
+    "finalist_selection": "Top three screening combined scores plus the highest mean FA/GI temporal recovery candidate; duplicates are filled by combined score until four finalists are selected.",
+    "fixed_temporal_search_space": {
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "full_timeline_behavior": "None retains TemporalTree's existing deduplicated Full Timeline behavior.",
+      "optimized_during_search": false
+    },
+    "input_paths": {
+      "fa": "historical_not_distributed/experiment1_v2/temporal_benchmark_fa_labels_5000.pkl",
+      "gi": "historical_not_distributed/experiment1_v2/temporal_benchmark_gi_labels_5000.pkl",
+      "x": "historical_not_distributed/experiment1_v2/temporal_benchmark_5000.pkl"
+    },
+    "n_finalists": 4,
+    "n_screening_configurations": 8,
+    "n_top_candidates": 3,
+    "previous_result_evidence": {
+      "v2_a_0_1": {
+        "candidate_sampling_rate": 0.1,
+        "conclusion": "Excluded because it was clearly weaker than A=0.4.",
+        "fa_roc_auc": 0.6017,
+        "gi_roc_auc": 0.6215
+      },
+      "v2_a_0_4_reference": {
+        "candidate_sampling_rate": 0.4,
+        "conclusion": "Retained as the evidence-based baseline.",
+        "observed_pair_training_minutes": 39.7
+      },
+      "v2_wide_offsets": {
+        "conclusion": "The broad 0.7/1-6/12/18 and -1-6/-12/-18 search space is fixed for every candidate. Its distractor usage and higher runtime are part of the revised scientific stress test, not parameters to optimize away.",
+        "observed_pair_training_minutes_range": [
+          53.7,
+          65.4
+        ]
+      }
+    },
+    "representative_seed": "Sampling seed whose combined validation score is closest to the candidate's median across seeds; lower seed breaks exact ties.",
+    "scientific_question": "Which TemporalTree hyperparameter configuration provides the best balance of predictive performance and temporal recovery when the model is exposed to a broad set of candidate temporal windows, including irrelevant alternatives?",
+    "scoring": {
+      "auc_skill": "clip(2 * (ROC_AUC - 0.5), 0, 1)",
+      "average_precision_skill": "clip((Average Precision - evaluation prevalence) / (1 - evaluation prevalence), 0, 1)",
+      "combined_score": "Unweighted mean of FA AUC skill, FA AP skill, FA temporal recovery, GI AUC skill, GI AP skill, and GI temporal recovery.",
+      "finalist_rank": "Descending mean combined validation score minus one sample SD across sampling seeds; mean combined score and candidate_id break ties.",
+      "pareto_reporting": "A finalist is Pareto-optimal when no other finalist is at least as good on all six mean normalized components and strictly better on at least one. Pareto status is reported but does not replace the predeclared stability-adjusted ranking.",
+      "temporal_recovery": "Mean per-split overlap fraction with the outcome's known temporal region on the correct anchor. For a used interval W and true interval T, relevance = length(W intersection T) / length(W). Wrong anchors, Full Timeline, and zero-width windows receive 0."
+    },
+    "screening_seed": 42,
+    "search_name": "experiment_1_v2_smart_hyperparameter_search",
+    "split_protocol": {
+      "inner_split_seed": 137,
+      "joint_stratification": "FA label + GI label",
+      "outer_split_seed": 42,
+      "outer_test_size": 0.3,
+      "selection_uses_test_set": false,
+      "validation_fraction_of_outer_train": 0.25
+    },
+    "stability_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "status": "complete",
+  "top_3_configurations": [
+    {
+      "candidate": {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C02",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 3,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Isolates stronger sample regularization from the baseline while leaving the gain threshold disabled.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      "candidate_id": "C02",
+      "combined_score_mean": 0.3070842380384407,
+      "combined_score_sd": 0.023895009698773777,
+      "fa_auc_skill_mean": 0.24928766701320693,
+      "fa_average_precision_mean": 0.13725758618933195,
+      "fa_average_precision_sd": 0.004743933317162775,
+      "fa_average_precision_skill_mean": 0.040788294683183575,
+      "fa_birth_date_usage_proportion_mean": 0.5118588468893605,
+      "fa_birth_date_usage_proportion_sd": 0.14942661328649723,
+      "fa_full_timeline_usage_proportion_mean": 0.1242247988526702,
+      "fa_full_timeline_usage_proportion_sd": 0.17826817183110202,
+      "fa_now_usage_proportion_mean": 0.3639163542579693,
+      "fa_now_usage_proportion_sd": 0.029403236205758135,
+      "fa_outcome_score_mean": 0.23827346045874673,
+      "fa_roc_auc_mean": 0.6246438335066035,
+      "fa_roc_auc_sd": 0.013425004492776574,
+      "fa_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 18,
+            "threshold": 0.4166666666666667
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 6,
+            "threshold": 0.3157894736842105
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 5,
+            "threshold": 6.0
+          }
+        }
+      ],
+      "fa_temporal_recovery_mean": 0.4247444196798497,
+      "fa_temporal_recovery_score_mean": 0.4247444196798497,
+      "fa_temporal_recovery_sd": 0.26554058353188975,
+      "fa_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.019007526470213035,
+          "sd_usage_proportion": 0.032922001572619305,
+          "window": "Birth Date Anchor | offset=18"
+        },
+        {
+          "mean_usage_proportion": 0.11166411434405309,
+          "sd_usage_proportion": 0.1934079194260806,
+          "window": "Birth Date Anchor | offset=18.0"
+        },
+        {
+          "mean_usage_proportion": 0.0821694742215416,
+          "sd_usage_proportion": 0.13672397756803237,
+          "window": "Birth Date Anchor | offset=4.0"
+        },
+        {
+          "mean_usage_proportion": 0.18790662074244166,
+          "sd_usage_proportion": 0.3254638142044848,
+          "window": "Birth Date Anchor | offset=5"
+        },
+        {
+          "mean_usage_proportion": 0.1111111111111111,
+          "sd_usage_proportion": 0.19245008972987526,
+          "window": "Birth Date Anchor | offset=6.0"
+        },
+        {
+          "mean_usage_proportion": 0.1242247988526702,
+          "sd_usage_proportion": 0.17826817183110202,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.027047619047619046,
+          "sd_usage_proportion": 0.04684785041424392,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.01638095238095238,
+          "sd_usage_proportion": 0.028372641800175895,
+          "window": "NOW Anchor | offset=-12.0"
+        },
+        {
+          "mean_usage_proportion": 0.035336139813751756,
+          "sd_usage_proportion": 0.061203989500775484,
+          "window": "NOW Anchor | offset=-18"
+        },
+        {
+          "mean_usage_proportion": 0.06301514378084057,
+          "sd_usage_proportion": 0.05458567476578247,
+          "window": "NOW Anchor | offset=-18.0"
+        },
+        {
+          "mean_usage_proportion": 0.016328613343538717,
+          "sd_usage_proportion": 0.02828198792815618,
+          "window": "NOW Anchor | offset=-3"
+        },
+        {
+          "mean_usage_proportion": 0.07475443296338818,
+          "sd_usage_proportion": 0.12947847598359002,
+          "window": "NOW Anchor | offset=-4"
+        },
+        {
+          "mean_usage_proportion": 0.13105345292787865,
+          "sd_usage_proportion": 0.11960051475071591,
+          "window": "NOW Anchor | offset=-4.0"
+        }
+      ],
+      "final_artifact_directory": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_1",
+      "gi_auc_skill_mean": 0.2867687350230226,
+      "gi_average_precision_mean": 0.18038198868573022,
+      "gi_average_precision_sd": 0.004054753473005033,
+      "gi_average_precision_skill_mean": 0.06740473355008314,
+      "gi_birth_date_usage_proportion_mean": 0.11769950321095361,
+      "gi_birth_date_usage_proportion_sd": 0.10193089873923777,
+      "gi_full_timeline_usage_proportion_mean": 0.05104761904761904,
+      "gi_full_timeline_usage_proportion_sd": 0.04420853489794849,
+      "gi_now_usage_proportion_mean": 0.8312528777414273,
+      "gi_now_usage_proportion_sd": 0.08846019424684859,
+      "gi_outcome_score_mean": 0.37589501561813465,
+      "gi_roc_auc_mean": 0.6433843675115113,
+      "gi_roc_auc_sd": 0.009862682765470783,
+      "gi_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "max",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        },
+        {
+          "count": 2,
+          "proportion": 0.6666666666666666,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        }
+      ],
+      "gi_temporal_recovery_mean": 0.7735115782812984,
+      "gi_temporal_recovery_score_mean": 0.7735115782812984,
+      "gi_temporal_recovery_sd": 0.11050125760588722,
+      "gi_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.058905852417302805,
+          "sd_usage_proportion": 0.10202792924992242,
+          "window": "Birth Date Anchor | offset=1"
+        },
+        {
+          "mean_usage_proportion": 0.058793650793650794,
+          "sd_usage_proportion": 0.10183359033706542,
+          "window": "Birth Date Anchor | offset=1.0"
+        },
+        {
+          "mean_usage_proportion": 0.05104761904761904,
+          "sd_usage_proportion": 0.04420853489794849,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.24885496183206104,
+          "sd_usage_proportion": 0.4310294376087435,
+          "window": "NOW Anchor | offset=-1"
+        },
+        {
+          "mean_usage_proportion": 0.5205079365079365,
+          "sd_usage_proportion": 0.46406823070678166,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.02557251908396947,
+          "sd_usage_proportion": 0.04429290233095984,
+          "window": "NOW Anchor | offset=-12"
+        },
+        {
+          "mean_usage_proportion": 0.03631746031746031,
+          "sd_usage_proportion": 0.03843719538959612,
+          "window": "NOW Anchor | offset=-18.0"
+        }
+      ],
+      "n_seeds": 3,
+      "pareto_optimal": true,
+      "rank": 1,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "stability_adjusted_score": 0.2831892283396669,
+      "why_ranked_highly": "Ranked on stability-adjusted validation score 0.2832 (mean 0.3071, SD 0.0239); mean FA/GI temporal recovery was 0.4247/0.7735, with mean FA/GI ROC-AUC 0.6246/0.6434."
+    },
+    {
+      "candidate": {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C01",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 3,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 10,
+        "min_samples_split": 20,
+        "rationale": "Broad-space baseline with moderate sample regularization and no gain threshold.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      "candidate_id": "C01",
+      "combined_score_mean": 0.3039041245300423,
+      "combined_score_sd": 0.020875301813700616,
+      "fa_auc_skill_mean": 0.25308517192252894,
+      "fa_average_precision_mean": 0.13897839893790453,
+      "fa_average_precision_sd": 0.0050612413863275274,
+      "fa_average_precision_skill_mean": 0.042701523596780776,
+      "fa_birth_date_usage_proportion_mean": 0.5098412698412699,
+      "fa_birth_date_usage_proportion_sd": 0.15023359991262267,
+      "fa_full_timeline_usage_proportion_mean": 0.12584126984126984,
+      "fa_full_timeline_usage_proportion_sd": 0.1810467256142213,
+      "fa_now_usage_proportion_mean": 0.3643174603174603,
+      "fa_now_usage_proportion_sd": 0.03112251167856093,
+      "fa_outcome_score_mean": 0.23964671155758296,
+      "fa_roc_auc_mean": 0.6265425859612644,
+      "fa_roc_auc_sd": 0.01268809875614213,
+      "fa_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 18,
+            "threshold": 0.4166666666666667
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 6,
+            "threshold": 0.3157894736842105
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 5,
+            "threshold": 6.0
+          }
+        }
+      ],
+      "fa_temporal_recovery_mean": 0.4231534391534391,
+      "fa_temporal_recovery_score_mean": 0.4231534391534391,
+      "fa_temporal_recovery_sd": 0.26596898402241037,
+      "fa_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.0016507936507936507,
+          "sd_usage_proportion": 0.002859258475986718,
+          "window": "Birth Date Anchor | offset=0.7"
+        },
+        {
+          "mean_usage_proportion": 0.01892063492063492,
+          "sd_usage_proportion": 0.03277150099400162,
+          "window": "Birth Date Anchor | offset=18"
+        },
+        {
+          "mean_usage_proportion": 0.1111111111111111,
+          "sd_usage_proportion": 0.19245008972987526,
+          "window": "Birth Date Anchor | offset=18.0"
+        },
+        {
+          "mean_usage_proportion": 0.08,
+          "sd_usage_proportion": 0.13856406460551018,
+          "window": "Birth Date Anchor | offset=4.0"
+        },
+        {
+          "mean_usage_proportion": 0.18704761904761905,
+          "sd_usage_proportion": 0.3239759796252643,
+          "window": "Birth Date Anchor | offset=5"
+        },
+        {
+          "mean_usage_proportion": 0.1111111111111111,
+          "sd_usage_proportion": 0.19245008972987526,
+          "window": "Birth Date Anchor | offset=6.0"
+        },
+        {
+          "mean_usage_proportion": 0.12584126984126984,
+          "sd_usage_proportion": 0.1810467256142213,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.027047619047619046,
+          "sd_usage_proportion": 0.04684785041424392,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.01638095238095238,
+          "sd_usage_proportion": 0.028372641800175895,
+          "window": "NOW Anchor | offset=-12.0"
+        },
+        {
+          "mean_usage_proportion": 0.03517460317460317,
+          "sd_usage_proportion": 0.06092419983448623,
+          "window": "NOW Anchor | offset=-18"
+        },
+        {
+          "mean_usage_proportion": 0.06285714285714285,
+          "sd_usage_proportion": 0.05444421305888172,
+          "window": "NOW Anchor | offset=-18.0"
+        },
+        {
+          "mean_usage_proportion": 0.016253968253968253,
+          "sd_usage_proportion": 0.02815269884048461,
+          "window": "NOW Anchor | offset=-3"
+        },
+        {
+          "mean_usage_proportion": 0.07441269841269842,
+          "sd_usage_proportion": 0.1288865743790936,
+          "window": "NOW Anchor | offset=-4"
+        },
+        {
+          "mean_usage_proportion": 0.13066666666666668,
+          "sd_usage_proportion": 0.11910048350056361,
+          "window": "NOW Anchor | offset=-4.0"
+        },
+        {
+          "mean_usage_proportion": 0.0015238095238095239,
+          "sd_usage_proportion": 0.0026393155162954323,
+          "window": "NOW Anchor | offset=-5"
+        }
+      ],
+      "final_artifact_directory": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_2",
+      "gi_auc_skill_mean": 0.28920594417318896,
+      "gi_average_precision_mean": 0.18178710769087117,
+      "gi_average_precision_sd": 0.00419227357138592,
+      "gi_average_precision_skill_mean": 0.0690035360591837,
+      "gi_birth_date_usage_proportion_mean": 0.1443809523809524,
+      "gi_birth_date_usage_proportion_sd": 0.13133799501378252,
+      "gi_full_timeline_usage_proportion_mean": 0.05104761904761904,
+      "gi_full_timeline_usage_proportion_sd": 0.04420853489794849,
+      "gi_now_usage_proportion_mean": 0.8045714285714286,
+      "gi_now_usage_proportion_sd": 0.12943638506145702,
+      "gi_outcome_score_mean": 0.36816153750250163,
+      "gi_roc_auc_mean": 0.6446029720865946,
+      "gi_roc_auc_sd": 0.008729232948303708,
+      "gi_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "max",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        },
+        {
+          "count": 2,
+          "proportion": 0.6666666666666666,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        }
+      ],
+      "gi_temporal_recovery_mean": 0.7462751322751323,
+      "gi_temporal_recovery_score_mean": 0.7462751322751323,
+      "gi_temporal_recovery_sd": 0.1493206972992,
+      "gi_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.058793650793650794,
+          "sd_usage_proportion": 0.10183359033706542,
+          "window": "Birth Date Anchor | offset=1"
+        },
+        {
+          "mean_usage_proportion": 0.058793650793650794,
+          "sd_usage_proportion": 0.10183359033706542,
+          "window": "Birth Date Anchor | offset=1.0"
+        },
+        {
+          "mean_usage_proportion": 0.026793650793650797,
+          "sd_usage_proportion": 0.04640796449486135,
+          "window": "Birth Date Anchor | offset=5.0"
+        },
+        {
+          "mean_usage_proportion": 0.05104761904761904,
+          "sd_usage_proportion": 0.04420853489794849,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.24838095238095237,
+          "sd_usage_proportion": 0.43020842915615537,
+          "window": "NOW Anchor | offset=-1"
+        },
+        {
+          "mean_usage_proportion": 0.49371428571428577,
+          "sd_usage_proportion": 0.45327522636804485,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.02552380952380952,
+          "sd_usage_proportion": 0.04420853489794849,
+          "window": "NOW Anchor | offset=-12"
+        },
+        {
+          "mean_usage_proportion": 0.0006349206349206349,
+          "sd_usage_proportion": 0.00109971479845643,
+          "window": "NOW Anchor | offset=-18"
+        },
+        {
+          "mean_usage_proportion": 0.03631746031746031,
+          "sd_usage_proportion": 0.03843719538959612,
+          "window": "NOW Anchor | offset=-18.0"
+        }
+      ],
+      "n_seeds": 3,
+      "pareto_optimal": true,
+      "rank": 2,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "stability_adjusted_score": 0.28302882271634167,
+      "why_ranked_highly": "Ranked on stability-adjusted validation score 0.2830 (mean 0.3039, SD 0.0209); mean FA/GI temporal recovery was 0.4232/0.7463, with mean FA/GI ROC-AUC 0.6265/0.6446."
+    },
+    {
+      "candidate": {
+        "aggregations": [
+          "mean",
+          "sum",
+          "max",
+          "count"
+        ],
+        "anchor_offset_map": {
+          "Birth Date Anchor": [
+            null,
+            0.7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            12,
+            18
+          ],
+          "NOW Anchor": [
+            null,
+            -1,
+            -2,
+            -3,
+            -4,
+            -5,
+            -6,
+            -12,
+            -18
+          ]
+        },
+        "candidate_id": "C05",
+        "candidate_sampling_rate": 0.4,
+        "max_depth": 4,
+        "min_impurity_decrease": 0.001,
+        "min_samples_leaf": 20,
+        "min_samples_split": 40,
+        "rationale": "Strengthens only the gain requirement relative to C04 at depth four.",
+        "temporal_search_space": "broad_fixed",
+        "use_dynamic_anchors": false
+      },
+      "candidate_id": "C05",
+      "combined_score_mean": 0.30500581679824584,
+      "combined_score_sd": 0.034890098792806815,
+      "fa_auc_skill_mean": 0.19466905394478454,
+      "fa_average_precision_mean": 0.12969979673090207,
+      "fa_average_precision_sd": 0.004405276957719603,
+      "fa_average_precision_skill_mean": 0.032385415679211306,
+      "fa_birth_date_usage_proportion_mean": 0.6653994172164192,
+      "fa_birth_date_usage_proportion_sd": 0.02583178988345842,
+      "fa_full_timeline_usage_proportion_mean": 0.0723167289844772,
+      "fa_full_timeline_usage_proportion_sd": 0.07245061785399995,
+      "fa_now_usage_proportion_mean": 0.26228385379910363,
+      "fa_now_usage_proportion_sd": 0.09656515547302275,
+      "fa_outcome_score_mean": 0.23930937603869462,
+      "fa_roc_auc_mean": 0.5973345269723923,
+      "fa_roc_auc_sd": 0.023256609175834966,
+      "fa_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 18,
+            "threshold": 0.4166666666666667
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "mean",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 6,
+            "threshold": 0.3157894736842105
+          }
+        },
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "Birth Date Anchor",
+            "feature": "FormulaYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": 5,
+            "threshold": 6.0
+          }
+        }
+      ],
+      "fa_temporal_recovery_mean": 0.4908736584920881,
+      "fa_temporal_recovery_score_mean": 0.4908736584920881,
+      "fa_temporal_recovery_sd": 0.2295102993949014,
+      "fa_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.011359185272228749,
+          "sd_usage_proportion": 0.0196746860240883,
+          "window": "Birth Date Anchor | offset=12"
+        },
+        {
+          "mean_usage_proportion": 0.029181355268311792,
+          "sd_usage_proportion": 0.05054358995843375,
+          "window": "Birth Date Anchor | offset=18"
+        },
+        {
+          "mean_usage_proportion": 0.22408789386401326,
+          "sd_usage_proportion": 0.388131617533573,
+          "window": "Birth Date Anchor | offset=18.0"
+        },
+        {
+          "mean_usage_proportion": 0.030232120968655685,
+          "sd_usage_proportion": 0.043529977731230685,
+          "window": "Birth Date Anchor | offset=4.0"
+        },
+        {
+          "mean_usage_proportion": 0.17136701919310615,
+          "sd_usage_proportion": 0.2968163839840908,
+          "window": "Birth Date Anchor | offset=5"
+        },
+        {
+          "mean_usage_proportion": 0.19917184265010354,
+          "sd_usage_proportion": 0.34497575090709315,
+          "window": "Birth Date Anchor | offset=6.0"
+        },
+        {
+          "mean_usage_proportion": 0.0723167289844772,
+          "sd_usage_proportion": 0.07245061785399995,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.006004140786749482,
+          "sd_usage_proportion": 0.010399476898446674,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.03230508945953462,
+          "sd_usage_proportion": 0.04225502323753338,
+          "window": "NOW Anchor | offset=-12.0"
+        },
+        {
+          "mean_usage_proportion": 0.06795926361143752,
+          "sd_usage_proportion": 0.11770889741997657,
+          "window": "NOW Anchor | offset=-18"
+        },
+        {
+          "mean_usage_proportion": 0.10254884995313289,
+          "sd_usage_proportion": 0.08882522369611202,
+          "window": "NOW Anchor | offset=-18.0"
+        },
+        {
+          "mean_usage_proportion": 0.02506854680767724,
+          "sd_usage_proportion": 0.04341999674281557,
+          "window": "NOW Anchor | offset=-3"
+        },
+        {
+          "mean_usage_proportion": 0.028397963180571875,
+          "sd_usage_proportion": 0.04918671506022076,
+          "window": "NOW Anchor | offset=-6"
+        }
+      ],
+      "final_artifact_directory": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3",
+      "gi_auc_skill_mean": 0.2860244865912605,
+      "gi_average_precision_mean": 0.17964020976648973,
+      "gi_average_precision_sd": 0.005560891680095887,
+      "gi_average_precision_skill_mean": 0.06656070682142849,
+      "gi_birth_date_usage_proportion_mean": 0.05907981206279206,
+      "gi_birth_date_usage_proportion_sd": 0.051500769953675515,
+      "gi_full_timeline_usage_proportion_mean": 0.09054063374837173,
+      "gi_full_timeline_usage_proportion_sd": 0.018339091404995567,
+      "gi_now_usage_proportion_mean": 0.8503795541888363,
+      "gi_now_usage_proportion_sd": 0.06337356369284254,
+      "gi_outcome_score_mean": 0.37070225755779695,
+      "gi_roc_auc_mean": 0.6430122432956303,
+      "gi_roc_auc_sd": 0.005728591208364464,
+      "gi_root_stability": [
+        {
+          "count": 1,
+          "proportion": 0.3333333333333333,
+          "root_split": {
+            "aggregation": "max",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        },
+        {
+          "count": 2,
+          "proportion": 0.6666666666666666,
+          "root_split": {
+            "aggregation": "sum",
+            "anchor": "NOW Anchor",
+            "feature": "VomitingYN",
+            "is_full_timeline": false,
+            "is_leaf": false,
+            "offset": -1,
+            "threshold": 0.0
+          }
+        }
+      ],
+      "gi_temporal_recovery_mean": 0.759521579260702,
+      "gi_temporal_recovery_score_mean": 0.759521579260702,
+      "gi_temporal_recovery_sd": 0.02166242436282243,
+      "gi_window_usage_stability": [
+        {
+          "mean_usage_proportion": 0.0040348822074710395,
+          "sd_usage_proportion": 0.006988620985895509,
+          "window": "Birth Date Anchor | offset=12.0"
+        },
+        {
+          "mean_usage_proportion": 0.010152284263959392,
+          "sd_usage_proportion": 0.017584272158059668,
+          "window": "Birth Date Anchor | offset=18.0"
+        },
+        {
+          "mean_usage_proportion": 0.034696567159989075,
+          "sd_usage_proportion": 0.030048317360627932,
+          "window": "Birth Date Anchor | offset=4.0"
+        },
+        {
+          "mean_usage_proportion": 0.01019607843137255,
+          "sd_usage_proportion": 0.017660125881094436,
+          "window": "Birth Date Anchor | offset=6.0"
+        },
+        {
+          "mean_usage_proportion": 0.09054063374837173,
+          "sd_usage_proportion": 0.018339091404995567,
+          "window": "Full Timeline"
+        },
+        {
+          "mean_usage_proportion": 0.7450015716165623,
+          "sd_usage_proportion": 0.015874860953175505,
+          "window": "NOW Anchor | offset=-1.0"
+        },
+        {
+          "mean_usage_proportion": 0.051778471138845546,
+          "sd_usage_proportion": 0.07305013314223358,
+          "window": "NOW Anchor | offset=-12.0"
+        },
+        {
+          "mean_usage_proportion": 0.037337896501826034,
+          "sd_usage_proportion": 0.039575118259017515,
+          "window": "NOW Anchor | offset=-18.0"
+        },
+        {
+          "mean_usage_proportion": 0.01626161493160234,
+          "sd_usage_proportion": 0.014566412176037937,
+          "window": "NOW Anchor | offset=-2.0"
+        }
+      ],
+      "n_seeds": 3,
+      "pareto_optimal": true,
+      "rank": 3,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "stability_adjusted_score": 0.27011571800543904,
+      "why_ranked_highly": "Ranked on stability-adjusted validation score 0.2701 (mean 0.3050, SD 0.0349); mean FA/GI temporal recovery was 0.4909/0.7595, with mean FA/GI ROC-AUC 0.5973/0.6430."
+    }
+  ],
+  "total_model_pairs": 19,
+  "total_runtime_seconds": 51915.260581187904
+}

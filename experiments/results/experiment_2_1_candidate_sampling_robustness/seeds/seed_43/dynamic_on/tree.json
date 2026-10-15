@@ -1,0 +1,215 @@
+[
+  {
+    "node_id": 0,
+    "depth": 0,
+    "patients": 4000,
+    "type": "split",
+    "feature": "FishIntroduction",
+    "aggregation": "sum",
+    "window": [
+      null,
+      null
+    ],
+    "threshold": 1.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor"
+    ],
+    "left": 1,
+    "right": 8,
+    "source_node_id": 0,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 1,
+    "depth": 1,
+    "patients": 3200,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      1
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 2,
+    "right": 5,
+    "source_node_id": 1,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 2,
+    "depth": 2,
+    "patients": 698,
+    "type": "split",
+    "feature": "FishIntroduction",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      19
+    ],
+    "threshold": 1.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(Vomiting) Anchor"
+    ],
+    "left": 3,
+    "right": 4,
+    "source_node_id": 3,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 3,
+    "depth": 3,
+    "patients": 502,
+    "type": "leaf",
+    "score": 0.9322709163346613
+  },
+  {
+    "node_id": 4,
+    "depth": 3,
+    "patients": 196,
+    "type": "leaf",
+    "score": 0.8826530612244898
+  },
+  {
+    "node_id": 5,
+    "depth": 2,
+    "patients": 2502,
+    "type": "split",
+    "feature": "GI",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      4
+    ],
+    "threshold": 5.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(Vomiting) Anchor"
+    ],
+    "left": 6,
+    "right": 7,
+    "source_node_id": 4,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 6,
+    "depth": 3,
+    "patients": 1578,
+    "type": "leaf",
+    "score": 0.5342205323193916
+  },
+  {
+    "node_id": 7,
+    "depth": 3,
+    "patients": 924,
+    "type": "leaf",
+    "score": 0.04329004329004329
+  },
+  {
+    "node_id": 8,
+    "depth": 1,
+    "patients": 800,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      2
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 9,
+    "right": 12,
+    "source_node_id": 2,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 9,
+    "depth": 2,
+    "patients": 134,
+    "type": "split",
+    "feature": "DoctorVisit",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      13
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 2 | SUM(Vomiting) Anchor"
+    ],
+    "left": 10,
+    "right": 11,
+    "source_node_id": 5,
+    "is_distractor_split": true
+  },
+  {
+    "node_id": 10,
+    "depth": 3,
+    "patients": 58,
+    "type": "leaf",
+    "score": 0.034482758620689655
+  },
+  {
+    "node_id": 11,
+    "depth": 3,
+    "patients": 76,
+    "type": "leaf",
+    "score": 0.18421052631578946
+  },
+  {
+    "node_id": 12,
+    "depth": 2,
+    "patients": 666,
+    "type": "split",
+    "feature": "SleepDisturbance",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      20
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 2 | SUM(Vomiting) Anchor"
+    ],
+    "left": 13,
+    "right": 14,
+    "source_node_id": 6,
+    "is_distractor_split": true
+  },
+  {
+    "node_id": 13,
+    "depth": 3,
+    "patients": 234,
+    "type": "leaf",
+    "score": 0.017094017094017096
+  },
+  {
+    "node_id": 14,
+    "depth": 3,
+    "patients": 432,
+    "type": "leaf",
+    "score": 0.07407407407407407
+  }
+]

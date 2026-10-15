@@ -21,12 +21,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from experiments import experiment_1_fa_vs_gi as experiment  # noqa: E402
+from project_paths import resolve_path  # noqa: E402
 
-BASELINE = ROOT / "experiments" / "results" / (
-    "experiment_1_5000V3clean__moreOFFSETS2_patients_"
-    "A1_minS20_minL10_minGAIN0.0005"
-)
-RESULTS_ROOT = ROOT / "experiments" / "results" / "finding_best_A_for_exp_1"
+BASELINE = ROOT / "supporting_analyses/candidate_sampling/baseline_A1"
+RESULTS_ROOT = ROOT / "supporting_analyses/candidate_sampling/results"
 ALLOWED_RATES = (0.8, 0.4, 0.2)
 
 
@@ -48,7 +46,7 @@ def configured_experiment(rate: float) -> Iterator[Path]:
     config = json.loads((BASELINE / "config.json").read_text(encoding="utf-8"))
     parameters = deepcopy(config["model_hyperparameters"])
     parameters["candidate_sampling_rate"] = rate
-    input_paths = {key: Path(value) for key, value in config["input_paths"].items()}
+    input_paths = {key: resolve_path(value) for key, value in config["input_paths"].items()}
     load_inputs = experiment.load_inputs
     create_split = experiment.create_shared_split
 

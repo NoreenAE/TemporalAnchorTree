@@ -10,8 +10,10 @@ The output directory must be new; saved results are never overwritten.
 from __future__ import annotations
 
 import hashlib
+import argparse
 import json
 from pathlib import Path
+import sys
 
 import matplotlib
 
@@ -23,6 +25,10 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from experiments.experiment_utils import artifact_path
+from project_paths import resolve_path
 RESULTS = ROOT / "experiments/results/experiment_2_noisy_matched_v2"
 OUTPUT = ROOT / "figures/experiment_2_noisy_matched_v2_patient_timelines"
 FISH = "FishIntroduction"
@@ -46,26 +52,26 @@ def require(condition: bool, message: str) -> None:
 
 def source_hashes() -> dict[str, str]:
     """Fingerprint every saved artifact consumed by this visualization."""
-    return {name: hashlib.sha256((RESULTS / name).read_bytes()).hexdigest()
+    return {name: hashlib.sha256(artifact_path(RESULTS, name).read_bytes()).hexdigest()
             for name in FILES}
 
 
 def load_artifacts() -> tuple:
     """Load one saved run and verify its immutable dataset snapshots."""
-    missing = [str(RESULTS / name) for name in FILES
-               if not (RESULTS / name).is_file()]
+    missing = [str(artifact_path(RESULTS, name)) for name in FILES
+               if not artifact_path(RESULTS, name).is_file()]
     if missing:
         raise FileNotFoundError("Missing saved artifacts:\n" + "\n".join(missing))
-    manifest = json.loads((RESULTS / "manifest.json").read_text())
+    manifest = json.loads(artifact_path(RESULTS, "manifest.json").read_text())
     hashes = source_hashes()
     for name in ("observations.csv", "patients_and_split.csv"):
         require(hashes[name] == manifest[name], f"Snapshot hash mismatch: {name}")
     observations = pd.read_csv(
-        RESULTS / "observations.csv", parse_dates=["time"],
+        artifact_path(RESULTS, "observations.csv"), parse_dates=["time"],
         dtype={"patient_id": str, "value": str},
     )
     date_columns = ["birth", "followup_end", "fish_time"]
-    patients = pd.read_csv(RESULTS / "patients_and_split.csv",
+    patients = pd.read_csv(artifact_path(RESULTS, "patients_and_split.csv"),
                            parse_dates=date_columns, dtype={"patient_id": str})
     predictions = pd.read_csv(
         RESULTS / "dynamic_on/patient_predictions.csv", parse_dates=date_columns,
@@ -300,4 +306,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--results", type=Path, default=RESULTS)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    args = parser.parse_args()
+    RESULTS = resolve_path(args.results)
+    OUTPUT = resolve_path(args.output)
     main()

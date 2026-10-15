@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from settree.temporal_tree import TemporalTree
+from TAT.temporal_tree import TemporalTree
 
 
 def _training_data(num_patients=100, num_features=1):

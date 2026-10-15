@@ -12,7 +12,7 @@ from sklearn.metrics import roc_auc_score
 
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-from settree.eval_utils import save_roc_curves
+from TAT.eval_utils import save_roc_curves
 
 RUNS = ("dynamic_on", "dynamic_off")
 LABELS = ("Dynamic Anchoring ON", "Dynamic Anchoring OFF")
@@ -215,6 +215,7 @@ def _anchor_export(output: Path, predictions: dict, trees: dict) -> None:
         },
         "observations_file": "observations.csv",
         "patient_metadata_file": "patients_and_split.csv",
+        "dataset_reference": "configuration.json:dataset_directory",
         "join_key": "patient_id",
         "runs": {},
     }

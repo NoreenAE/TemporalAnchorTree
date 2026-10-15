@@ -15,7 +15,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 
-DEFAULT_DATA_DIR = Path("data/temporal_benchmark_v3")
+DEFAULT_DATA_DIR = Path(__file__).resolve().parent / "data/temporal_benchmark_v3_clean_fa"
 FA_GROUND_TRUTH = "temporal_benchmark_ground_truth_5000.pkl"
 GI_GROUND_TRUTH = "temporal_benchmark_gi_ground_truth_5000.pkl"
 FA_FIGURE = "true_fa_probability_histogram.png"

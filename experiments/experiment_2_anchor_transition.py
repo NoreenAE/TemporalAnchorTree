@@ -15,6 +15,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from experiments.experiment_utils import artifact_path
 
 from experiments.experiment_2_temporal_explainability import (
     BIRTH, FISH, FULL, INPUTS, load_test_visits, require,
@@ -226,7 +227,7 @@ def save_anchor_transition(results: Path, output: Path = None,
     if verify_current:
         audit_current_transition(summary)
     summary["source_sha256"] = {
-        name: hashlib.sha256((results / name).read_bytes()).hexdigest()
+        name: hashlib.sha256(artifact_path(results, name).read_bytes()).hexdigest()
         for name in INPUTS}
     summary["postprocessing_source_sha256"] = {
         str(path.relative_to(Path(__file__).resolve().parents[1])):

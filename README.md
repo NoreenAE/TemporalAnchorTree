@@ -1,211 +1,105 @@
-# Set-Tree
-### Extending decision trees to process sets
-This is the official repository for the paper: "Trees with Attention for Set Prediction Tasks" (ICML21).
-[http://proceedings.mlr.press/v139/hirsch21a.html](http://proceedings.mlr.press/v139/hirsch21a.html)
+# Temporal Anchor Tree (TAT)
 
-This repository contains a prototypical implementaion of Set-Tree and GBeST (Gradient Boosted Set-Tree) algorithms
+Temporal Anchor Tree (TAT) is an interpretable decision-tree framework for
+longitudinal data. TAT evaluates features within temporal windows defined relative
+to fixed or patient-specific reference events.
 
-## Getting Started
-The Set-Tree package can be downloaded from PIP:
-`pip install settree`
+This repository accompanies the MSc thesis and contains the TAT implementation,
+synthetic-data generators, final synthetic datasets, experiment runners, EDA
+notebooks, and saved experimental results.
 
-We also supply the code and datasets for reproducing our experimetns under `exps` folder.
+All patient-level datasets included in this repository are synthetic.
 
-## Background and motivation
-In many machine learning applications, each record represents a set of items. A set is an unordered group of items, the number of items may differ between different sets. Problems comprised from sets of items are present in diverse fields, from particle physics and cosmology to statistics and computer graphics. In this work, we present a novel tree-based algorithm for processing sets.
+## Repository Structure
 
-![set_problems](images/set_problems.PNG)
-
-## The model
-Set-Tree model comprised from two components:
-1) **Set-compatible split criteria**: we specifically support the familly of split criteria defined by the following equation and parametrized by alpha and beta.
-2) **Attention-Sets**: a mechanism for allplying the split criteria to subsets of the input. The attention-sets are derived forn previous split-criteria and allows the model to learn more complex set-functions.
-
-
-<img src="https://github.com/TAU-MLwell/Set-Tree/blob/main/images/model.PNG" width="600" align="center">
-
-## Implementation
-
-The current implementation is based on Sklean's `BaseEstimator` class and is fully compatible with Sklearn.
-It contains two main components: `SetDataset` object, that receives `records` as attribute. `records` is a list of numpy arrays, each array with shape `(n_i, d)` represents a single record (set). `d` is the dimention of each item in the record and `n_i` is the number of items in the i's record and may differ between records. The second componnent is `SetTree` model inherited from Sklean's `BaseEstimator` and has simillar attributes.
-
-When configuring Set-Tree one should also configure:
-- `operations` : list of the operations to be used
-- `use_attention_set` : binary flag for activating the attention-sets mechanism 
-- `attention_set_limit` :  the number of ancestors levels to derive attention-sets from
-- `use_attention_set_comp` : binary flag for activating the attention-sets compatibility option
-
-A simplified code snippet for training Set-Tree:
-```
-import settree
-import numpy as np
-
-set_data = settree.SetDataset(records=[np.random.randn(2,5) for _ in range(10)])
-labels = np.random.randn(10) >= 0.5
-set_tree_model = settree.SetTree(classifier=True,
-                                 criterion='entropy',
-                                 operations=settree.OPERATIONS,
-                                 use_attention_set=True,
-                                 use_attention_set_comp=True,
-                                 attention_set_limit=5,
-                                 max_depth=10)
-set_tree_model.fit(set_data, labels)
+```text
+TemporalAnchorTree/
+├── TAT/                  # Core TAT implementation
+├── generators/           # Synthetic-data generators
+├── data/                 # Final synthetic datasets
+├── experiments/          # Experiment runners and saved results
+├── notebooks/            # EDA notebooks
+├── supporting_analyses/  # Additional thesis analyses
+├── docs/                 # Detailed documentation
+├── requirements.txt
+└── README.md
 ```
 
-A simplified code snippet for training GBeST:
-```
-import settree
-import numpy as np
+## Installation
 
-set_data = settree.SetDataset(records=[np.random.randn(2,5) for _ in range(10)])
-labels = np.random.randn(10) >= 0.5
-gbest_model = settree.GradientBoostedSetTreeClassifier(learning_rate=0.1, 
-                                                       n_estimators=10,
-                                                       criterion='mse',
-                                                       operations=settree.OPERATIONS,
-                                                       use_attention_set=True,
-                                                       use_attention_set_comp=True,
-                                                       attention_set_limit=5,
-                                                       max_depth=10)
-gbest_model.fit(set_data, labels)
-```
-
-For further details and examples see: `example.ipynb`.
-
-## Temporal experiment ROC figures
-
-Future runs save a 300 dpi ROC figure using the continuous evaluation scores
-and the ROC-AUC already calculated by the evaluation pipeline:
-
-- `main.py`: `roc_curve.png` in the supplied run output directory.
-- Experiment 1: `fa/roc_curve.png`, `gi/roc_curve.png`, and
-  `roc_curves_fa_vs_gi.png` in the parent result directory after both outcomes.
-- Ensemble Robustness: `FA_roc_curve.png` and `GI_roc_curve.png` in each seed attempt
-  directory, alongside the existing outcome-prefixed artifacts.
-- Experiment 1 V2 search: `roc_curve.png` per outcome evaluation, including
-  validation candidates; final test candidates also receive the combined
-  `roc_curves_fa_vs_gi.png`. Validation plots use validation scores, while final
-  plots use test scores. ROC saving is independent of the search's temporal
-  usage `save_plots` option.
-
-For a completed Experiment 1, the plotting-only helper
-`experiments.experiment_1_fa_vs_gi.create_roc_comparison(Path(result_directory))`
-reads each outcome's `test_predictions.csv` (`label` and `score` columns) and
-`metrics_and_temporal_summary.json`. It writes only the combined PNG and never
-loads a model or calls prediction/training. Missing prediction artifacts cause
-an error; aggregate AUC values alone cannot supply a ROC curve.
-
-## Experiment 1 thesis tree figures
-
-After both outcomes have saved their trees, Experiment 1 automatically adds
-`fa/fa_tree_thesis.png`, `gi/gi_tree_thesis.png`, and the stacked comparison
-`learned_trees_fa_vs_gi_thesis.png` in the parent result directory. The existing
-`tree.json` and `tree.png` artifacts are retained. All three new figures use
-300 dpi and consistent node styling, with separate `(a)` FA and `(b)` GI panels.
-
-Internal nodes show the feature, temporal window, aggregation, and threshold;
-leaves show training patient counts and positive-class probability. Thresholds
-are displayed with six significant digits and probabilities with three decimal
-places. Integer offsets denote calendar months; fractional offsets are shown
-as days using the model's rounded 30-day conversion. Branch labels describe
-the comparison for observed aggregates; missing-value routing is not recorded
-in the existing tree JSON and is not inferred by this visualization.
-
-To generate these figures from a completed run without loading or executing a
-model, call
-`experiments.experiment_1_fa_vs_gi.create_thesis_tree_figures(Path(result_directory))`.
-This helper reads only the two `tree.json` files and writes only the three PNGs.
-It rejects incomplete child links, cycles, and unreachable nodes.
-
-## Final Experiment 2 temporal-reference explainability
-
-After Dynamic ON saves its tree, predictions, and anchor trace, the noisy
-matched V2 runner automatically compares temporal-reference usage before/at
-versus after FishIntroduction anchor creation. It uses only anchor-created
-held-out TEST patients, without loading or invoking a trained model.
-Experiment 1 and Experiment 2.1 remain unaffected. Post-processing failures
-issue an explicit warning while retaining scientific outputs and allowing the
-ON/OFF workflow to continue.
-
-To reconstruct the current final saved result with its independent audit checks:
+Python 3.9.5 is the verified research environment.
 
 ```bash
-python -B -m experiments.experiment_2_temporal_explainability --verify-current
+git clone https://github.com/NoreenAE/TemporalDecisionTree.git TemporalAnchorTree
+cd TemporalAnchorTree
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-For another completed noisy matched V2 run, use `--results PATH` without
-`--verify-current`. Output directories must be new; `--output` can select a
-new destination. The default is `dynamic_on/temporal_explainability_transition/`
-inside the result directory, containing:
+See [installation details](docs/installation.md) for platform-specific instructions.
 
-- `temporal_reference_transition.png` (300 DPI) and `.pdf` (vector).
-- `temporal_reference_transition.csv`: stage, source-reference category, visit
-  count, stage denominator, population size, and percentage.
-- `temporal_reference_transition_audit.json`: source hashes, creation boundaries,
-  every included visit's stage assignment, and patient-level diagnostics.
+## Synthetic Datasets
 
-The same anchor-created TEST population is used in both panels. Each patient's
-first saved nonempty FishIntroduction-derived anchor creation defines the
-boundary in **tree traversal order**, not clinical time. The creating split is
-included in BEFORE/AT creation and excluded from AFTER creation. Later creations
-are recorded in the audit and do not reset the boundary.
+### Experiment 1 – V3 Clean FA
 
-Each patient–split visit contributes exactly once, classified by its window's
-source reference rather than the split feature. Each panel divides by **all
-split visits in its own stage**, so mutually exclusive reference percentages
-sum to 100%. Empty-event and unavailable-window evaluations still count as
-visited references; availability is audited separately. An empty AFTER stage
-has undefined percentages and is explicitly labelled as having no downstream
-visits. The primary metric is visits, while patient coverage and combinations
-of post-anchor references are secondary diagnostics. Additional references are
-reported and plotted explicitly rather than discarded. Full Timeline remains
-as a zero category when unused to support the direct before/after comparison.
+This dataset contains 5,000 synthetic patients with longitudinal feeding,
+gastrointestinal, and background clinical observations. Separate food-allergy
+(FA) and gastrointestinal (GI) outcomes depend on predefined temporal relationships.
 
-All population sizes, creation positions, categories, counts, and percentages
-are reconstructed dynamically. No model configuration or scientific evaluation
-is changed. Earlier histogram/progression outputs remain in their original
-folders, and their calculation helpers remain available for reproducibility.
+Generator: [create_temporal_benchmark_v3_clean_fa.py](create_temporal_benchmark_v3_clean_fa.py)
 
-## Citation
-If you use Set-Tree in your work, please cite:
-```
-@InProceedings{pmlr-v139-hirsch21a,
-  title = 	 {Trees with Attention for Set Prediction Tasks},
-  author =       {Hirsch, Roy and Gilad-Bachrach, Ran},
-  booktitle = 	 {Proceedings of the 38th International Conference on Machine Learning},
-  pages = 	 {4250--4261},
-  year = 	 {2021},
-  editor = 	 {Meila, Marina and Zhang, Tong},
-  volume = 	 {139},
-  series = 	 {Proceedings of Machine Learning Research},
-  month = 	 {18--24 Jul},
-  publisher =    {PMLR}
-}
-```
+Included data: [data/temporal_benchmark_v3_clean_fa/](data/temporal_benchmark_v3_clean_fa/)
 
-## License
-Set-Tree is MIT licensed, as found in the [LICENSE](https://github.com/TAU-MLwell/Set-Tree/blob/main/LICENSE) file.
+### Experiment 2 – V2 Noisy Matched
 
+This dataset contains 5,000 synthetic children in a matched design. The relevant
+temporal signal depends on GI or vomiting events occurring relative to each
+child's `FishIntroduction` event.
 
+Generator: [generate_fish_intro_noisy_v2.py](generate_fish_intro_noisy_v2.py)
 
+Included data: [data/fish_intro_noisy_matched_v2/](data/fish_intro_noisy_matched_v2/)
 
+## Experiments
 
+| Experiment | Purpose | Main runner |
+| --- | --- | --- |
+| Experiment 1 | Temporal ground-truth evaluation for FA and GI | [experiment_1_fa_vs_gi.py](experiments/experiment_1_fa_vs_gi.py) |
+| Experiment 1.1 | GI prediction without the NOW anchor | [experiment_1_1_gi_without_now.py](experiments/experiment_1_1_gi_without_now.py) |
+| Experiment 2 | Dynamic anchors ON vs. OFF | [experiment_2_noisy_v2.py](experiments/experiment_2_noisy_v2.py) |
+| Experiment 2.1 | Candidate-sampling robustness | [experiment_2_1_candidate_sampling_robustness.py](experiments/experiment_2_1_candidate_sampling_robustness.py) |
+| CART baseline | Conventional non-temporal tree comparison | [experiment_2_cart_baseline.py](experiments/experiment_2_cart_baseline.py) |
 
+Saved outputs are available under [experiments/results/](experiments/results/).
 
-## Experiment naming
+## Main Results
 
-- Experiment 1 — FA vs. GI: existing files and configuration unchanged.
-- Experiment 2 — Fish Introduction – Dynamic Anchors:
-  `experiments/experiment_2_fish_introduction_dynamic_anchors.py`.
-- Ensemble Robustness:
-  `experiments/ensemble_robustness.py`.
-- Saved-tree ensemble analysis:
-  `experiments/ensemble_robustness_from_saved_trees.py`;
-  documentation: `experiments/ensemble_robustness_from_saved_trees.md`.
+Main saved results are available under [experiments/results/](experiments/results/).
+The repository includes ROC curves, learned tree visualizations, temporal-reference
+analyses, robustness summaries, and CART baseline results corresponding to the
+thesis experiments. See [results and visualizations](docs/results.md) for details.
 
-Fish data generation remains in `generate_fish_intro_dataset.py`;
-the dataset remains in `data/fish_intro_dataset_distractors/`.
+## Exploratory Data Analysis
 
-Historical result directories, result-path references, and saved-run identifiers
-retain their original names. This naming-only change does not move results or
-change existing output defaults.
+EDA notebooks are provided for both final synthetic datasets:
+
+- Experiment 1: [notebooks/EDA_experiment_1_v3_clean_fa.ipynb](notebooks/EDA_experiment_1_v3_clean_fa.ipynb)
+- Experiment 2: [experiments/EDA_experiment_2_noisy_v2.ipynb](experiments/EDA_experiment_2_noisy_v2.ipynb)
+
+## Reproducibility
+
+Final synthetic datasets, train/test partitions, random seeds, experiment
+configurations, and saved outputs are included in the repository. Use
+[experiments/reproduce_thesis_results.py](experiments/reproduce_thesis_results.py)
+to check saved results or rerun the thesis experiments; see the
+[reproduction guide](docs/reproducibility.md) for instructions.
+
+## Citation and Use
+
+This repository accompanies the MSc thesis on the Temporal Anchor Tree framework.
+Citation information will be added with the final thesis record.
+All patient-level datasets included in this repository are synthetic.
+
+This project is licensed under the [MIT License](LICENSE). See
+[citation and licensing details](docs/citation_and_use.md).

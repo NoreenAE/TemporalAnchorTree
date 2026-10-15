@@ -40,6 +40,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from experiments.experiment_2_noisy_v2 import load_dataset  # noqa: E402
+from project_paths import portable_metadata  # noqa: E402
+from experiments.experiment_utils import dataset_directory  # noqa: E402
 
 
 RECORDED_RUN = ROOT / "experiments/results/experiment_2_noisy_matched_v2"
@@ -133,10 +135,11 @@ def prepare_inputs(recorded_run: Path) -> tuple:
 def main(recorded_run: Path = RECORDED_RUN) -> None:
     """Fit one CART and save a separate comparison run without overwriting TAT."""
     recorded_run = recorded_run.resolve()
+    data_dir = dataset_directory(recorded_run)
     sources = {
-        "observations": recorded_run / "observations.csv",
-        "patients_and_split": recorded_run / "patients_and_split.csv",
-        "manifest": recorded_run / "manifest.json",
+        "observations": data_dir / "observations.csv",
+        "patients_and_split": data_dir / "patients_and_split.csv",
+        "manifest": data_dir / "manifest.json",
         "configuration": recorded_run / "configuration.json",
         "dynamic_on_predictions": recorded_run / "dynamic_on/patient_predictions.csv",
         "baseline_script": Path(__file__),
@@ -210,7 +213,7 @@ def main(recorded_run: Path = RECORDED_RUN) -> None:
         "evaluation_population": "all saved test patients, including undocumented",
         "train_patient_ids": train_ids.tolist(), "test_patient_ids": test_ids.tolist(),
         "feature_columns": matrix.columns.tolist(),
-        "python_executable": sys.executable, "python_version": sys.version,
+        "python_executable": Path(sys.executable).name, "python_version": sys.version,
         "package_versions": {name: version(name) for name in
                              ("numpy", "pandas", "scikit-learn", "matplotlib")},
         "input_paths": {name: str(path) for name, path in sources.items()},
@@ -218,7 +221,8 @@ def main(recorded_run: Path = RECORDED_RUN) -> None:
         "results": results.to_dict("records"),
     }
     (output / "run_metadata.json").write_text(
-        json.dumps(metadata, indent=2, sort_keys=True, allow_nan=False) + "\n"
+        json.dumps(portable_metadata(metadata), indent=2, sort_keys=True,
+                   allow_nan=False) + "\n"
     )
     print("\nExperiment 2 – CART vs TAT Dynamic ON (FA)")
     for result in results.to_dict("records"):

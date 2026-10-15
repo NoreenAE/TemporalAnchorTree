@@ -1,0 +1,185 @@
+[
+  {
+    "node_id": 0,
+    "depth": 0,
+    "patients": 4000,
+    "type": "split",
+    "feature": "FishIntroduction",
+    "aggregation": "sum",
+    "window": [
+      null,
+      null
+    ],
+    "threshold": 1.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor"
+    ],
+    "left": 1,
+    "right": 8,
+    "source_node_id": 0,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 1,
+    "depth": 1,
+    "patients": 3200,
+    "type": "split",
+    "feature": "GI",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      4
+    ],
+    "threshold": 6.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 2,
+    "right": 5,
+    "source_node_id": 1,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 2,
+    "depth": 2,
+    "patients": 1886,
+    "type": "split",
+    "feature": "GI",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      2
+    ],
+    "threshold": 5.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(GI) Anchor"
+    ],
+    "left": 3,
+    "right": 4,
+    "source_node_id": 3,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 3,
+    "depth": 3,
+    "patients": 1376,
+    "type": "leaf",
+    "score": 0.7274709302325582
+  },
+  {
+    "node_id": 4,
+    "depth": 3,
+    "patients": 510,
+    "type": "leaf",
+    "score": 0.24705882352941178
+  },
+  {
+    "node_id": 5,
+    "depth": 2,
+    "patients": 1314,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      3
+    ],
+    "threshold": 3.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(GI) Anchor"
+    ],
+    "left": 6,
+    "right": 7,
+    "source_node_id": 4,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 6,
+    "depth": 3,
+    "patients": 566,
+    "type": "leaf",
+    "score": 0.6501766784452296
+  },
+  {
+    "node_id": 7,
+    "depth": 3,
+    "patients": 748,
+    "type": "leaf",
+    "score": 0.03877005347593583
+  },
+  {
+    "node_id": 8,
+    "depth": 1,
+    "patients": 800,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      1
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 9,
+    "right": 10,
+    "source_node_id": 2,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 9,
+    "depth": 2,
+    "patients": 73,
+    "type": "leaf",
+    "score": 0.1643835616438356
+  },
+  {
+    "node_id": 10,
+    "depth": 2,
+    "patients": 727,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      9
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 2 | SUM(Vomiting) Anchor"
+    ],
+    "left": 11,
+    "right": 12,
+    "source_node_id": 5,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 11,
+    "depth": 3,
+    "patients": 359,
+    "type": "leaf",
+    "score": 0.03064066852367688
+  },
+  {
+    "node_id": 12,
+    "depth": 3,
+    "patients": 368,
+    "type": "leaf",
+    "score": 0.07880434782608696
+  }
+]

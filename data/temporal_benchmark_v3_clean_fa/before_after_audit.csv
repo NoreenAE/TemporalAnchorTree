@@ -1,0 +1,11 @@
+feature,before_anchor,before_offset,before_aggregation,before_summary_kind,before_n,before_n_positive,before_n_negative,before_statistic,before_absolute_value,before_limit_ratio,after_anchor,after_offset,after_aggregation,after_summary_kind,after_n,after_n_positive,after_n_negative,after_statistic,after_absolute_value,after_limit_ratio
+ApgarFiveMinutes,NOW,-18.0,mean,value,28,2,26,smd,1.242547348130027,6.2127367406501355,NOW,-18.0,mean,value,28,2,26,group_eta,0.4436013731018218,2.9573424873454788
+BirthOrder,NOW,-18.0,mean,value,28,2,26,smd,0.6393827325307078,3.1969136626535386,NOW,-18.0,mean,value,28,2,26,group_eta,0.4361972779237226,2.9079818528248174
+BirthWeightKg,NOW,-18.0,mean,value,28,2,26,group_eta,0.4552551959042177,3.0350346393614513,NOW,-18.0,mean,value,28,2,26,smd,1.3436956943646563,6.718478471823281
+GestationalAgeWeeks,NOW,-18.0,mean,value,28,2,26,group_eta,0.4750366888753126,3.1669112591687507,NOW,-18.0,mean,value,28,2,26,group_eta,0.3750164066490281,2.5001093776601873
+MaternalAgeYears,NOW,-18.0,mean,value,28,2,26,smd,0.7156562669645132,3.578281334822566,NOW,-18.0,mean,value,28,2,26,smd,1.5611840761115603,7.805920380557801
+SocioEconomicScore,NOW,-18.0,mean,value,28,2,26,smd,1.3539176109204667,6.769588054602333,NOW,-18.0,mean,value,28,2,26,smd,1.0993755263317888,5.496877631658943
+LengthCm,NOW,-1.0,mean,value,847,86,761,smd,0.2276028245532433,1.1380141227662164,NOW,-1.0,mean,value,839,87,752,group_eta,0.1273909049477866,0.8492726996519107
+WeightKg,NOW,-1.0,mean,value,842,88,754,group_eta,0.0879359729497353,0.586239819664902,NOW,-1.0,mean,value,833,86,747,group_eta,0.1368153120816108,0.912102080544072
+FoodExposureYN,Full Timeline,,mean,value,5000,504,4496,smd,0.0966104618013879,0.48305230900693946,NOW,-18.0,sum,value,5000,504,4496,probability_r,0.0462594233044493,0.462594233044493
+ClinicalVisitYN,Full Timeline,,sum,value,5000,504,4496,probability_r,0.0396645659787197,0.396645659787197,Full Timeline,,sum,value,5000,504,4496,probability_r,0.0396645659787197,0.396645659787197

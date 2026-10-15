@@ -4,12 +4,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from settree.anchor_utils import _offset_to_dateoffset, create_branch_anchors
-from settree.temporal_explainability import (
+from TAT.anchor_utils import _offset_to_dateoffset, create_branch_anchors
+from TAT.temporal_explainability import (
     derive_monthly_bin_edges,
     run_temporal_explainability,
 )
-from settree.temporal_tree import TemporalSplitNode, TemporalTree
+from TAT.temporal_tree import TemporalSplitNode, TemporalTree
 
 
 ANCHOR = "Birth Date Anchor"

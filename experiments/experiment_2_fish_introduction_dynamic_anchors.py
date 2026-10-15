@@ -1,50 +1,38 @@
-"""Experiment 2: Fish Introduction – Dynamic Anchors.
+"""Shared Dynamic ON/OFF fitting and anchor audits for final noisy Experiment 2.
 
-Run: python experiments/experiment_2_fish_introduction_dynamic_anchors.py
-Load data/fish_intro_dataset_distractors_v2/; never regenerate observations,
-labels or splits. All eight event features can create dynamic anchors.
-Generate a new dataset separately with generate_fish_intro_dataset.py.
-Birth windows are cumulative [birth, birth + m months], m=1..22, plus
-full follow-up. Dynamic windows extend 1, 2, 3 or 4 calendar months.
-Fish introductions after month 22 remain accessible through full follow-up.
-No symptoms coincide with introduction, so the strict-after truth agrees.
-After both runs finish, saved artifacts produce combined ROC and tree figures
-(roc_on_vs_off and decision_trees_on_vs_off, PNG/PDF) in --output, plus
-anchor_usage_test_summary.json and anchor_usage_test_{patients,creations,windows}.csv.
-Usage exports join to observations.csv by patient_id; only actual held-out
-prediction visits are exported for every dynamic-anchor feature, with separate
-FishIntroduction summaries. Creation and downstream use remain distinct.
-Outputs are never overwritten. No execution occurs on import.
+The final entry point is experiments.experiment_2_noisy_v2. This module contains
+only reusable model/evaluation code and does not generate data or run on import.
 """
 from __future__ import annotations
 
-import argparse
 from copy import deepcopy
-import hashlib
-import json
 from pathlib import Path
 import pickle
-import platform
-import shutil
 import sys
 from types import MethodType
 from time import perf_counter
 
 import numpy as np
 import pandas as pd
-import sklearn
 from sklearn.metrics import brier_score_loss, roc_auc_score
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from experiments.controlled_dynamic_anchors_100 import (  # noqa: E402
+from experiments.experiment_utils import (  # noqa: E402
     anchor_values, require, tree_records, write_json,
 )
-from settree.temporal_tree import TemporalTree  # noqa: E402
-from generate_fish_intro_dataset import (  # noqa: E402
-    BIRTH, DEFAULT_DATA_DIR, DISTRACTORS, FISH, SEED, SYMPTOMS,
+from TAT.temporal_tree import TemporalTree  # noqa: E402
+from generate_fish_intro_noisy_v2 import (  # noqa: E402
+    BIRTH, FISH, SYMPTOMS,
+)
+
+# Preserve the original shared model settings and audit export order.
+# The final noisy runner supplies its explicit model configuration.
+SEED = 42
+DISTRACTORS = (
+    "MinorInjury", "Cough", "RoutineVaccination", "SleepDisturbance", "DoctorVisit",
 )
 
 # The only run-specific setting is USE_DYNAMIC_ANCHORS.
@@ -64,28 +52,8 @@ SHARED_MODEL_CONFIG = dict(
     candidate_sampling_rate=0.4, random_state=SEED, split_sampling_seed=SEED,
     learn_missing_direction=False, verbose=0,
 )
-DATASET_FILES = ("observations.csv", "patients_and_split.csv", "validation.json")
 
 
-def load_dataset(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
-    """Restore saved types without generating events, labels, or partitions."""
-    for name in DATASET_FILES:
-        require((directory / name).is_file(), f"Missing dataset file: {directory / name}")
-    data = pd.read_csv(directory / "observations.csv", parse_dates=["time"],
-                       dtype={"patient_id": str, "value": object})
-    birth_rows = data.feature_name.eq(BIRTH)
-    data.loc[birth_rows, "value"] = pd.to_datetime(data.loc[birth_rows, "value"])
-    data.loc[~birth_rows, "value"] = pd.to_numeric(data.loc[~birth_rows, "value"])
-    require(set(data.feature_name) == {BIRTH, FISH, *SYMPTOMS, *DISTRACTORS},
-            "Expected revised Experiment 2 feature names; use a separately "
-            "generated v2 dataset, not a historical dataset")
-    patients = pd.read_csv(
-        directory / "patients_and_split.csv",
-        parse_dates=["birth", "followup_end", "a", "b", "signal_time", "fish_time"],
-        dtype={"patient_id": str, "documented": bool},
-    )
-    validation = json.loads((directory / "validation.json").read_text())
-    return data, patients, validation
 
 
 def make_model(enabled: bool, model_config: dict = None) -> TemporalTree:
@@ -274,53 +242,3 @@ def run_model(enabled: bool, data: pd.DataFrame, patients: pd.DataFrame,
         pickle.dump(model, file)
     require(not errors, f"Mechanism audit failed; see {output / 'diagnostics.json'}")
     return summary
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--output", type=Path,
-                        default=ROOT / "experiments/results/experiment_2_fish_introduction_dynamic_anchors_v2")
-    args = parser.parse_args()
-    require(not args.output.exists(), "Output exists; choose another --output")
-    data, patients, validation = load_dataset(args.data_dir)
-    args.output.mkdir(parents=True)
-    # Preserve the existing output layout with byte-for-byte input snapshots.
-    for name in DATASET_FILES:
-        shutil.copyfile(args.data_dir / name, args.output / name)
-    params = make_model(True).get_params()
-    params.pop("aggregation_funcs")
-    write_json(args.output / "configuration.json", dict(
-        seed=SEED, parameters=params, aggregations=["sum"],
-        dataset_directory=str(args.data_dir.resolve()),
-        dataset_sha256={name: hashlib.sha256((args.data_dir / name).read_bytes()).hexdigest()
-                        for name in DATASET_FILES},
-        FA_probabilities={"R1": .90, "R0": .05},
-        split="400 train / 100 test blocks, stratified by scenario and signal type",
-        birth_dates="Uniform days from 2010-01-01 through 2014-12-31",
-        calibration="10 fixed equal-width bins; last bin includes 1",
-        versions=dict(python=platform.python_version(), numpy=np.__version__,
-                      pandas=pd.__version__, sklearn=sklearn.__version__),
-        sha256={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
-                for path in (Path(__file__).resolve(), ROOT / "generate_fish_intro_dataset.py",
-                             ROOT / "settree/temporal_tree.py",
-                             ROOT / "settree/anchor_utils.py",
-                             ROOT / "experiments/controlled_dynamic_anchors_100.py")},
-    ))
-    print(f"Loaded dataset; saved validation: {validation}", flush=True)
-    results = {}
-    for run in MODEL_RUNS:
-        output = args.output / run["name"]
-        output.mkdir()
-        results[run["name"]] = run_model(
-            run["USE_DYNAMIC_ANCHORS"], data, patients, output
-        )
-    write_json(args.output / "comparison.json", results)
-    from experiments.experiment_2_outputs import save_experiment_outputs
-
-    save_experiment_outputs(args.output)
-    print(f"Completed. Results: {args.output}", flush=True)
-
-
-if __name__ == "__main__":
-    main()

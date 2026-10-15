@@ -1,0 +1,19 @@
+{
+  "artifacts": {
+    "combined_temporal_usage": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/temporal_usage_comparison_fa_vs_gi.png",
+    "config": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/config.json",
+    "fa_temporal_histogram": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/fa/temporal_explainability/temporal_usage_histogram.png",
+    "fa_temporal_usage": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/fa/temporal_explainability/aggregated_temporal_usage.csv",
+    "fa_tree_json": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/fa/tree.json",
+    "gi_temporal_histogram": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/gi/temporal_explainability/temporal_usage_histogram.png",
+    "gi_temporal_usage": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/gi/temporal_explainability/aggregated_temporal_usage.csv",
+    "gi_tree_json": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/gi/tree.json",
+    "metrics": "supporting_analyses/v2_hyperparameter_search/results/top_3_candidates/candidate_3/metrics.json"
+  },
+  "candidate_id": "C05",
+  "rank": 3,
+  "representative_seed": 43,
+  "test_combined_score_not_used_for_ranking": 0.32254666917467095,
+  "validation_stability_adjusted_score": 0.27011571800543904,
+  "why_ranked_highly": "Ranked on stability-adjusted validation score 0.2701 (mean 0.3050, SD 0.0349); mean FA/GI temporal recovery was 0.4909/0.7595, with mean FA/GI ROC-AUC 0.5973/0.6430."
+}

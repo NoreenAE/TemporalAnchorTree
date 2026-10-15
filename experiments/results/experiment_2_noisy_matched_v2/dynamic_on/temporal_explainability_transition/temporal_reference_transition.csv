@@ -1,0 +1,7 @@
+stage,reference_type,visit_count,total_stage_split_visits,usage_percentage,anchor_created_test_patients,unit
+before_at_creation,Birth Date,720,720,100.0,720,percent of patient–split visits within stage
+before_at_creation,FishIntroduction,0,720,0.0,720,percent of patient–split visits within stage
+before_at_creation,Full Timeline,0,720,0.0,720,percent of patient–split visits within stage
+after_creation,Birth Date,224,1440,15.555555555555555,720,percent of patient–split visits within stage
+after_creation,FishIntroduction,1216,1440,84.44444444444444,720,percent of patient–split visits within stage
+after_creation,Full Timeline,0,1440,0.0,720,percent of patient–split visits within stage

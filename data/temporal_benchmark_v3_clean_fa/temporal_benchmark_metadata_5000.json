@@ -1,0 +1,624 @@
+{
+  "benchmark_version": "publication_v2_fa_v1",
+  "cohort_size": 5000,
+  "distractors": {
+    "clinical_visit_interval_days": 14,
+    "gi_feature_rates_per_assessment": {
+      "DiarrheaYN": 0.1,
+      "GISymptomYN": 0.12,
+      "VomitingYN": 0.08
+    },
+    "gi_features_affect_fa": false
+  },
+  "fa": {
+    "calibrated_intercept": -2.4461610055100302,
+    "mean_theoretical_probability": 0.10000000000007328,
+    "per_group_probability": {
+      "2.0": 0.07971974107501632,
+      "2.1": 0.04230980191033981,
+      "2.2": 0.04071815387560615,
+      "2.3": 0.04468739526732161,
+      "2.4": 0.03912120650542988,
+      "3": 0.20353327690761072,
+      "4": 0.21169159854298428,
+      "5.1": 0.08915929910370142,
+      "5.2": 0.12704227638814194,
+      "5.3": 0.12172906022267226,
+      "6": 0.1464069905016553
+    },
+    "positive_count": 504,
+    "realized_prevalence": 0.1008,
+    "target_prevalence": 0.1
+  },
+  "feature_names": [
+    "ApgarFiveMinutes",
+    "Birth Date Anchor",
+    "BirthOrder",
+    "BirthWeightKg",
+    "BreastMilkYN",
+    "ClinicalVisitYN",
+    "DiarrheaYN",
+    "FoodExposureYN",
+    "FormulaYN",
+    "GISymptomYN",
+    "GestationalAgeWeeks",
+    "LengthCm",
+    "MaternalAgeYears",
+    "NOW Anchor",
+    "SocioEconomicScore",
+    "VomitingYN",
+    "WeightKg"
+  ],
+  "feeding": {
+    "conceptual_templates": {
+      "2.0": [
+        "F",
+        "F",
+        "F",
+        "F"
+      ],
+      "2.1": [
+        "M",
+        "F",
+        "F",
+        "F"
+      ],
+      "2.2": [
+        "M",
+        "M",
+        "F",
+        "F"
+      ],
+      "2.3": [
+        "M",
+        "M",
+        "M",
+        "F"
+      ],
+      "2.4": [
+        "M",
+        "M",
+        "M",
+        "M"
+      ],
+      "3": [
+        "B",
+        "B",
+        "B",
+        "B"
+      ],
+      "4": [
+        "F",
+        "B",
+        "B",
+        "B"
+      ],
+      "5.1": [
+        "B",
+        "F",
+        "F",
+        "F"
+      ],
+      "5.2": [
+        "B",
+        "B",
+        "F",
+        "F"
+      ],
+      "5.3": [
+        "B",
+        "B",
+        "B",
+        "F"
+      ]
+    },
+    "empirical_counts": {
+      "2.0": 41120,
+      "2.1": 19560,
+      "2.2": 25913,
+      "2.3": 6659,
+      "2.4": 24817,
+      "3": 40682,
+      "4": 5427,
+      "5.1": 21444,
+      "5.2": 10417,
+      "5.3": 9205,
+      "6": 3707
+    },
+    "experiment_3_population": 208951,
+    "inconsistent_templates": [
+      [
+        "M",
+        "F",
+        "M",
+        "F"
+      ],
+      [
+        "F",
+        "B",
+        "M",
+        "F"
+      ],
+      [
+        "B",
+        "M",
+        "B",
+        "M"
+      ],
+      [
+        "M",
+        "B",
+        "F",
+        "M"
+      ]
+    ],
+    "log_odds_coefficients": {
+      "2.0": 0.0,
+      "2.1": -0.6733445532637656,
+      "2.2": -0.7133498878774648,
+      "2.3": -0.616186139423817,
+      "2.4": -0.7550225842780328,
+      "3": 1.0818051703517284,
+      "4": 1.1314021114911006,
+      "5.1": 0.12221763272424911,
+      "5.2": 0.5187937934151675,
+      "5.3": 0.47000362924573563,
+      "6": 0.6830968447064438
+    },
+    "odds_ratios": {
+      "2.0": 1.0,
+      "2.1": 0.51,
+      "2.2": 0.49,
+      "2.3": 0.54,
+      "2.4": 0.47,
+      "3": 2.95,
+      "4": 3.1,
+      "5.1": 1.13,
+      "5.2": 1.68,
+      "5.3": 1.6,
+      "6": 1.98
+    },
+    "post_6_month_behavior": "Independent categorical F/B/M samples; independent of early trajectory and FA",
+    "sampling_probabilities": {
+      "2.0": 0.19679254944939245,
+      "2.1": 0.09361046369723044,
+      "2.2": 0.12401472115472048,
+      "2.3": 0.031868715631894556,
+      "2.4": 0.118769472268618,
+      "3": 0.19469636421936243,
+      "4": 0.02597259644605673,
+      "5.1": 0.10262693167297596,
+      "5.2": 0.04985379347311092,
+      "5.3": 0.04405339050782241,
+      "6": 0.017741001478815608
+    },
+    "transition_rules": {
+      "2.1": "Mixed to formula at exactly 21 days",
+      "2.2": "Mixed to formula uniformly in (21 days, 2 calendar months]",
+      "2.3": "Mixed to formula uniformly in (2, 4 calendar months]",
+      "4": "Formula to EBF at exactly 21 days",
+      "5.1": "EBF to formula uniformly in (21 days, 2 calendar months]",
+      "5.2": "EBF to formula uniformly in (2, 4 calendar months]",
+      "5.3": "EBF to formula uniformly in (4, 6 calendar months]",
+      "6": "Approved explicit templates transition at 21d, 2m, and 4m"
+    }
+  },
+  "generation_profile": "publication_v2",
+  "gi_label_status": "not_implemented",
+  "ground_truth_windows": {
+    "density_now": "NOW Anchor -6 calendar months to NOW",
+    "fa": "Birth Date Anchor 0 to +6 calendar months",
+    "future_gi": "NOW Anchor -1 calendar month to NOW"
+  },
+  "label_schema": [
+    "patient_id",
+    "label"
+  ],
+  "longitudinal_schema": [
+    "patient_id",
+    "time",
+    "feature_name",
+    "value"
+  ],
+  "master_seed": 20260823,
+  "missingness": {
+    "anchors_missing": false,
+    "continuous_measurement_rate": 0.05,
+    "depends_on_fa": false,
+    "feeding_assessments_missing": false
+  },
+  "now_age_distribution": {
+    "age_days": {
+      "max": 731,
+      "mean": 638.9016,
+      "min": 546,
+      "std": 52.98154317722353
+    },
+    "exact_integer_calendar_month_count": 195,
+    "exact_integer_calendar_month_proportion": 0.039,
+    "sampling": "uniform integer day from Birth+18m through Birth+24m",
+    "unique_age_days": 186
+  },
+  "output_directory": "historical_not_distributed/experiment1_v2",
+  "publication_v2_changes": {
+    "clinical_assessments": {
+      "background_interval_days": 14,
+      "background_jitter_days": 2,
+      "patient_specific_now_assessment": true
+    },
+    "food_exposure": {
+      "affects_fa": false,
+      "affects_gi": false,
+      "base_probability": 0.005,
+      "logistic_scale_days": 20.0,
+      "maximum_probability_range": [
+        0.85,
+        0.95
+      ],
+      "patient_midpoint_days_range": [
+        150,
+        210
+      ],
+      "status": "neutral age-dependent distractor"
+    },
+    "growth": {
+      "affects_fa": false,
+      "affects_gi": false,
+      "length_velocity_ranges_cm_per_month": [
+        [
+          0.0,
+          3.0,
+          3.0,
+          3.5
+        ],
+        [
+          3.0,
+          6.0,
+          2.0,
+          2.5
+        ],
+        [
+          6.0,
+          12.0,
+          1.0,
+          1.5
+        ],
+        [
+          12.0,
+          24.0,
+          0.8,
+          1.0
+        ]
+      ],
+      "measurement_jitter_days": 3,
+      "patient_specific_latent_trajectories": true,
+      "routine_schedule_months": [
+        0,
+        1,
+        2,
+        4,
+        6,
+        9,
+        12,
+        18,
+        24
+      ],
+      "weight_velocity_ranges_kg_per_month": [
+        [
+          0.0,
+          3.0,
+          0.7,
+          1.0
+        ],
+        [
+          3.0,
+          6.0,
+          0.5,
+          0.7
+        ],
+        [
+          6.0,
+          12.0,
+          0.25,
+          0.4
+        ],
+        [
+          12.0,
+          24.0,
+          0.15,
+          0.25
+        ]
+      ]
+    },
+    "now_sampling": "Uniform integer day from patient-specific Birth+18 calendar months through Birth+24 calendar months, inclusive"
+  },
+  "rng_streams": {
+    "cohort": {
+      "spawn_key": [
+        0
+      ]
+    },
+    "distractors": {
+      "spawn_key": [
+        3
+      ]
+    },
+    "fa_labels": {
+      "spawn_key": [
+        5
+      ]
+    },
+    "feeding_observations": {
+      "spawn_key": [
+        2
+      ]
+    },
+    "food_exposure": {
+      "spawn_key": [
+        7
+      ]
+    },
+    "growth": {
+      "spawn_key": [
+        8
+      ]
+    },
+    "missingness": {
+      "spawn_key": [
+        4
+      ]
+    },
+    "trajectory": {
+      "spawn_key": [
+        1
+      ]
+    }
+  },
+  "validation": {
+    "checks": {
+      "all_11_trajectories_represented": true,
+      "binary_labels": true,
+      "coherent_length_cm_trajectory": true,
+      "coherent_weight_kg_trajectory": true,
+      "cohort_size": true,
+      "day_level_now_distribution": true,
+      "exact_feeding_boundary_observations_present": true,
+      "exactly_one_private_feeding_group_per_patient": true,
+      "fa_probability_order_matches_ors": true,
+      "feeding_betas_match_log_ors": true,
+      "feeding_groups_cover_full_cohort": true,
+      "feeding_observations_match_ground_truth": true,
+      "food_exposure_increases_with_age": true,
+      "group_6_exclusive_from_regular_groups": true,
+      "label_schema": true,
+      "longitudinal_schema": true,
+      "mean_fa_probability_matches_target": true,
+      "no_leakage_features": true,
+      "no_multiple_trajectory_assignments": true,
+      "no_observable_regular_group_overlap": true,
+      "no_observations_after_now": true,
+      "now_age_within_configured_range": true,
+      "observable_history_matches_single_assigned_group": true,
+      "one_birth_date_anchor_per_patient": true,
+      "one_now_anchor_per_patient": true,
+      "one_private_ground_truth_row_per_patient": true,
+      "patient_specific_now_ages": true,
+      "realized_fa_prevalence_reasonable": true,
+      "routine_length_cm_measurement_frequency": true,
+      "routine_weight_kg_measurement_frequency": true,
+      "same_patient_population": true,
+      "strict_temporal_separation": true,
+      "sufficient_birth_density": true,
+      "sufficient_now_1m_density": true,
+      "sufficient_now_6m_density": true,
+      "trajectory_distribution_reasonable": true,
+      "transition_ranges_valid": true,
+      "unique_labels": true,
+      "valid_birth_date_anchor_timestamps": true,
+      "valid_now_anchor_timestamps": true
+    },
+    "fa_positive_count": 504,
+    "observation_density": {
+      "birth_0_to_6m": {
+        "long_format_rows_per_patient": {
+          "max": 129,
+          "mean": 117.5928,
+          "min": 113,
+          "std": 2.4619886596002316
+        },
+        "unique_timestamps_per_patient": {
+          "max": 41,
+          "mean": 33.2608,
+          "min": 26,
+          "std": 1.7544182397592187
+        }
+      },
+      "now_minus_1m_to_now": {
+        "long_format_rows_per_patient": {
+          "max": 24,
+          "mean": 17.1854,
+          "min": 10,
+          "std": 2.4492910892746766
+        },
+        "unique_timestamps_per_patient": {
+          "max": 6,
+          "mean": 3.7724,
+          "min": 2,
+          "std": 0.8006236569075591
+        }
+      },
+      "now_minus_6m_to_now": {
+        "long_format_rows_per_patient": {
+          "max": 85,
+          "mean": 78.2264,
+          "min": 71,
+          "std": 1.8593394095752847
+        },
+        "unique_timestamps_per_patient": {
+          "max": 20,
+          "mean": 17.6934,
+          "min": 15,
+          "std": 0.6995687528756426
+        }
+      }
+    },
+    "publication_v2_covariate_audit": {
+      "food_exposure": {
+        "0_to_4m": {
+          "observations": 45000,
+          "positive_count": 727,
+          "prevalence": 0.016155555555555555
+        },
+        "12_to_24m": {
+          "observations": 102889,
+          "positive_count": 92598,
+          "prevalence": 0.8999795896548708
+        },
+        "24m_plus": {
+          "observations": 23,
+          "positive_count": 22,
+          "prevalence": 0.9565217391304348
+        },
+        "4_to_6m": {
+          "observations": 20000,
+          "positive_count": 4825,
+          "prevalence": 0.24125
+        },
+        "6_to_12m": {
+          "observations": 65000,
+          "positive_count": 53768,
+          "prevalence": 0.8272
+        }
+      },
+      "growth": {
+        "LengthCm": {
+          "decrease_magnitude": {
+            "max": 0.0,
+            "median": 0.0
+          },
+          "measurement_gap_days": {
+            "max": 428,
+            "median": 64.0,
+            "min": 22
+          },
+          "missing_count": 2036,
+          "missing_rate": 0.05086693649128067,
+          "observations_per_patient": {
+            "max": 9,
+            "mean": 8.0052,
+            "min": 7,
+            "std": 0.11301752076558552
+          },
+          "observed_decrease_count": 0,
+          "observed_decrease_rate": 0.0,
+          "observed_transition_count": 32990
+        },
+        "WeightKg": {
+          "decrease_magnitude": {
+            "max": 0.0,
+            "median": 0.0
+          },
+          "measurement_gap_days": {
+            "max": 426,
+            "median": 64.0,
+            "min": 22
+          },
+          "missing_count": 2033,
+          "missing_rate": 0.05079198520961375,
+          "observations_per_patient": {
+            "max": 9,
+            "mean": 8.0052,
+            "min": 7,
+            "std": 0.11301752076558552
+          },
+          "observed_decrease_count": 0,
+          "observed_decrease_rate": 0.0,
+          "observed_transition_count": 32993
+        }
+      },
+      "now": {
+        "age_days": {
+          "max": 731,
+          "mean": 638.9016,
+          "min": 546,
+          "std": 52.98154317722353
+        },
+        "exact_integer_calendar_month_count": 195,
+        "exact_integer_calendar_month_proportion": 0.039,
+        "sampling": "uniform integer day from Birth+18m through Birth+24m",
+        "unique_age_days": 186
+      }
+    },
+    "realized_fa_prevalence": 0.1008,
+    "trajectory_distribution": {
+      "chi_square_p_value": 0.5885850774126979,
+      "chi_square_statistic": 8.412777609396679,
+      "counts": {
+        "2.0": 969,
+        "2.1": 472,
+        "2.2": 595,
+        "2.3": 180,
+        "2.4": 574,
+        "3": 989,
+        "4": 135,
+        "5.1": 528,
+        "5.2": 255,
+        "5.3": 229,
+        "6": 74
+      },
+      "expected_counts": {
+        "2.0": 983.9627472469623,
+        "2.1": 468.0523184861522,
+        "2.2": 620.0736057736024,
+        "2.3": 159.34357815947277,
+        "2.4": 593.84736134309,
+        "3": 973.4818210968122,
+        "4": 129.86298223028365,
+        "5.1": 513.1346583648798,
+        "5.2": 249.2689673655546,
+        "5.3": 220.26695253911203,
+        "6": 88.70500739407804
+      },
+      "expected_probabilities": {
+        "2.0": 0.19679254944939245,
+        "2.1": 0.09361046369723044,
+        "2.2": 0.12401472115472048,
+        "2.3": 0.031868715631894556,
+        "2.4": 0.118769472268618,
+        "3": 0.19469636421936243,
+        "4": 0.02597259644605673,
+        "5.1": 0.10262693167297596,
+        "5.2": 0.04985379347311092,
+        "5.3": 0.04405339050782241,
+        "6": 0.017741001478815608
+      },
+      "max_absolute_standardized_residual": 1.6631088872040278,
+      "realized_probabilities": {
+        "2.0": 0.1938,
+        "2.1": 0.0944,
+        "2.2": 0.119,
+        "2.3": 0.036,
+        "2.4": 0.1148,
+        "3": 0.1978,
+        "4": 0.027,
+        "5.1": 0.1056,
+        "5.2": 0.051,
+        "5.3": 0.0458,
+        "6": 0.0148
+      },
+      "standardized_residuals": {
+        "2.0": -0.5322407806989907,
+        "2.1": 0.19166263999392671,
+        "2.2": -1.075837719052526,
+        "2.3": 1.6631088872040278,
+        "2.4": -0.8676020993347756,
+        "3": 0.554238896760951,
+        "4": 0.4567544573580848,
+        "5.1": 0.6927438906262622,
+        "5.2": 0.3723947543972931,
+        "5.3": 0.6018306894662188,
+        "6": -1.5753540396974113
+      }
+    }
+  }
+}

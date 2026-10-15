@@ -1,0 +1,11 @@
+seed,run,root_feature,root_window,fish_anchor_creator_present,gi_one_month_present,vomiting_one_month_present,documented_test_n,fish_anchor_created_n,fish_anchor_creation_coverage,fish_anchor_used_n,fish_anchor_usage_coverage,fish_anchor_used_for_symptom_n,gi_one_month_used_n,vomiting_one_month_used_n,either_one_month_used_n,either_one_month_coverage
+43,dynamic_on,FishIntroduction,"[None, None]",True,False,True,800,800,1.0,800,1.0,800,0,800,800,1.0
+43,dynamic_off,FishIntroduction,"[None, None]",False,False,False,800,0,0.0,0,0.0,0,0,0,0,0.0
+44,dynamic_on,FishIntroduction,"[None, None]",True,True,False,800,800,1.0,800,1.0,800,544,0,544,0.68
+44,dynamic_off,FishIntroduction,"[None, None]",False,False,False,800,0,0.0,0,0.0,0,0,0,0,0.0
+45,dynamic_on,FishIntroduction,"[None, None]",True,False,False,800,800,1.0,800,1.0,800,0,0,0,0.0
+45,dynamic_off,FishIntroduction,"[None, None]",False,False,False,800,0,0.0,0,0.0,0,0,0,0,0.0
+46,dynamic_on,FishIntroduction,"[None, None]",True,True,False,800,800,1.0,800,1.0,800,800,0,800,1.0
+46,dynamic_off,FishIntroduction,"[None, None]",False,False,False,800,0,0.0,0,0.0,0,0,0,0,0.0
+47,dynamic_on,FishIntroduction,"[None, None]",True,True,False,800,800,1.0,800,1.0,800,800,0,800,1.0
+47,dynamic_off,FishIntroduction,"[None, None]",False,False,False,800,0,0.0,0,0.0,0,0,0,0,0.0

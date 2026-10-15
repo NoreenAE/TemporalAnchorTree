@@ -1,0 +1,3 @@
+,roc_auc,average_precision,accuracy,precision,recall,f1,mcc,confusion_matrix,decision_threshold,training_runtime_seconds,total_runtime_seconds,evaluated_candidates,root_anchor,root_offset,birth_date_usage_proportion,now_usage_proportion,full_timeline_usage_proportion
+fa,0.6361052337026691,0.14861860078729128,0.8993333333333333,0.0,0.0,0.0,0.0,"[[1349, 0], [151, 0]]",0.5,4481.4880916606635,4803.284101114608,230432,Birth Date Anchor,6,0.8980952380952381,0.1019047619047619,0.0
+gi,0.6716353195497302,0.2040777085111447,0.878,0.0,0.0,0.0,0.0,"[[1317, 0], [183, 0]]",0.5,4302.872554737143,4651.294276970439,228019,NOW Anchor,-1,0.07628571428571429,0.9237142857142857,0.0

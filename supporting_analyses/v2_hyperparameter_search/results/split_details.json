@@ -1,0 +1,18 @@
+{
+  "inner_split_seed": 137,
+  "input_sha256": {
+    "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+    "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+    "x": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199"
+  },
+  "outer_split_seed": 42,
+  "outer_test_size": 0.3,
+  "patient_counts": {
+    "search_train": 2625,
+    "test": 1500,
+    "validation": 875
+  },
+  "patient_split_file": "supporting_analyses/v2_hyperparameter_search/results/shared_patient_splits.csv",
+  "patient_split_sha256": "3f197b0b23beb50758831946549d2c7ced55931aefd7be434b50e4449c475d5e",
+  "validation_fraction_of_outer_train": 0.25
+}

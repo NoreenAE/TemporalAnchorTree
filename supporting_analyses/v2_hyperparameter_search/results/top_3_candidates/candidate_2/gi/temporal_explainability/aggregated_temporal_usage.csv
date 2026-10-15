@@ -1,0 +1,37 @@
+anchor,bin_start_offset,bin_end_offset,raw_usage_count,normalized_usage_per_patient
+Birth Date Anchor,0.0,1.0,621,0.414
+Birth Date Anchor,1.0,2.0,317,0.21133333333333335
+Birth Date Anchor,2.0,3.0,317,0.21133333333333335
+Birth Date Anchor,3.0,4.0,317,0.21133333333333335
+Birth Date Anchor,4.0,5.0,317,0.21133333333333335
+Birth Date Anchor,5.0,6.0,0,0.0
+Birth Date Anchor,6.0,7.0,0,0.0
+Birth Date Anchor,7.0,8.0,0,0.0
+Birth Date Anchor,8.0,9.0,0,0.0
+Birth Date Anchor,9.0,10.0,0,0.0
+Birth Date Anchor,10.0,11.0,0,0.0
+Birth Date Anchor,11.0,12.0,0,0.0
+Birth Date Anchor,12.0,13.0,0,0.0
+Birth Date Anchor,13.0,14.0,0,0.0
+Birth Date Anchor,14.0,15.0,0,0.0
+Birth Date Anchor,15.0,16.0,0,0.0
+Birth Date Anchor,16.0,17.0,0,0.0
+Birth Date Anchor,17.0,18.0,0,0.0
+NOW Anchor,-18.0,-17.0,344,0.22933333333333333
+NOW Anchor,-17.0,-16.0,344,0.22933333333333333
+NOW Anchor,-16.0,-15.0,344,0.22933333333333333
+NOW Anchor,-15.0,-14.0,344,0.22933333333333333
+NOW Anchor,-14.0,-13.0,344,0.22933333333333333
+NOW Anchor,-13.0,-12.0,344,0.22933333333333333
+NOW Anchor,-12.0,-11.0,344,0.22933333333333333
+NOW Anchor,-11.0,-10.0,344,0.22933333333333333
+NOW Anchor,-10.0,-9.0,344,0.22933333333333333
+NOW Anchor,-9.0,-8.0,344,0.22933333333333333
+NOW Anchor,-8.0,-7.0,344,0.22933333333333333
+NOW Anchor,-7.0,-6.0,344,0.22933333333333333
+NOW Anchor,-6.0,-5.0,344,0.22933333333333333
+NOW Anchor,-5.0,-4.0,344,0.22933333333333333
+NOW Anchor,-4.0,-3.0,344,0.22933333333333333
+NOW Anchor,-3.0,-2.0,344,0.22933333333333333
+NOW Anchor,-2.0,-1.0,344,0.22933333333333333
+NOW Anchor,-1.0,0.0,3000,2.0

@@ -1,0 +1,215 @@
+[
+  {
+    "node_id": 0,
+    "depth": 0,
+    "patients": 4000,
+    "type": "split",
+    "feature": "FishIntroduction",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      22
+    ],
+    "threshold": 1.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor"
+    ],
+    "left": 1,
+    "right": 8,
+    "source_node_id": 0,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 1,
+    "depth": 1,
+    "patients": 2844,
+    "type": "split",
+    "feature": "GI",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      1
+    ],
+    "threshold": 3.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 2,
+    "right": 5,
+    "source_node_id": 1,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 2,
+    "depth": 2,
+    "patients": 900,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      18
+    ],
+    "threshold": 3.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(GI) Anchor"
+    ],
+    "left": 3,
+    "right": 4,
+    "source_node_id": 3,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 3,
+    "depth": 3,
+    "patients": 602,
+    "type": "leaf",
+    "score": 0.9102990033222591
+  },
+  {
+    "node_id": 4,
+    "depth": 3,
+    "patients": 298,
+    "type": "leaf",
+    "score": 0.8523489932885906
+  },
+  {
+    "node_id": 5,
+    "depth": 2,
+    "patients": 1944,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      1
+    ],
+    "threshold": 2.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 1 | SUM(GI) Anchor"
+    ],
+    "left": 6,
+    "right": 7,
+    "source_node_id": 4,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 6,
+    "depth": 3,
+    "patients": 522,
+    "type": "leaf",
+    "score": 0.9157088122605364
+  },
+  {
+    "node_id": 7,
+    "depth": 3,
+    "patients": 1422,
+    "type": "leaf",
+    "score": 0.051336146272855133
+  },
+  {
+    "node_id": 8,
+    "depth": 1,
+    "patients": 1156,
+    "type": "split",
+    "feature": "RoutineVaccination",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      18
+    ],
+    "threshold": 3.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor"
+    ],
+    "left": 9,
+    "right": 12,
+    "source_node_id": 2,
+    "is_distractor_split": true
+  },
+  {
+    "node_id": 9,
+    "depth": 2,
+    "patients": 349,
+    "type": "split",
+    "feature": "DoctorVisit",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      3
+    ],
+    "threshold": 1.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 2 | SUM(RoutineVaccination) Anchor"
+    ],
+    "left": 10,
+    "right": 11,
+    "source_node_id": 5,
+    "is_distractor_split": true
+  },
+  {
+    "node_id": 10,
+    "depth": 3,
+    "patients": 50,
+    "type": "leaf",
+    "score": 0.08
+  },
+  {
+    "node_id": 11,
+    "depth": 3,
+    "patients": 299,
+    "type": "leaf",
+    "score": 0.27759197324414714
+  },
+  {
+    "node_id": 12,
+    "depth": 2,
+    "patients": 807,
+    "type": "split",
+    "feature": "Vomiting",
+    "aggregation": "sum",
+    "window": [
+      "Birth Date Anchor",
+      13
+    ],
+    "threshold": 5.0,
+    "missing_direction": "right",
+    "available_anchors": [
+      "Birth Date Anchor",
+      "Node 0 | SUM(FishIntroduction) Anchor",
+      "Node 2 | SUM(RoutineVaccination) Anchor"
+    ],
+    "left": 13,
+    "right": 14,
+    "source_node_id": 6,
+    "is_distractor_split": false
+  },
+  {
+    "node_id": 13,
+    "depth": 3,
+    "patients": 576,
+    "type": "leaf",
+    "score": 0.1423611111111111
+  },
+  {
+    "node_id": 14,
+    "depth": 3,
+    "patients": 231,
+    "type": "leaf",
+    "score": 0.23376623376623376
+  }
+]

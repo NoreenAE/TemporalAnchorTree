@@ -1,0 +1,201 @@
+{
+  "patient_count": 5000,
+  "same_ids_anchors_timestamps_rows_dtypes": true,
+  "protected_rows_identical": true,
+  "marginal_values_and_missing_counts_identical": true,
+  "temporal_order_unchanged": true,
+  "changed_value_counts": {
+    "ApgarFiveMinutes": 3755,
+    "BirthOrder": 3714,
+    "BirthWeightKg": 4975,
+    "GestationalAgeWeeks": 4891,
+    "MaternalAgeYears": 4817,
+    "SocioEconomicScore": 4999,
+    "LengthCm": 39421,
+    "WeightKg": 39733,
+    "FoodExposureYN": 43804,
+    "ClinicalVisitYN": 0
+  },
+  "protected_rows_sha256_before": "3a24d49d7898fcea2865659c8cf4d0304dc9f7a86ac8302a526f43b05eab3fa2",
+  "protected_rows_sha256_after": "3a24d49d7898fcea2865659c8cf4d0304dc9f7a86ac8302a526f43b05eab3fa2",
+  "distractor_acceptance_passed": false,
+  "distractor_flagged_summaries": 12,
+  "late_feeding_flagged_summaries": 0,
+  "source_directories_untouched": true,
+  "copied_artifact_sha256": {
+    "temporal_benchmark_fa_labels_5000.pkl": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+    "temporal_benchmark_gi_ground_truth_5000.pkl": "8f4721751b7e71c9d6a7ed30f8e1a248d8817ce875b2d50801671658288ca5e5",
+    "temporal_benchmark_gi_labels_5000.pkl": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+    "temporal_benchmark_gi_metadata_5000.json": "081dd07292561501eb29935f2f68674839bf9a2f033fa8750871913ad4e2c4b7",
+    "temporal_benchmark_ground_truth_5000.pkl": "8ad04e43e681dbdde2a9dc7bda11bc1175c1bed22461eddcfad84248f13c2991",
+    "temporal_benchmark_metadata_5000.json": "0631f8ddc480c0db57c649981960c3fc589d990f6af5a53d704f71d1fc3f09f6",
+    "true_fa_probability_histogram.png": "8e13200c041a47a97a82a7c5800a0e74de5774468ed811c23b0c250abc342490",
+    "true_gi_probability_histogram.png": "5f4327e46c9ddd18965975253b9f1667b3e7ba7c901bcb992bcda8b608a43e86",
+    "true_probability_histogram_fa_vs_gi.png": "27cf5e8a53c75fbcd32db4de8e20640c2ccbaffcc1c1a9027c2e1b99001bdca2"
+  },
+  "source_snapshots_before": {
+    "v2": {
+      "temporal_benchmark_5000.pkl": {
+        "sha256": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199",
+        "mtime_ns": 1787650068920320521
+      },
+      "temporal_benchmark_fa_labels_5000.pkl": {
+        "sha256": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+        "mtime_ns": 1787650068940320505
+      },
+      "temporal_benchmark_gi_ground_truth_5000.pkl": {
+        "sha256": "8f4721751b7e71c9d6a7ed30f8e1a248d8817ce875b2d50801671658288ca5e5",
+        "mtime_ns": 1787650084080307471
+      },
+      "temporal_benchmark_gi_labels_5000.pkl": {
+        "sha256": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+        "mtime_ns": 1787650084076307474
+      },
+      "temporal_benchmark_gi_metadata_5000.json": {
+        "sha256": "081dd07292561501eb29935f2f68674839bf9a2f033fa8750871913ad4e2c4b7",
+        "mtime_ns": 1787650084080307471
+      },
+      "temporal_benchmark_ground_truth_5000.pkl": {
+        "sha256": "8ad04e43e681dbdde2a9dc7bda11bc1175c1bed22461eddcfad84248f13c2991",
+        "mtime_ns": 1787650068948320498
+      },
+      "temporal_benchmark_metadata_5000.json": {
+        "sha256": "0631f8ddc480c0db57c649981960c3fc589d990f6af5a53d704f71d1fc3f09f6",
+        "mtime_ns": 1787650068952320494
+      },
+      "true_fa_probability_histogram.png": {
+        "sha256": "8e13200c041a47a97a82a7c5800a0e74de5774468ed811c23b0c250abc342490",
+        "mtime_ns": 1788086125235290916
+      },
+      "true_gi_probability_histogram.png": {
+        "sha256": "5f4327e46c9ddd18965975253b9f1667b3e7ba7c901bcb992bcda8b608a43e86",
+        "mtime_ns": 1788086125703289900
+      },
+      "true_probability_histogram_fa_vs_gi.png": {
+        "sha256": "27cf5e8a53c75fbcd32db4de8e20640c2ccbaffcc1c1a9027c2e1b99001bdca2",
+        "mtime_ns": 1788087820635801051
+      }
+    },
+    "old_v3": {
+      "temporal_benchmark_5000.pkl": {
+        "sha256": "b78ff20669a734ece76a7ad63f87cd362a48542f43b6a62dc5989aff67f193da",
+        "mtime_ns": 1787685803943477804
+      },
+      "temporal_benchmark_fa_labels_5000.pkl": {
+        "sha256": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_ground_truth_5000.pkl": {
+        "sha256": "8f4721751b7e71c9d6a7ed30f8e1a248d8817ce875b2d50801671658288ca5e5",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_labels_5000.pkl": {
+        "sha256": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_metadata_5000.json": {
+        "sha256": "7d431af177f361f25062a4c937c1e2de7de68e1f898a380fdb65c3d1a28ed1ec",
+        "mtime_ns": 1787685847175321878
+      },
+      "temporal_benchmark_ground_truth_5000.pkl": {
+        "sha256": "8ad04e43e681dbdde2a9dc7bda11bc1175c1bed22461eddcfad84248f13c2991",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_metadata_5000.json": {
+        "sha256": "8077071163ea868b12729203e358ef99b9326504385805ba19694934d58e05c5",
+        "mtime_ns": 1787685847171321892
+      },
+      "true_fa_probability_histogram.png": {
+        "sha256": "8e13200c041a47a97a82a7c5800a0e74de5774468ed811c23b0c250abc342490",
+        "mtime_ns": 1788085929491707933
+      },
+      "true_gi_probability_histogram.png": {
+        "sha256": "5f4327e46c9ddd18965975253b9f1667b3e7ba7c901bcb992bcda8b608a43e86",
+        "mtime_ns": 1788085929963706950
+      }
+    }
+  },
+  "source_snapshots_after": {
+    "v2": {
+      "temporal_benchmark_5000.pkl": {
+        "sha256": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199",
+        "mtime_ns": 1787650068920320521
+      },
+      "temporal_benchmark_fa_labels_5000.pkl": {
+        "sha256": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+        "mtime_ns": 1787650068940320505
+      },
+      "temporal_benchmark_gi_ground_truth_5000.pkl": {
+        "sha256": "8f4721751b7e71c9d6a7ed30f8e1a248d8817ce875b2d50801671658288ca5e5",
+        "mtime_ns": 1787650084080307471
+      },
+      "temporal_benchmark_gi_labels_5000.pkl": {
+        "sha256": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+        "mtime_ns": 1787650084076307474
+      },
+      "temporal_benchmark_gi_metadata_5000.json": {
+        "sha256": "081dd07292561501eb29935f2f68674839bf9a2f033fa8750871913ad4e2c4b7",
+        "mtime_ns": 1787650084080307471
+      },
+      "temporal_benchmark_ground_truth_5000.pkl": {
+        "sha256": "8ad04e43e681dbdde2a9dc7bda11bc1175c1bed22461eddcfad84248f13c2991",
+        "mtime_ns": 1787650068948320498
+      },
+      "temporal_benchmark_metadata_5000.json": {
+        "sha256": "0631f8ddc480c0db57c649981960c3fc589d990f6af5a53d704f71d1fc3f09f6",
+        "mtime_ns": 1787650068952320494
+      },
+      "true_fa_probability_histogram.png": {
+        "sha256": "8e13200c041a47a97a82a7c5800a0e74de5774468ed811c23b0c250abc342490",
+        "mtime_ns": 1788086125235290916
+      },
+      "true_gi_probability_histogram.png": {
+        "sha256": "5f4327e46c9ddd18965975253b9f1667b3e7ba7c901bcb992bcda8b608a43e86",
+        "mtime_ns": 1788086125703289900
+      },
+      "true_probability_histogram_fa_vs_gi.png": {
+        "sha256": "27cf5e8a53c75fbcd32db4de8e20640c2ccbaffcc1c1a9027c2e1b99001bdca2",
+        "mtime_ns": 1788087820635801051
+      }
+    },
+    "old_v3": {
+      "temporal_benchmark_5000.pkl": {
+        "sha256": "b78ff20669a734ece76a7ad63f87cd362a48542f43b6a62dc5989aff67f193da",
+        "mtime_ns": 1787685803943477804
+      },
+      "temporal_benchmark_fa_labels_5000.pkl": {
+        "sha256": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_ground_truth_5000.pkl": {
+        "sha256": "8f4721751b7e71c9d6a7ed30f8e1a248d8817ce875b2d50801671658288ca5e5",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_labels_5000.pkl": {
+        "sha256": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_gi_metadata_5000.json": {
+        "sha256": "7d431af177f361f25062a4c937c1e2de7de68e1f898a380fdb65c3d1a28ed1ec",
+        "mtime_ns": 1787685847175321878
+      },
+      "temporal_benchmark_ground_truth_5000.pkl": {
+        "sha256": "8ad04e43e681dbdde2a9dc7bda11bc1175c1bed22461eddcfad84248f13c2991",
+        "mtime_ns": 1787685803963477731
+      },
+      "temporal_benchmark_metadata_5000.json": {
+        "sha256": "8077071163ea868b12729203e358ef99b9326504385805ba19694934d58e05c5",
+        "mtime_ns": 1787685847171321892
+      },
+      "true_fa_probability_histogram.png": {
+        "sha256": "8e13200c041a47a97a82a7c5800a0e74de5774468ed811c23b0c250abc342490",
+        "mtime_ns": 1788085929491707933
+      },
+      "true_gi_probability_histogram.png": {
+        "sha256": "5f4327e46c9ddd18965975253b9f1667b3e7ba7c901bcb992bcda8b608a43e86",
+        "mtime_ns": 1788085929963706950
+      }
+    }
+  },
+  "transformed_x_sha256": "f8f1aefb02c6ccb64d0ce5e94eca76fd8922153c931472d95d15a5a1dc82b1e9"
+}

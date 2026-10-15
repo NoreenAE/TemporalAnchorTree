@@ -1,0 +1,127 @@
+{
+  "dataset_version": "fish_intro_noisy_matched_v2",
+  "parameters": {
+    "is_classification": false,
+    "criterion": "mse",
+    "max_depth": 3,
+    "min_samples_split": 100,
+    "min_samples_leaf": 50,
+    "min_impurity_decrease": 0.0,
+    "anchors_list": [
+      "Birth Date Anchor"
+    ],
+    "anchor_offset_list": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        null
+      ]
+    },
+    "feature_semantics": {
+      "FishIntroduction": "binary_event_indicator",
+      "GI": "binary_event_indicator",
+      "Vomiting": "binary_event_indicator",
+      "MinorInjury": "binary_event_indicator",
+      "Cough": "binary_event_indicator",
+      "RoutineVaccination": "binary_event_indicator",
+      "SleepDisturbance": "binary_event_indicator",
+      "DoctorVisit": "binary_event_indicator"
+    },
+    "candidate_sampling_rate": 0.4,
+    "random_state": 42,
+    "split_sampling_seed": 42,
+    "learn_missing_direction": false,
+    "verbose": 0
+  },
+  "aggregations": [
+    "sum"
+  ],
+  "runs": [
+    {
+      "name": "dynamic_on",
+      "USE_DYNAMIC_ANCHORS": true
+    },
+    {
+      "name": "dynamic_off",
+      "USE_DYNAMIC_ANCHORS": false
+    }
+  ],
+  "dataset_directory": "data/fish_intro_noisy_matched_v2",
+  "dataset_config": {
+    "seed": 42,
+    "blocks": 500,
+    "test_fraction": 0.2,
+    "gi_mean": 5.0,
+    "vomiting_mean": 3.0,
+    "fish_min_months": 6,
+    "fish_max_months": 24,
+    "candidate_times": 256,
+    "max_attempts_per_block": 100,
+    "cough_episode_mean": 3.0,
+    "sleep_episode_mean": 2.0,
+    "cluster_probability": 0.4,
+    "cluster_max_extra": 2,
+    "cluster_max_days": 3,
+    "doctor_visit_mean": 2.0,
+    "minor_injury_mean": 0.5,
+    "vaccination_months": [
+      2,
+      4,
+      6,
+      12,
+      18,
+      24
+    ],
+    "vaccination_probability": 0.85,
+    "vaccination_jitter_days": 10
+  },
+  "split": "80/20 blocks by default; both runs use identical saved assignments",
+  "sha256": {
+    "experiments/experiment_2_fish_introduction_dynamic_anchors.py": "9e64e50d175f5b3703c755cfeb6734be6b6112e27253b667be80bc7b930ee39a",
+    "experiments/experiment_2_noisy_v2.py": "d122f5fb8293f6cfda2084356fe68a2668b607221d08ff2f59bd06b7d0114c29",
+    "experiments/experiment_2_outputs.py": "8f19634c9aa0319de18c36683ec72647e7a18553a62819be1ff166d68124a73c",
+    "generate_fish_intro_noisy_v2.py": "cec8e25c3a5b1cefac849210732d4168f4e481bd922495edbb7e0470582f03a8",
+    "project_paths.py": "cc389d48c3db7ad62e41e0773701456d53171da21c79a7f222cba128a940cfa9",
+    "TAT/__init__.py": "f8e54416151be08c4feba03e0fe5f11cad0a41520c54eb1bf14a8131d901634b",
+    "TAT/anchor_utils.py": "9d2a9655a194f114126489f5ae15b29340442df2415dfc6097daee3cfe4e9fee",
+    "TAT/eval_utils.py": "1aff93656d25b95bb467ca57a98e0d6cb87f5465d6168f43c732e3379db18ca7",
+    "TAT/temporal_explainability.py": "adabba310c28d6e5b6de04c8c10afc6576f127568825d495d9418285b7421e66",
+    "TAT/temporal_tree.py": "dbfe91a05666c045b218da9f25f8c2eb428a3fcd3e059f87bbcbd4374c734dc4",
+    "TAT/temporal_tree_ensemble.py": "0e98a14d947c1603215d7a5384d21b8917d5246a8b63fd7efcc1280d8781c6a7"
+  },
+  "recorded_source_sha256": {
+    "experiments/experiment_2_noisy_v2.py": "30b0ad6e47e09b61219ae923913ccee10314fd2e465daa983bc7131933edcda5",
+    "generate_fish_intro_noisy_v2.py": "daa9c7e0cebd4bc230698d6e28e252e8f450703c3b7a000bee6449ebbe32375d",
+    "experiments/experiment_2_fish_introduction_dynamic_anchors.py": "829dccb8d41db56092a9741f04495096ef1690da8beb48a1515335243e2cc0a2",
+    "experiments/experiment_2_outputs.py": "df25fee2029496ac48176374571823f39761318f425e5ed02ad9642a7f4ce4a0",
+    "settree/temporal_tree.py": "0fdf639f3a9c8c1542d02b14f39636d590daada921e31e84edec62af521b0de0",
+    "settree/anchor_utils.py": "9d2a9655a194f114126489f5ae15b29340442df2415dfc6097daee3cfe4e9fee"
+  },
+  "sha256_scope": "Release source fingerprints after organization changes; original trained-source fingerprints are recorded_source_sha256."
+}

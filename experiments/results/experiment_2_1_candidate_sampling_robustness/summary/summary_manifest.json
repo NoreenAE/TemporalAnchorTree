@@ -1,0 +1,24 @@
+{
+  "protocol_sha256": "d0d44c2e834136667b253da8dadd21cec876d4de1120ceb8eda40246508957fe",
+  "seeds": [
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "sd_definition": "sample SD across seeds (ddof=1), not patient uncertainty",
+  "coverage_definition": "Unique documented test patients; available anchor required; an evaluated window may contain zero events",
+  "completed_run_markers": {
+    "43/dynamic_on": "114b98be7422c7b5f393676601b4bbedbc0e09c769c512c43b04a6478a1c70db",
+    "43/dynamic_off": "e3305eace5d56c6cebe038de75ca304db99edd1e05579a84b4183cb6ef2c0850",
+    "44/dynamic_on": "260d9d5b47e58cd3dfec9183c8a5d43768f5842018c394dd6225c5f940184c77",
+    "44/dynamic_off": "7e381aec7c6948c887cb74479f98e7458e92820c3b3dc7fb407fb2e6c4c2bb1b",
+    "45/dynamic_on": "f5ea77a431460fbab9720118f4b0f4c6732f1c115232c6187b71f31ae6757ded",
+    "45/dynamic_off": "4798efd94029fb3284e3e26e9af9f8605e3c58abe52b56dbcb5f20b4a84c88fc",
+    "46/dynamic_on": "e06785a44bfb122ed60758297471f119493a924d2b1338b92c527baf2edfdd48",
+    "46/dynamic_off": "4d03de9aa54d55f7a15d380a20f156c50ced80910f63518a3b62b23a1cf2fab6",
+    "47/dynamic_on": "75030debd6ff7e00dcf6adeff56c23a4c2ffda5397a31c84b632834aaa01aec8",
+    "47/dynamic_off": "71eb125ed630625b1f6ffc1ada58fafcea91a5a1e8a5a5ade20fca31bba5f6b1"
+  }
+}

@@ -1,0 +1,398 @@
+{
+  "candidate": {
+    "aggregations": [
+      "mean",
+      "sum",
+      "max",
+      "count"
+    ],
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        null,
+        0.7,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        18
+      ],
+      "NOW Anchor": [
+        null,
+        -1,
+        -2,
+        -3,
+        -4,
+        -5,
+        -6,
+        -12,
+        -18
+      ]
+    },
+    "candidate_id": "C02",
+    "candidate_sampling_rate": 0.4,
+    "max_depth": 3,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 20,
+    "min_samples_split": 40,
+    "rationale": "Isolates stronger sample regularization from the baseline while leaving the gain threshold disabled.",
+    "temporal_search_space": "broad_fixed",
+    "use_dynamic_anchors": false
+  },
+  "model_parameters": {
+    "anchor_offset_list": [
+      null
+    ],
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        null,
+        0.7,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        18
+      ],
+      "NOW Anchor": [
+        null,
+        -1,
+        -2,
+        -3,
+        -4,
+        -5,
+        -6,
+        -12,
+        -18
+      ]
+    },
+    "anchors_list": [
+      "Birth Date Anchor",
+      "NOW Anchor"
+    ],
+    "candidate_sampling_rate": 0.4,
+    "criterion": "mse",
+    "is_classification": false,
+    "learn_missing_direction": false,
+    "max_depth": 3,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 20,
+    "min_samples_split": 40,
+    "random_state": 42,
+    "split_sampling_seed": 42,
+    "use_dynamic_anchors": false,
+    "verbose": 1
+  },
+  "per_seed_validation_runs": [
+    {
+      "combined_score": 0.3182693673319442,
+      "fa_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_42/fa/tree.json",
+      "gi_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_42/gi/tree.json",
+      "split_sampling_seed": 42
+    },
+    {
+      "combined_score": 0.3233352342396872,
+      "fa_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_43/fa/tree.json",
+      "gi_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_43/gi/tree.json",
+      "split_sampling_seed": 43
+    },
+    {
+      "combined_score": 0.27964811254369076,
+      "fa_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_44/fa/tree.json",
+      "gi_tree_json": "supporting_analyses/v2_hyperparameter_search/results/validation_runs/C02/seed_44/gi/tree.json",
+      "split_sampling_seed": 44
+    }
+  ],
+  "rank": 1,
+  "ranking_does_not_use_test_metrics": true,
+  "representative_seed": 42,
+  "representative_seed_rule": "Sampling seed whose combined validation score is closest to the candidate's median across seeds; lower seed breaks exact ties.",
+  "split_details": {
+    "inner_split_seed": 137,
+    "input_sha256": {
+      "fa": "cd15943205b6fe38cb00c1d905a4747840b05ef17f1caee25db791813bb9a44d",
+      "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+      "x": "0102c1365b4ab0cd2d0c88d08c0997e5bbc075dfdd86aadd854213242103a199"
+    },
+    "outer_split_seed": 42,
+    "outer_test_size": 0.3,
+    "patient_counts": {
+      "search_train": 2625,
+      "test": 1500,
+      "validation": 875
+    },
+    "patient_split_file": "supporting_analyses/v2_hyperparameter_search/results/shared_patient_splits.csv",
+    "patient_split_sha256": "3f197b0b23beb50758831946549d2c7ced55931aefd7be434b50e4449c475d5e",
+    "validation_fraction_of_outer_train": 0.25
+  },
+  "stability_seeds": [
+    42,
+    43,
+    44
+  ],
+  "validation_summary": {
+    "candidate": {
+      "aggregations": [
+        "mean",
+        "sum",
+        "max",
+        "count"
+      ],
+      "anchor_offset_map": {
+        "Birth Date Anchor": [
+          null,
+          0.7,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          12,
+          18
+        ],
+        "NOW Anchor": [
+          null,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -12,
+          -18
+        ]
+      },
+      "candidate_id": "C02",
+      "candidate_sampling_rate": 0.4,
+      "max_depth": 3,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 20,
+      "min_samples_split": 40,
+      "rationale": "Isolates stronger sample regularization from the baseline while leaving the gain threshold disabled.",
+      "temporal_search_space": "broad_fixed",
+      "use_dynamic_anchors": false
+    },
+    "candidate_id": "C02",
+    "combined_score_mean": 0.3070842380384407,
+    "combined_score_sd": 0.023895009698773777,
+    "fa_auc_skill_mean": 0.24928766701320693,
+    "fa_average_precision_mean": 0.13725758618933195,
+    "fa_average_precision_sd": 0.004743933317162775,
+    "fa_average_precision_skill_mean": 0.040788294683183575,
+    "fa_birth_date_usage_proportion_mean": 0.5118588468893605,
+    "fa_birth_date_usage_proportion_sd": 0.14942661328649723,
+    "fa_full_timeline_usage_proportion_mean": 0.1242247988526702,
+    "fa_full_timeline_usage_proportion_sd": 0.17826817183110202,
+    "fa_now_usage_proportion_mean": 0.3639163542579693,
+    "fa_now_usage_proportion_sd": 0.029403236205758135,
+    "fa_outcome_score_mean": 0.23827346045874673,
+    "fa_roc_auc_mean": 0.6246438335066035,
+    "fa_roc_auc_sd": 0.013425004492776574,
+    "fa_root_stability": [
+      {
+        "count": 1,
+        "proportion": 0.3333333333333333,
+        "root_split": {
+          "aggregation": "mean",
+          "anchor": "Birth Date Anchor",
+          "feature": "FormulaYN",
+          "is_full_timeline": false,
+          "is_leaf": false,
+          "offset": 18,
+          "threshold": 0.4166666666666667
+        }
+      },
+      {
+        "count": 1,
+        "proportion": 0.3333333333333333,
+        "root_split": {
+          "aggregation": "mean",
+          "anchor": "Birth Date Anchor",
+          "feature": "FormulaYN",
+          "is_full_timeline": false,
+          "is_leaf": false,
+          "offset": 6,
+          "threshold": 0.3157894736842105
+        }
+      },
+      {
+        "count": 1,
+        "proportion": 0.3333333333333333,
+        "root_split": {
+          "aggregation": "sum",
+          "anchor": "Birth Date Anchor",
+          "feature": "FormulaYN",
+          "is_full_timeline": false,
+          "is_leaf": false,
+          "offset": 5,
+          "threshold": 6.0
+        }
+      }
+    ],
+    "fa_temporal_recovery_mean": 0.4247444196798497,
+    "fa_temporal_recovery_score_mean": 0.4247444196798497,
+    "fa_temporal_recovery_sd": 0.26554058353188975,
+    "fa_window_usage_stability": [
+      {
+        "mean_usage_proportion": 0.019007526470213035,
+        "sd_usage_proportion": 0.032922001572619305,
+        "window": "Birth Date Anchor | offset=18"
+      },
+      {
+        "mean_usage_proportion": 0.11166411434405309,
+        "sd_usage_proportion": 0.1934079194260806,
+        "window": "Birth Date Anchor | offset=18.0"
+      },
+      {
+        "mean_usage_proportion": 0.0821694742215416,
+        "sd_usage_proportion": 0.13672397756803237,
+        "window": "Birth Date Anchor | offset=4.0"
+      },
+      {
+        "mean_usage_proportion": 0.18790662074244166,
+        "sd_usage_proportion": 0.3254638142044848,
+        "window": "Birth Date Anchor | offset=5"
+      },
+      {
+        "mean_usage_proportion": 0.1111111111111111,
+        "sd_usage_proportion": 0.19245008972987526,
+        "window": "Birth Date Anchor | offset=6.0"
+      },
+      {
+        "mean_usage_proportion": 0.1242247988526702,
+        "sd_usage_proportion": 0.17826817183110202,
+        "window": "Full Timeline"
+      },
+      {
+        "mean_usage_proportion": 0.027047619047619046,
+        "sd_usage_proportion": 0.04684785041424392,
+        "window": "NOW Anchor | offset=-1.0"
+      },
+      {
+        "mean_usage_proportion": 0.01638095238095238,
+        "sd_usage_proportion": 0.028372641800175895,
+        "window": "NOW Anchor | offset=-12.0"
+      },
+      {
+        "mean_usage_proportion": 0.035336139813751756,
+        "sd_usage_proportion": 0.061203989500775484,
+        "window": "NOW Anchor | offset=-18"
+      },
+      {
+        "mean_usage_proportion": 0.06301514378084057,
+        "sd_usage_proportion": 0.05458567476578247,
+        "window": "NOW Anchor | offset=-18.0"
+      },
+      {
+        "mean_usage_proportion": 0.016328613343538717,
+        "sd_usage_proportion": 0.02828198792815618,
+        "window": "NOW Anchor | offset=-3"
+      },
+      {
+        "mean_usage_proportion": 0.07475443296338818,
+        "sd_usage_proportion": 0.12947847598359002,
+        "window": "NOW Anchor | offset=-4"
+      },
+      {
+        "mean_usage_proportion": 0.13105345292787865,
+        "sd_usage_proportion": 0.11960051475071591,
+        "window": "NOW Anchor | offset=-4.0"
+      }
+    ],
+    "gi_auc_skill_mean": 0.2867687350230226,
+    "gi_average_precision_mean": 0.18038198868573022,
+    "gi_average_precision_sd": 0.004054753473005033,
+    "gi_average_precision_skill_mean": 0.06740473355008314,
+    "gi_birth_date_usage_proportion_mean": 0.11769950321095361,
+    "gi_birth_date_usage_proportion_sd": 0.10193089873923777,
+    "gi_full_timeline_usage_proportion_mean": 0.05104761904761904,
+    "gi_full_timeline_usage_proportion_sd": 0.04420853489794849,
+    "gi_now_usage_proportion_mean": 0.8312528777414273,
+    "gi_now_usage_proportion_sd": 0.08846019424684859,
+    "gi_outcome_score_mean": 0.37589501561813465,
+    "gi_roc_auc_mean": 0.6433843675115113,
+    "gi_roc_auc_sd": 0.009862682765470783,
+    "gi_root_stability": [
+      {
+        "count": 1,
+        "proportion": 0.3333333333333333,
+        "root_split": {
+          "aggregation": "max",
+          "anchor": "NOW Anchor",
+          "feature": "VomitingYN",
+          "is_full_timeline": false,
+          "is_leaf": false,
+          "offset": -1,
+          "threshold": 0.0
+        }
+      },
+      {
+        "count": 2,
+        "proportion": 0.6666666666666666,
+        "root_split": {
+          "aggregation": "sum",
+          "anchor": "NOW Anchor",
+          "feature": "VomitingYN",
+          "is_full_timeline": false,
+          "is_leaf": false,
+          "offset": -1,
+          "threshold": 0.0
+        }
+      }
+    ],
+    "gi_temporal_recovery_mean": 0.7735115782812984,
+    "gi_temporal_recovery_score_mean": 0.7735115782812984,
+    "gi_temporal_recovery_sd": 0.11050125760588722,
+    "gi_window_usage_stability": [
+      {
+        "mean_usage_proportion": 0.058905852417302805,
+        "sd_usage_proportion": 0.10202792924992242,
+        "window": "Birth Date Anchor | offset=1"
+      },
+      {
+        "mean_usage_proportion": 0.058793650793650794,
+        "sd_usage_proportion": 0.10183359033706542,
+        "window": "Birth Date Anchor | offset=1.0"
+      },
+      {
+        "mean_usage_proportion": 0.05104761904761904,
+        "sd_usage_proportion": 0.04420853489794849,
+        "window": "Full Timeline"
+      },
+      {
+        "mean_usage_proportion": 0.24885496183206104,
+        "sd_usage_proportion": 0.4310294376087435,
+        "window": "NOW Anchor | offset=-1"
+      },
+      {
+        "mean_usage_proportion": 0.5205079365079365,
+        "sd_usage_proportion": 0.46406823070678166,
+        "window": "NOW Anchor | offset=-1.0"
+      },
+      {
+        "mean_usage_proportion": 0.02557251908396947,
+        "sd_usage_proportion": 0.04429290233095984,
+        "window": "NOW Anchor | offset=-12"
+      },
+      {
+        "mean_usage_proportion": 0.03631746031746031,
+        "sd_usage_proportion": 0.03843719538959612,
+        "window": "NOW Anchor | offset=-18.0"
+      }
+    ],
+    "n_seeds": 3,
+    "pareto_optimal": true,
+    "rank": 1,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "stability_adjusted_score": 0.2831892283396669
+  }
+}

@@ -5,8 +5,8 @@ import pytest
 from sklearn.base import clone
 from sklearn.exceptions import NotFittedError
 
-from settree.temporal_tree import TemporalTree
-from settree.temporal_tree_ensemble import (
+from TAT.temporal_tree import TemporalTree
+from TAT.temporal_tree_ensemble import (
     MAX_SPLIT_SAMPLING_SEED,
     TemporalTreeEnsemble,
 )

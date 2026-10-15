@@ -1,0 +1,163 @@
+{
+  "aggregation_provenance": "Saved fitted final Experiment 1 GI model.",
+  "aggregations": [
+    "mean",
+    "sum",
+    "max",
+    "count"
+  ],
+  "analysis_type": "NOW-anchor ablation of final Experiment 1 GI",
+  "baseline_declared_aggregations": [
+    "mean",
+    "sum",
+    "max",
+    "count"
+  ],
+  "baseline_directory": "experiments/results/experiment_1_5000V3clean__moreOFFSETS2_patients_A=0.4_minS20_minL10_minGAIN0.0005",
+  "baseline_sha256": {
+    "config.json": "5867fd41b350baec93240ce71ddf68bf0af5e5e44251a95ae75b1dfef42e69ef",
+    "shared_patient_split.csv": "59b8a1d7a12ac8d839611e3ba517dd9f6f4d9eaca439b85324de8f787708a900",
+    "gi/metrics_and_temporal_summary.json": "3466d40634d63e2afb89d209465d075749583a20f2c5e7f33fdeb2e34b9149e1"
+  },
+  "decision_threshold": 0.5,
+  "effective_candidate_windows": [
+    [
+      null,
+      null
+    ],
+    [
+      "Birth Date Anchor",
+      0.7
+    ],
+    [
+      "Birth Date Anchor",
+      1
+    ],
+    [
+      "Birth Date Anchor",
+      2
+    ],
+    [
+      "Birth Date Anchor",
+      3
+    ],
+    [
+      "Birth Date Anchor",
+      4
+    ],
+    [
+      "Birth Date Anchor",
+      5
+    ],
+    [
+      "Birth Date Anchor",
+      6
+    ],
+    [
+      "Birth Date Anchor",
+      12
+    ],
+    [
+      "Birth Date Anchor",
+      18
+    ]
+  ],
+  "effective_full_timeline_window_count": 1,
+  "experiment_name": "Experiment 1.1 – GI Without NOW Anchor – A=0.4, min gain 0.0005",
+  "input_paths": {
+    "gi": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_gi_labels_5000.pkl",
+    "x": "data/temporal_benchmark_v3_clean_fa/temporal_benchmark_5000.pkl"
+  },
+  "input_sha256": {
+    "gi": "1203a0fe4a4a27740c0edcb95a666ae76c4fdb168117c360844b01f97c1e5639",
+    "x": "f8f1aefb02c6ccb64d0ce5e94eca76fd8922153c931472d95d15a5a1dc82b1e9"
+  },
+  "intended_ablation": "NOW Anchor removed from candidate search space.",
+  "interpretation": "Alternative windows are not recovery of the true GI temporal ground truth.",
+  "model_hyperparameters": {
+    "anchor_offset_list": [
+      null
+    ],
+    "anchor_offset_map": {
+      "Birth Date Anchor": [
+        null,
+        0.7,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        18
+      ]
+    },
+    "anchors_list": [
+      "Birth Date Anchor"
+    ],
+    "candidate_sampling_rate": 0.4,
+    "criterion": "mse",
+    "is_classification": false,
+    "learn_missing_direction": false,
+    "max_depth": 3,
+    "min_impurity_decrease": 0.0005,
+    "min_samples_leaf": 10,
+    "min_samples_split": 20,
+    "random_state": 42,
+    "split_sampling_seed": 42,
+    "use_dynamic_anchors": false,
+    "verbose": 1
+  },
+  "n_test_patients": 1500,
+  "n_train_patients": 3500,
+  "now_usage_status": "not available / removed from search space",
+  "outcome": "gi",
+  "output_directory": "experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN0.0005",
+  "split_source": "experiments/results/experiment_1_5000V3clean__moreOFFSETS2_patients_A=0.4_minS20_minL10_minGAIN0.0005/shared_patient_split.csv",
+  "temporal_explainability_bin_edges": {
+    "Birth Date Anchor": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "NOW Anchor": [
+      -18,
+      -17,
+      -16,
+      -15,
+      -14,
+      -13,
+      -12,
+      -11,
+      -10,
+      -9,
+      -8,
+      -7,
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0
+    ]
+  },
+  "temporal_usage_population": "training patients, production path tracing",
+  "true_region": "NOW Anchor: -1 calendar month to NOW"
+}

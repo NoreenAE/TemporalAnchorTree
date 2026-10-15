@@ -1,0 +1,34 @@
+{
+  "dynamic_on": {
+    "root_feature": "FishIntroduction",
+    "root_window": [
+      "Birth Date Anchor",
+      22
+    ],
+    "fish_anchor_creator_present": true,
+    "gi_one_month_present": true,
+    "vomiting_one_month_present": true,
+    "documented_test_n": 800,
+    "fish_anchor_created_n": 720,
+    "gi_one_month_used_n": 720,
+    "vomiting_one_month_used_n": 496,
+    "either_one_month_used_n": 720,
+    "either_one_month_coverage": 0.9
+  },
+  "dynamic_off": {
+    "root_feature": "FishIntroduction",
+    "root_window": [
+      "Birth Date Anchor",
+      22
+    ],
+    "fish_anchor_creator_present": false,
+    "gi_one_month_present": false,
+    "vomiting_one_month_present": false,
+    "documented_test_n": 800,
+    "fish_anchor_created_n": 0,
+    "gi_one_month_used_n": 0,
+    "vomiting_one_month_used_n": 0,
+    "either_one_month_used_n": 0,
+    "either_one_month_coverage": 0.0
+  }
+}

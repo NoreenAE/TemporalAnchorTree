@@ -1,0 +1,129 @@
+[
+  {
+    "aggregation": "max",
+    "anchor": "Birth Date Anchor",
+    "depth": 0,
+    "feature": "LengthCm",
+    "left_child": 1,
+    "node_id": 0,
+    "num_patients": 3500,
+    "offset": 6,
+    "right_child": 8,
+    "threshold": 59.9,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "depth": 1,
+    "feature": "FormulaYN",
+    "left_child": 2,
+    "node_id": 1,
+    "num_patients": 273,
+    "offset": 18,
+    "right_child": 5,
+    "threshold": 0.13043478260869565,
+    "type": "split"
+  },
+  {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "depth": 2,
+    "feature": "WeightKg",
+    "left_child": 3,
+    "node_id": 2,
+    "num_patients": 23,
+    "offset": 1,
+    "right_child": 4,
+    "threshold": 3.665,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 3,
+    "num_patients": 12,
+    "prediction": 0.0,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 4,
+    "num_patients": 11,
+    "prediction": 0.36363636363636365,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "max",
+    "anchor": "Birth Date Anchor",
+    "depth": 2,
+    "feature": "LengthCm",
+    "left_child": 6,
+    "node_id": 5,
+    "num_patients": 250,
+    "offset": 4,
+    "right_child": 7,
+    "threshold": 53.1,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 6,
+    "num_patients": 25,
+    "prediction": 0.16,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 7,
+    "num_patients": 225,
+    "prediction": 0.022222222222222223,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "max",
+    "anchor": "Birth Date Anchor",
+    "depth": 1,
+    "feature": "LengthCm",
+    "left_child": 9,
+    "node_id": 8,
+    "num_patients": 3227,
+    "offset": 2,
+    "right_child": 10,
+    "threshold": 48.8,
+    "type": "split"
+  },
+  {
+    "depth": 2,
+    "node_id": 9,
+    "num_patients": 16,
+    "prediction": 0.4375,
+    "type": "leaf"
+  },
+  {
+    "aggregation": "sum",
+    "anchor": "Birth Date Anchor",
+    "depth": 2,
+    "feature": "LengthCm",
+    "left_child": 11,
+    "node_id": 10,
+    "num_patients": 3211,
+    "offset": 3,
+    "right_child": 12,
+    "threshold": 96.6,
+    "type": "split"
+  },
+  {
+    "depth": 3,
+    "node_id": 11,
+    "num_patients": 23,
+    "prediction": 0.391304347826087,
+    "type": "leaf"
+  },
+  {
+    "depth": 3,
+    "node_id": 12,
+    "num_patients": 3188,
+    "prediction": 0.12421580928481807,
+    "type": "leaf"
+  }
+]

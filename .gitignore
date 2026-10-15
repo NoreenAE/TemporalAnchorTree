@@ -1,35 +1,125 @@
-# Data files
-*.csv
-*.xlsx
+# These rules affect untracked Git files only. They do not sanitize Git history
+# or filter a ZIP made directly from the working directory.
 
-# Archived/generated datasets
-legacy/features_dfs/
-legacy/features_dfs_9/
-legacy/*synthea*.csv
-legacy/labels*.csv
-legacy/hypothetical_*.csv
-legacy/patients.xlsx
-
-# Notebooks with generated outputs/data exploration
-legacy/*.ipynb
-
-# Saved models
-*.dill
-*.pkl
-*.pickle
-legacy/saved_models/
-outputs/
-
-# Python cache/build artifacts
+# Local environments, editors, caches, and build artifacts
+.venv/
+venv/
+env/
+ENV/
+.tox/
+.nox/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.cache/
 *.egg-info/
-
-# IDE files
+build/
+dist/
 .idea/
 .vscode/
-experiments/results/
-data/temporal_benchmark_v2/
-data/temporal_benchmark_v3/
-data/temporal_benchmark_v3_clean_fa/
-data/temporal_benchmark/*.json
+.ipynb_checkpoints/
+.ipython/
+.jupyter/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Operating-system metadata and editor backup files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+*.bak
+*.orig
+*.rej
+
+# Secrets and local machine settings
+.env
+.env.*
+*.pem
+*.key
+.ssh/
+.aws/
+.netrc
+.pypirc
+credentials.json
+service-account*.json
+
+# Temporary cleanup/validation areas: NEVER include in the public snapshot
+_review_before_publication/
+.release_validation/
+/legacy/
+/tmp/
+/temp/
+/scratch/
+/output/
+/outputs/
+/output.png
+/reproduction_*.json
+
+# Local submission/export archives
+/*.zip
+/*.tar
+/*.tar.gz
+/*.tgz
+/*.7z
+
+# Serialized closures can contain interpreter paths; public results use JSON trees
+*.dill
+*.pickle
+# Do not ignore *.pkl: final datasets and saved TAT models require these files.
+
+# New local experiment attempts and interrupted writes
+*.incomplete/
+.summary_*/
+.lock
+*.pid
+*.tmp
+*.log
+
+# Keep only the two final synthetic datasets; new generator outputs stay local.
+/data/*
+!/data/temporal_benchmark_v3_clean_fa/
+!/data/fish_intro_noisy_matched_v2/
+
+# Keep only the selected thesis results. Reproduction directories and any other
+# newly named attempts are ignored, regardless of the names chosen by the runner.
+/experiments/results/*
+!/experiments/results/experiment_1_5000V3clean__moreOFFSETS2_patients_A=0.4_minS20_minL10_minGAIN0.0005/
+!/experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN0/
+!/experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN0.0005/
+!/experiments/results/experiment_2_noisy_matched_v2/
+!/experiments/results/experiment_2_1_seed42_checkpoint/
+!/experiments/results/experiment_2_1_candidate_sampling_robustness/
+!/experiments/results/experiment_2_cart_baseline/
+
+# CART creates timestamped runs inside this directory; retain only the final one.
+/experiments/results/experiment_2_cart_baseline/*
+!/experiments/results/experiment_2_cart_baseline/run_20261014T110752808924Z_5f1eab64/
+
+# Interrupted attempts and superseded summaries are not final scientific outputs.
+/experiments/results/experiment_2_1_candidate_sampling_robustness/history/
+/experiments/results/experiment_2_1_candidate_sampling_robustness/seeds/*/interrupted/
+
+# Preserve required supporting references and the results-only V2 search.
+/supporting_analyses/*
+!/supporting_analyses/candidate_sampling/
+!/supporting_analyses/v2_hyperparameter_search/
+/supporting_analyses/candidate_sampling/*
+!/supporting_analyses/candidate_sampling/baseline_A1/
+/supporting_analyses/v2_hyperparameter_search/*
+!/supporting_analyses/v2_hyperparameter_search/README.md
+!/supporting_analyses/v2_hyperparameter_search/results/
+
+# Keep the selected illustrations; newly reproduced figures stay local.
+/figures/*
+!/figures/experiment_1_ground_truth_timelines.png
+!/figures/experiment_1_ground_truth_timelines.pdf
+!/figures/experiment_2_noisy_matched_v2_patient_timelines/

@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from settree.temporal_tree import TemporalSplitNode, TemporalTree
+from TAT.temporal_tree import TemporalSplitNode, TemporalTree
 
 
 def _patient_data(values):

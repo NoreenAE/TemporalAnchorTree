@@ -1,0 +1,3 @@
+outcome,model,train_roc_auc,test_roc_auc
+FA,CART,0.647582052780151,0.655182700713898
+FA,TAT_dynamic_on_saved,0.9160231180161162,0.9170627012110992

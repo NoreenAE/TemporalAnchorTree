@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 from sklearn.metrics import roc_auc_score
 
-from settree.temporal_tree import TemporalTree
+from TAT.temporal_tree import TemporalTree
 
 
 def _data(values):

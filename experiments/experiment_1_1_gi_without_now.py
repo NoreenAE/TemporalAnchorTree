@@ -1,18 +1,17 @@
-"""Experiment 1.1 GI at A=0.4, without NOW and with minimum gain zero."""
+"""Experiment 1.1 GI without NOW, at either recorded minimum-gain setting."""
 from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-import inspect
+from contextlib import contextmanager
 import json
 from pathlib import Path
 import shutil
 import sys
 from time import perf_counter
-from typing import Optional
+from typing import Iterator, Optional
 from unittest.mock import patch
 
-import dill
 import numpy as np
 import pandas as pd
 
@@ -21,11 +20,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from experiments import experiment_1_fa_vs_gi as original  # noqa: E402
-from settree.eval_utils import (
+from TAT.eval_utils import (
     _draw_thesis_tree,
     _load_thesis_tree,
 )  # noqa: E402
-from settree.temporal_tree import TemporalTree  # noqa: E402
+from TAT.temporal_tree import TemporalTree  # noqa: E402
+from project_paths import resolve_path  # noqa: E402
 
 plt = original.plt
 BASELINE = (
@@ -35,17 +35,24 @@ BASELINE = (
 OUTPUT = (
     ROOT / "experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN0"
 )
+ALLOWED_OUTPUT = None
 PRIMARY = ROOT / "experiments/results/experiment_1_1_gi_without_now"
 NAME = "Experiment 1.1 – GI Without NOW Anchor – A=0.4, min gain 0"
+MIN_GAIN = 0.0
 REMOVED = "not available / removed from search space"
 BIRTH = "Birth Date Anchor"
 NOW = "NOW Anchor"
 # Pin the inspected final run, including its exact patient membership.
 BASELINE_HASHES = {
-    "config.json": "1b3ae9afc7cd52b8c6236e1a54d14179e71460fa0b5d19d980d8a27f803662d0",
-    "shared_patient_split.csv": "59b8a1d7a12ac8d839611e3ba517dd9f6f4d9eaca439b85324de8f787708a900",
-    "gi/model.dill": "22ec34ce23a0257060d4a80bc467e030a25fa5fbbca6117e52fbcec8a05ef1e7",
-    "gi/metrics_and_temporal_summary.json": "a747cce31e6e9eb5d57a910b704dcd1657562c3e8495fde2e22bde5bbae0e373",
+    "config.json": (
+        "5867fd41b350baec93240ce71ddf68bf0af5e5e44251a95ae75b1dfef42e69ef"
+    ),
+    "shared_patient_split.csv": (
+        "59b8a1d7a12ac8d839611e3ba517dd9f6f4d9eaca439b85324de8f787708a900"
+    ),
+    "gi/metrics_and_temporal_summary.json": (
+        "3466d40634d63e2afb89d209465d075749583a20f2c5e7f33fdeb2e34b9149e1"
+    ),
 }
 
 
@@ -57,8 +64,8 @@ def require(condition: bool, message: str) -> None:
 
 def validate_output(output: Path) -> None:
     """Allow only the dedicated new destination; reject existing paths/symlinks."""
-    expected = (
-        ROOT / "experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN0"
+    expected = ALLOWED_OUTPUT or ROOT / (
+        f"experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN{MIN_GAIN:g}"
     )
     require(
         output.absolute() == expected,
@@ -75,11 +82,11 @@ def validate_output(output: Path) -> None:
 
 
 def ablated_parameters(configuration: dict) -> dict:
-    """Remove NOW and disable the saved baseline's minimum-gain cutoff."""
+    """Remove NOW using the selected recorded minimum-gain setting."""
     params = deepcopy(configuration["model_hyperparameters"])
     params["anchors_list"] = [BIRTH]
     params["anchor_offset_map"] = {BIRTH: params["anchor_offset_map"][BIRTH]}
-    params["min_impurity_decrease"] = 0.0
+    params["min_impurity_decrease"] = MIN_GAIN
     return params
 
 
@@ -123,7 +130,7 @@ def probe_candidate_windows(model: TemporalTree) -> list:
 def validate_parameters(
     config: dict, params: dict, aggregations: dict
 ) -> list:
-    """Check the NOW ablation, zero gain cutoff, and candidate windows."""
+    """Check the NOW ablation, selected gain cutoff, and candidate windows."""
     require(
         params == ablated_parameters(config),
         "Unexpected model parameter change.",
@@ -133,7 +140,7 @@ def validate_parameters(
         "max_depth": 3,
         "min_samples_split": 20,
         "min_samples_leaf": 10,
-        "min_impurity_decrease": 0.0,
+        "min_impurity_decrease": MIN_GAIN,
         "use_dynamic_anchors": False,
     }
     for key, value in required.items():
@@ -198,9 +205,10 @@ def validate_split(
     )
 
 
-def prepare() -> dict:
+def prepare(*, validate_destination: bool = True) -> dict:
     """Read and validate immutable inputs and baseline; never train or write."""
-    validate_output(OUTPUT)
+    if validate_destination:
+        validate_output(OUTPUT)
     for relative, digest in BASELINE_HASHES.items():
         require(
             original.sha256_file(BASELINE / relative) == digest,
@@ -215,29 +223,15 @@ def prepare() -> dict:
         config["decision_threshold"] == original.DECISION_THRESHOLD,
         "Evaluation threshold changed.",
     )
-    # Trusted, locally produced artifact, pinned above before deserialization.
-    with (BASELINE / "gi/model.dill").open("rb") as handle:
-        try:
-            saved_model = dill.load(handle)
-        except (TypeError, ImportError) as error:
-            raise RuntimeError(
-                "The saved GI model requires a compatible Python/NumPy "
-                "environment. In this workspace, use python3 (Python 3.9, "
-                "NumPy 1.26.4) instead of the default python."
-            ) from error
-    for key, parameter in inspect.signature(TemporalTree).parameters.items():
-        if key != "aggregation_funcs":
-            expected = config["model_hyperparameters"].get(
-                key, parameter.default
-            )
-            require(
-                getattr(saved_model, key) == expected,
-                f"Saved model differs: {key}",
-            )
-    aggregations = saved_model.aggregation_funcs.copy()
+    # The public release records the checked model configuration in JSON.
+    # This mapping was verified against the original fitted GI model before
+    # excluding its serialized local code paths from the public snapshot.
+    aggregations = original.aggregation_functions()
+    require(list(aggregations) == config["aggregations"],
+            "Saved baseline aggregation order differs from the verified mapping.")
     params = ablated_parameters(config)
     windows = validate_parameters(config, params, aggregations)
-    paths = {name: Path(config["input_paths"][name]) for name in ("x", "gi")}
+    paths = {name: resolve_path(config["input_paths"][name]) for name in ("x", "gi")}
     for name, path in paths.items():
         require(
             original.sha256_file(path) == config["input_sha256"][name],
@@ -250,7 +244,7 @@ def prepare() -> dict:
     validate_split(split, data, labels, reference)
     provenance = {
         "experiment_name": NAME,
-        "analysis_type": "Minimum-gain-zero sensitivity of the NOW-anchor ablation",
+        "analysis_type": f"NOW-anchor ablation with min gain {MIN_GAIN:g}",
         "sensitivity_change": {
             "parameter": "min_impurity_decrease",
             "baseline_value": config["model_hyperparameters"]["min_impurity_decrease"],
@@ -267,7 +261,7 @@ def prepare() -> dict:
         "input_sha256": {k: config["input_sha256"][k] for k in paths},
         "model_hyperparameters": params,
         "aggregations": list(aggregations),
-        "aggregation_provenance": "Saved fitted final Experiment 1 GI model.",
+        "aggregation_provenance": "Explicit mapping verified against the original fitted GI model.",
         "baseline_declared_aggregations": config["aggregations"],
         "effective_candidate_windows": windows,
         "effective_full_timeline_window_count": 1,
@@ -338,7 +332,7 @@ def comparison_table(baseline: dict, result: dict) -> pd.DataFrame:
     rows = []
     for name, record, removed in [
         ("Original GI (with NOW)", baseline, False),
-        ("GI without NOW, A=0.4, min_gain=0 (Experiment 1.1)", result, True),
+        (f"GI without NOW, A=0.4, min_gain={MIN_GAIN:g} (Experiment 1.1)", result, True),
     ]:
         root = record["root_split"]
         usage = record["temporal_usage"]
@@ -380,7 +374,7 @@ def save_figures(
     figures = output / "figures"
     figures.mkdir()
     colors = ["#4477AA", "#EE7733"]
-    labels = ["Original GI\nwith NOW", "GI without NOW\nA=0.4, min_gain=0"]
+    labels = ["Original GI\nwith NOW", f"GI without NOW\nA=0.4, min_gain={MIN_GAIN:g}"]
     fig, ax = plt.subplots(figsize=(6, 4))
     bars = ax.bar(labels, comparison.roc_auc, color=colors, width=0.55)
     for bar, value in zip(bars, comparison.roc_auc):
@@ -392,7 +386,7 @@ def save_figures(
         )
     ax.set(
         ylim=(0, 1), ylabel="Test ROC-AUC",
-        title="Experiment 1.1 — GI without NOW, A=0.4, min gain 0",
+        title=f"Experiment 1.1 — GI without NOW, A=0.4, min gain {MIN_GAIN:g}",
     )
     fig.text(
         0.5,
@@ -445,7 +439,7 @@ def save_figures(
     height = max(3.5, 2 + 1.45 * max(-y for _, y in tree[1].values()))
     fig, ax = plt.subplots(figsize=(max(10, tree[3] * 1.9), height))
     _draw_thesis_tree(
-        ax, tree, "GI learned tree — NOW unavailable, A=0.4, min gain 0"
+        ax, tree, f"GI learned tree — NOW unavailable, A=0.4, min gain {MIN_GAIN:g}"
     )
     fig.tight_layout()
     fig.savefig(figures / "gi_tree_thesis.png", dpi=300, facecolor="white")
@@ -521,7 +515,7 @@ def run(prepared: dict) -> None:
     split = prepared["split"]
     config = prepared["configuration"]
     # Reuse the final GI pipeline with its saved evaluation settings, while
-    # removing NOW and setting the minimum-gain cutoff to zero.
+    # removing NOW and applying the selected recorded minimum-gain cutoff.
     with patch.multiple(
         original,
         MODEL_HYPERPARAMETERS=prepared["params"],
@@ -550,21 +544,45 @@ def run(prepared: dict) -> None:
     )
 
 
+@contextmanager
+def configured_run(
+    min_gain: float, output: Optional[Path] = None,
+) -> Iterator[None]:
+    """Select either recorded GI ablation without changing its other settings."""
+    if min_gain not in (0.0, 0.0005):
+        raise ValueError("Only recorded min gains 0 and 0.0005 are supported.")
+    destination = output or ROOT / (
+        f"experiments/results/experiment_1_1_gi_without_now_A0.4_minGAIN{min_gain:g}"
+    )
+    destination = resolve_path(destination)
+    if destination.parent.resolve() != ROOT / "experiments/results":
+        raise ValueError("Output must be a new directory under experiments/results.")
+    if destination == PRIMARY or destination == BASELINE:
+        raise ValueError("Output cannot replace a protected baseline.")
+    with patch.multiple(
+        sys.modules[__name__], MIN_GAIN=min_gain, OUTPUT=destination,
+        ALLOWED_OUTPUT=destination,
+        NAME=f"Experiment 1.1 – GI Without NOW Anchor – A=0.4, min gain {min_gain:g}",
+    ):
+        yield
+
+
 def main() -> None:
     """Require an explicit validation or training mode; no implicit fitting."""
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--validate-only", action="store_true")
     mode.add_argument("--run", action="store_true")
+    parser.add_argument("--min-gain", type=float, choices=(0.0, 0.0005), default=0.0)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    prepared = prepare()
-    print(json.dumps(prepared["provenance"], indent=2))
-    if args.run:
-        run(prepared)
-    else:
-        print(
-            "Validation passed. No training performed; no output artifacts written."
-        )
+    with configured_run(args.min_gain, args.output):
+        prepared = prepare(validate_destination=args.run)
+        print(json.dumps(original.portable_metadata(prepared["provenance"]), indent=2))
+        if args.run:
+            run(prepared)
+        else:
+            print("Validation passed. No training performed; no output artifacts written.")
 
 
 if __name__ == "__main__":

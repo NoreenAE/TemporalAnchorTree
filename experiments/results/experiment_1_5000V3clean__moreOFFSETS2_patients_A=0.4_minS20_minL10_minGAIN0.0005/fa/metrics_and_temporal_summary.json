@@ -1,0 +1,104 @@
+{
+  "artifacts": {
+    "aggregated_usage": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/temporal_explainability/aggregated_temporal_usage.csv",
+    "histogram": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/temporal_explainability/temporal_usage_histogram.png",
+    "model": null,
+    "path_table": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/temporal_explainability/temporal_path_usage.csv",
+    "predictions": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/test_predictions.csv",
+    "tree_json": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/tree.json",
+    "tree_png": "experiments/results/finding_best_A_for_exp_1/A_0.4/fa/tree.png"
+  },
+  "candidate_evaluations": {
+    "evaluated_threshold_candidates": 230432,
+    "fallback_evaluated_threshold_candidates": 0,
+    "generated_groups": 7560,
+    "generated_threshold_candidates": 241431,
+    "invalid_threshold_candidates": 10999,
+    "sampled_groups": 3069,
+    "skipped_groups": 4491,
+    "total_evaluated_candidates": 230432,
+    "valid_threshold_candidates": 230432
+  },
+  "n_test_patients": 1500,
+  "n_train_patients": 3500,
+  "outcome": "fa",
+  "performance": {
+    "accuracy": 0.8993333333333333,
+    "average_precision": 0.14861860078729128,
+    "confusion_matrix": [
+      [
+        1349,
+        0
+      ],
+      [
+        151,
+        0
+      ]
+    ],
+    "decision_threshold": 0.5,
+    "f1": 0.0,
+    "mcc": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "roc_auc": 0.6361052337026691
+  },
+  "root_split": {
+    "aggregation": "mean",
+    "anchor": "Birth Date Anchor",
+    "feature": "FormulaYN",
+    "is_full_timeline": false,
+    "is_leaf": false,
+    "offset": 6,
+    "threshold": 0.3157894736842105
+  },
+  "runtime_seconds": {
+    "evaluation": 95.16212194599211,
+    "explainability": 224.31951910536736,
+    "total": 4803.284101114608,
+    "training": 4481.4880916606635
+  },
+  "temporal_usage": {
+    "birth_date_anchor_usages": 9430,
+    "birth_date_usage_proportion": 0.8980952380952381,
+    "full_timeline_usage_proportion": 0.0,
+    "full_timeline_usages": 0,
+    "now_anchor_usages": 1070,
+    "now_usage_proportion": 0.1019047619047619,
+    "total_patient_path_split_usages": 10500
+  },
+  "test_positive_prevalence": 0.10066666666666667,
+  "train_positive_prevalence": 0.10085714285714285,
+  "true_region": "Birth Date Anchor: 0 to +6 calendar months",
+  "window_distribution": [
+    {
+      "raw_usage_count": 1673,
+      "usage_proportion": 0.15933333333333333,
+      "window": "Birth Date Anchor | offset=1"
+    },
+    {
+      "raw_usage_count": 914,
+      "usage_proportion": 0.08704761904761905,
+      "window": "Birth Date Anchor | offset=12"
+    },
+    {
+      "raw_usage_count": 835,
+      "usage_proportion": 0.07952380952380952,
+      "window": "Birth Date Anchor | offset=3"
+    },
+    {
+      "raw_usage_count": 6008,
+      "usage_proportion": 0.5721904761904761,
+      "window": "Birth Date Anchor | offset=6"
+    },
+    {
+      "raw_usage_count": 78,
+      "usage_proportion": 0.0074285714285714285,
+      "window": "NOW Anchor | offset=-12"
+    },
+    {
+      "raw_usage_count": 992,
+      "usage_proportion": 0.09447619047619048,
+      "window": "NOW Anchor | offset=-18"
+    }
+  ]
+}

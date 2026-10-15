@@ -1,0 +1,172 @@
+{
+  "schema_version": 2,
+  "definitions": {
+    "scope": "Creation/window rows include every dynamic-anchor feature. Filter anchor_feature=FishIntroduction for fish-only rows.",
+    "legacy_cohort_fields": "created_not_used, documented_no_anchor and no_anchor_created remain FishIntroduction-specific.",
+    "dynamic_anchor_used": "An actual downstream visit has an available dynamic-anchor window, even if it contains no events.",
+    "created": "At least one nonempty FishIntroduction-derived anchor timestamp.",
+    "used": "A visited downstream split references a fish-derived anchor and has a nonempty evaluated_windows list; no event need occur in it.",
+    "symptom_used": "Used as above, restricted to GI or Vomiting.",
+    "visit_rows": "Only actual held-out prediction visits; one row per evaluated window, or one blank-window row if unavailable."
+  },
+  "observations_file": "observations.csv",
+  "patient_metadata_file": "patients_and_split.csv",
+  "join_key": "patient_id",
+  "runs": {
+    "dynamic_on": {
+      "cohorts": {
+        "all_test": {
+          "denominator": 1000,
+          "fish_anchor_created": 720,
+          "fish_anchor_used": 720,
+          "fish_anchor_used_for_symptom": 720,
+          "created_not_used": 0,
+          "documented_no_anchor": 80,
+          "dynamic_anchor_created": 1000,
+          "dynamic_anchor_used": 720,
+          "no_anchor_created": 280
+        },
+        "documented": {
+          "denominator": 800,
+          "fish_anchor_created": 720,
+          "fish_anchor_used": 720,
+          "fish_anchor_used_for_symptom": 720,
+          "created_not_used": 0,
+          "documented_no_anchor": 80,
+          "dynamic_anchor_created": 800,
+          "dynamic_anchor_used": 720,
+          "no_anchor_created": 80
+        },
+        "undocumented": {
+          "denominator": 200,
+          "fish_anchor_created": 0,
+          "fish_anchor_used": 0,
+          "fish_anchor_used_for_symptom": 0,
+          "created_not_used": 0,
+          "documented_no_anchor": 0,
+          "dynamic_anchor_created": 200,
+          "dynamic_anchor_used": 0,
+          "no_anchor_created": 200
+        }
+      },
+      "dynamic_anchors": [
+        {
+          "anchor_name": "Node 0 | SUM(FishIntroduction) Anchor",
+          "anchor_feature": "FishIntroduction",
+          "created_children": 720,
+          "used_children": 720,
+          "created_not_used_children": 0,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 1 | SUM(GI) Anchor",
+          "anchor_feature": "GI",
+          "created_children": 224,
+          "used_children": 0,
+          "created_not_used_children": 224,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 4 | SUM(Vomiting) Anchor",
+          "anchor_feature": "Vomiting",
+          "created_children": 136,
+          "used_children": 0,
+          "created_not_used_children": 136,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 2 | SUM(RoutineVaccination) Anchor",
+          "anchor_feature": "RoutineVaccination",
+          "created_children": 280,
+          "used_children": 0,
+          "created_not_used_children": 280,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 6 | SUM(Vomiting) Anchor",
+          "anchor_feature": "Vomiting",
+          "created_children": 127,
+          "used_children": 0,
+          "created_not_used_children": 127,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 3 | SUM(Vomiting) Anchor",
+          "anchor_feature": "Vomiting",
+          "created_children": 176,
+          "used_children": 0,
+          "created_not_used_children": 176,
+          "denominator": 1000
+        },
+        {
+          "anchor_name": "Node 5 | SUM(DoctorVisit) Anchor",
+          "anchor_feature": "DoctorVisit",
+          "created_children": 24,
+          "used_children": 0,
+          "created_not_used_children": 24,
+          "denominator": 1000
+        }
+      ],
+      "downstream_usage": [
+        {
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor",
+          "feature": "GI",
+          "anchor_feature": "FishIntroduction",
+          "aggregation": "sum",
+          "offset_months": 1,
+          "unique_test_children": 720,
+          "denominator": 1000
+        },
+        {
+          "source_anchor": "Node 0 | SUM(FishIntroduction) Anchor",
+          "feature": "Vomiting",
+          "anchor_feature": "FishIntroduction",
+          "aggregation": "sum",
+          "offset_months": 1,
+          "unique_test_children": 496,
+          "denominator": 1000
+        }
+      ]
+    },
+    "dynamic_off": {
+      "cohorts": {
+        "all_test": {
+          "denominator": 1000,
+          "fish_anchor_created": 0,
+          "fish_anchor_used": 0,
+          "fish_anchor_used_for_symptom": 0,
+          "created_not_used": 0,
+          "documented_no_anchor": 800,
+          "dynamic_anchor_created": 0,
+          "dynamic_anchor_used": 0,
+          "no_anchor_created": 1000
+        },
+        "documented": {
+          "denominator": 800,
+          "fish_anchor_created": 0,
+          "fish_anchor_used": 0,
+          "fish_anchor_used_for_symptom": 0,
+          "created_not_used": 0,
+          "documented_no_anchor": 800,
+          "dynamic_anchor_created": 0,
+          "dynamic_anchor_used": 0,
+          "no_anchor_created": 800
+        },
+        "undocumented": {
+          "denominator": 200,
+          "fish_anchor_created": 0,
+          "fish_anchor_used": 0,
+          "fish_anchor_used_for_symptom": 0,
+          "created_not_used": 0,
+          "documented_no_anchor": 0,
+          "dynamic_anchor_created": 0,
+          "dynamic_anchor_used": 0,
+          "no_anchor_created": 200
+        }
+      },
+      "dynamic_anchors": [],
+      "downstream_usage": []
+    }
+  },
+  "dataset_reference": "configuration.json:dataset_directory"
+}

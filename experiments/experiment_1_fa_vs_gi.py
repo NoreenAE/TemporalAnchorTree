@@ -34,16 +34,17 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from settree.eval_utils import (  # noqa: E402
+from TAT.eval_utils import (  # noqa: E402
     plot_tree_structure, save_roc_curves, save_thesis_tree_figures,
 )
-from settree.temporal_explainability import (  # noqa: E402
+from TAT.temporal_explainability import (  # noqa: E402
     derive_monthly_bin_edges,
     load_temporal_usage_artifacts,
     plot_temporal_usage_comparison,
     run_temporal_explainability,
 )
-from settree.temporal_tree import TemporalTree  # noqa: E402
+from TAT.temporal_tree import TemporalTree  # noqa: E402
+from project_paths import portable_metadata, resolve_path  # noqa: E402
 
 
 EXPERIMENT_NAME = "experiment_1_fa_vs_gi_on_5000V3clean_patients_A=0.4_minS20_minL10_more_offsets2_minGAIN0.0005"
@@ -51,11 +52,11 @@ EXPERIMENT_DESCRIPTION = (
     "min GAIN, 0.0005 ,wider offset ranges, coinFlip A=0.4, Same validated longitudinal X (5000) v2 and identical TemporalTree settings; "
     "only the FA versus GI outcome label changes."
 )
-RANDOM_STATE = 48
+RANDOM_STATE = 42
 TEST_SIZE = 0.30
 DECISION_THRESHOLD = 0.50
 CANDIDATE_SAMPLING_RATE = 0.4
-SPLIT_SAMPLING_SEED = 48
+SPLIT_SAMPLING_SEED = 42
 MIN_IMPURITY_DECREASE = 0.0005 # 0 = off
 USE_DYNAMIC_ANCHORS = False
 VERBOSE = 1
@@ -147,7 +148,7 @@ def effective_candidate_windows() -> list:
 
 def load_longitudinal_x(path: Path) -> pd.DataFrame:
     """Load the validated X using the repository's anchor conversion rule."""
-    data = pd.read_pickle(path).copy()
+    data = pd.read_pickle(resolve_path(path)).copy()
     required_columns = ["patient_id", "time", "feature_name", "value"]
     if list(data.columns) != required_columns:
         raise ValueError(
@@ -173,7 +174,7 @@ def load_longitudinal_x(path: Path) -> pd.DataFrame:
 
 def load_labels(path: Path, outcome: str) -> pd.DataFrame:
     """Load and validate one binary patient-level outcome artifact."""
-    labels = pd.read_pickle(path).copy()
+    labels = pd.read_pickle(resolve_path(path)).copy()
     if list(labels.columns) != ["patient_id", "label"]:
         raise ValueError(f"Unexpected {outcome} label schema.")
     if labels["patient_id"].duplicated().any():
@@ -549,6 +550,7 @@ def experiment_configuration(input_hashes: Mapping[str, str]) -> dict:
             TEMPORAL_EXPLAINABILITY_BIN_EDGES
         ),
         "aggregations": AGGREGATION_NAMES,
+        "effective_aggregations": list(aggregation_functions()),
         "model_hyperparameters": MODEL_HYPERPARAMETERS,
         "input_paths": {name: str(path) for name, path in INPUT_PATHS.items()},
         "input_sha256": dict(input_hashes),
@@ -631,7 +633,8 @@ def create_roc_comparison(
 def write_json(value, path: Path) -> None:
     """Write indented JSON, converting NumPy and Path values safely."""
     path.write_text(
-        json.dumps(value, indent=2, default=_json_default, sort_keys=True),
+        json.dumps(portable_metadata(value), indent=2,
+                   default=_json_default, sort_keys=True),
         encoding="utf-8",
     )
 
@@ -775,11 +778,16 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
             "training."
         ),
     )
+    parser.add_argument("--output", type=Path,
+                        help="New result directory; saved thesis results are never overwritten.")
     return parser.parse_args(argv)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:
+    global OUTPUT_DIR
     args = parse_args(argv)
+    if args.output is not None:
+        OUTPUT_DIR = resolve_path(args.output)
     if args.validate_only:
         print(json.dumps(validate_only(), indent=2, sort_keys=True))
         return

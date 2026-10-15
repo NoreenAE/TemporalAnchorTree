@@ -1,0 +1,1 @@
+patient_id,node_id,depth,feature,aggregation,anchor,stored_offset,effective_start_offset,effective_end_offset,aggregated_value,missing,direction,terminal_leaf_id,is_full_timeline,is_zero_width,raw_usage_weight,per_patient_usage_weight,evaluated_patient_count

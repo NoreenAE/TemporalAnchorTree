@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from settree.temporal_tree import TemporalTree
+from TAT.temporal_tree import TemporalTree
 
 
 def _aggregation_caches():

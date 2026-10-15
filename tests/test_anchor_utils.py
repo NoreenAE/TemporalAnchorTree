@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from settree.anchor_utils import create_branch_anchors
-from settree.temporal_tree import TemporalSplitNode, TemporalTree
+from TAT.anchor_utils import create_branch_anchors
+from TAT.temporal_tree import TemporalSplitNode, TemporalTree
 
 
 def test_create_branch_anchors_handles_scalar_list_empty_and_nan_source_anchors():
