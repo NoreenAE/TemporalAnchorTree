@@ -95,11 +95,10 @@ configurations, and saved outputs are included in the repository. Use
 to check saved results or rerun the thesis experiments; see the
 [reproduction guide](docs/reproducibility.md) for instructions.
 
-## Citation and Use
+## Citation
 
 This repository accompanies the MSc thesis on the Temporal Anchor Tree framework.
 Citation information will be added with the final thesis record.
 All patient-level datasets included in this repository are synthetic.
 
-This project is licensed under the [MIT License](LICENSE). See
-[citation and licensing details](docs/citation_and_use.md).
+(LICENSE). 
